@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>mysql数据库的增删改查 | Theqiqi_blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="目录一对多关系表多对多关系">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql数据库的增删改查">
+<meta property="og:url" content="http://example.com/2023/04/17/mysql/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="目录一对多关系表多对多关系">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-18T00:06:02.000Z">
+<meta property="article:modified_time" content="2023-05-15T13:33:54.064Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Theqiqi_blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Theqiqi_blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mysql/mysql数据库的增删改查" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+
+	<span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+		  <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+<a href="/2023/04/17/mysql/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/" class="article-date">
+  <time datetime="2023-04-18T00:06:02.000Z" itemprop="datePublished">2023-04-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mysql数据库的增删改查
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一对多关系表"><a href="#一对多关系表" class="headerlink" title="一对多关系表"></a>一对多关系表</h2><h2 id="多对多关系"><a href="#多对多关系" class="headerlink" title="多对多关系"></a>多对多关系</h2><span id="more"></span>
+
+<h2 id="一对多关系表-1"><a href="#一对多关系表-1" class="headerlink" title="一对多关系表"></a>一对多关系表</h2><p>1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SHOW CREATE DATABASE test;</span><br><span class="line">SHOW databases;</span><br><span class="line">CREATE DATABASE test DEFAULT CHARSET utf8;</span><br><span class="line">#drop database test;#删除表text</span><br></pre></td></tr></table></figure>
+
+<p>2选择数据库test</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use test</span><br></pre></td></tr></table></figure>
+
+
+
+<p>2建表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE book (</span><br><span class="line">  book_id int PRIMARY KEY  AUTO_INCREMENT,</span><br><span class="line">  book_name varchar(60) NOT NULL,</span><br><span class="line">  book_author varchar(60) NOT NULL,</span><br><span class="line">  book_shelf int DEFAULT 0,</span><br><span class="line">  book_addtime datetime NOT NULL</span><br><span class="line">) ;</span><br><span class="line"></span><br><span class="line">CREATE TABLE book_shelf</span><br><span class="line">(</span><br><span class="line"> shelf_id int PRIMARY KEY AUTO_INCREMENT , </span><br><span class="line"> shelf_manager varchar(60) NOT NULL, </span><br><span class="line"> shelf_position varchar(60) NOT NULL, </span><br><span class="line"> record_time datetime NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3插入</p>
+<ol>
+<li></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO book_shelf (shelf_manager, shelf_position, record_time)</span><br><span class="line"> VALUES (&#x27;manager1&#x27;,&#x27;A123&#x27;, NOW()), (&#x27;manager1&#x27;,&#x27;A124&#x27;, NOW()),(&#x27;manager1&#x27;,&#x27;A125&#x27;, NOW()) ;</span><br></pre></td></tr></table></figure>
+
+<p>2. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM book_shelf;</span><br></pre></td></tr></table></figure>
+
+<p>3. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO book (book_name, book_author, book_shelf, book_addtime)</span><br><span class="line">VALUES (&#x27;life&#x27;, &#x27;yu&#x27;, 1, NOW()), (&#x27;倾城之恋&#x27;,&#x27;张爱玲&#x27;, 2, NOW());</span><br></pre></td></tr></table></figure>
+
+<p>4. </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT book_name, book_author, shelf_manager, shelf_position FROM book, book_shelf</span><br><span class="line"> WHERE shelf_id = book.book_shelf AND book_id = 1;</span><br></pre></td></tr></table></figure>
+
+<h2 id="多对多关系-1"><a href="#多对多关系-1" class="headerlink" title="多对多关系"></a>多对多关系</h2><p>1建立数据库map</p>
+<ol>
+<li>建立</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SHOW CREATE DATABASE map;</span><br><span class="line">SHOW databases;</span><br><span class="line">CREATE DATABASE map DEFAULT CHARSET utf8;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>选择数据库</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use map</span><br></pre></td></tr></table></figure>
+
+<p>2建表</p>
+<ol>
+<li>学生表</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE student</span><br><span class="line">(</span><br><span class="line"> stu_id int PRIMARY KEY AUTO_INCREMENT, </span><br><span class="line"> stu_name varchar(60) NOT NULL, </span><br><span class="line"> stu_class varchar(60) NOT NULL, </span><br><span class="line"> stu_phone varchar(60) NOT NULL, </span><br><span class="line"> record_time datetime NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>课程表</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE course</span><br><span class="line">(</span><br><span class="line"> course_id int PRIMARY KEY AUTO_INCREMENT, </span><br><span class="line"> course_name varchar(60) NOT NULL, </span><br><span class="line"> teacher_id int DEFAULT 0, </span><br><span class="line"> record_time datetime NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>教师</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE teacher</span><br><span class="line">(</span><br><span class="line"> teacher_id int PRIMARY KEY AUTO_INCREMENT, </span><br><span class="line"> teacher_name varchar(60),</span><br><span class="line"> record_time datetime NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>3学生和课程多对多</p>
+<ol>
+<li>建立学生和课程多对多的表</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE course_student</span><br><span class="line">(</span><br><span class="line"> course_id int, </span><br><span class="line"> stu_id int, </span><br><span class="line"> PRIMARY KEY(course_id, stu_id)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>插入</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO student (stu_name, stu_class, stu_phone, record_time)</span><br><span class="line"> VALUES (&#x27;aaa&#x27;, &#x27;001&#x27;, &#x27;12345&#x27;, NOW()),(&#x27;bbb&#x27;, &#x27;001&#x27;, &#x27;12346&#x27;, NOW());</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查询学生表</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM student;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>插入课程</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO course (course_name, teacher_id, record_time)</span><br><span class="line"> VALUES (&#x27;c&#x27;, 1, NOW()), (&#x27;android&#x27;,2, NOW()),(&#x27;computer&#x27;, 3, NOW());</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>查询学生和老师</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>插入</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO course_student (course_id, stu_id) VALUES (1,1),(1, 2),(2,1), (3, 1);</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>选择课程名和学生名</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT course_name,stu_name FROM course, student, course_student</span><br><span class="line">WHERE student.stu_id = 1 AND course_student.stu_id = student.stu_id </span><br><span class="line">AND course_student.course_id = course.course_id;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/04/17/mysql/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/" data-id="cljzovrdh000zg89bcbmlfcw3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/04/21/termux/termux%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8Bssh/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          termux开启远程ssh
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/04/17/mysql/mysql_connect/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">mysql_connect</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-%E7%A8%8B%E5%BA%8F/" rel="tag">c++程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" rel="tag">c++语言程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qt5-8/" rel="tag">qt5.8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 17.5px;">64位汇编程序</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/c-%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c++程序</a> <a href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c++语言程序</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/qt5-8/" style="font-size: 10px;">qt5.8</a> <a href="/tags/termux/" style="font-size: 12.5px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 20px;">x86汇编程序</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/05/06/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/">使用qt5.8开发数据库程序</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/">jsp项目的环境配置与使用</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/22/android/%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%89%93%E5%BC%80android%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%B9%B6root/">通过命令行打开android模拟器并root</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/">termux安装kali(Nethunter)与ubuntu</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/21/termux/termux%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8Bssh/">termux开启远程ssh</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      
+  <span id="busuanzi_container_site_pv">
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv" style='display:none'>
+          本站访客数<span id="busuanzi_value_site_uv"></span>人
+  </span>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 Theqiqi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

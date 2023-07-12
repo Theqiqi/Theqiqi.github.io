@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>如何给x86汇编添加头文件和使用结构体 | Theqiqi_blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="目录一 用visual studio2022新建一个x86汇编项目二 在x86汇编程序中使用头文件三 invoke指令的使用四 导入写好的头文件五.无参宏与有参宏六.用invoke调用封装的printf函数七 结构体的使用方法八 api中使用结构体">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何给x86汇编添加头文件和使用结构体">
+<meta property="og:url" content="http://example.com/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E7%BB%99x86%E6%B1%87%E7%BC%96%E6%B7%BB%E5%8A%A0%E5%A4%B4%E6%96%87%E4%BB%B6%E5%92%8C%E4%BD%BF%E7%94%A8%E7%BB%93%E6%9E%84%E4%BD%93/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="目录一 用visual studio2022新建一个x86汇编项目二 在x86汇编程序中使用头文件三 invoke指令的使用四 导入写好的头文件五.无参宏与有参宏六.用invoke调用封装的printf函数七 结构体的使用方法八 api中使用结构体">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-05T18:02:05.000Z">
+<meta property="article:modified_time" content="2023-05-15T13:40:56.707Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="x86汇编程序">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Theqiqi_blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Theqiqi_blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-assembly_x86/如何给x86汇编添加头文件和使用结构体" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+
+	<span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+		  <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+<a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E7%BB%99x86%E6%B1%87%E7%BC%96%E6%B7%BB%E5%8A%A0%E5%A4%B4%E6%96%87%E4%BB%B6%E5%92%8C%E4%BD%BF%E7%94%A8%E7%BB%93%E6%9E%84%E4%BD%93/" class="article-date">
+  <time datetime="2023-04-05T18:02:05.000Z" itemprop="datePublished">2023-04-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      如何给x86汇编添加头文件和使用结构体
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-用visual-studio2022新建一个x86汇编项目"><a href="#一-用visual-studio2022新建一个x86汇编项目" class="headerlink" title="一 用visual studio2022新建一个x86汇编项目"></a>一 用visual studio2022新建一个x86汇编项目</h2><h2 id="二-在x86汇编程序中使用头文件"><a href="#二-在x86汇编程序中使用头文件" class="headerlink" title="二 在x86汇编程序中使用头文件"></a>二 在x86汇编程序中使用头文件</h2><h2 id="三-invoke指令的使用"><a href="#三-invoke指令的使用" class="headerlink" title="三 invoke指令的使用"></a>三 invoke指令的使用</h2><h2 id="四-导入写好的头文件"><a href="#四-导入写好的头文件" class="headerlink" title="四 导入写好的头文件"></a>四 导入写好的头文件</h2><h2 id="五-无参宏与有参宏"><a href="#五-无参宏与有参宏" class="headerlink" title="五.无参宏与有参宏"></a>五.无参宏与有参宏</h2><h2 id="六-用invoke调用封装的printf函数"><a href="#六-用invoke调用封装的printf函数" class="headerlink" title="六.用invoke调用封装的printf函数"></a>六.用invoke调用封装的printf函数</h2><h2 id="七-结构体的使用方法"><a href="#七-结构体的使用方法" class="headerlink" title="七 结构体的使用方法"></a>七 结构体的使用方法</h2><h2 id="八-api中使用结构体"><a href="#八-api中使用结构体" class="headerlink" title="八 api中使用结构体"></a>八 api中使用结构体</h2><span id="more"></span>
+
+<h1 id="具体过程"><a href="#具体过程" class="headerlink" title="具体过程:"></a>具体过程:</h1><h2 id="一-用visual-studio2022新建一个x86汇编项目-1"><a href="#一-用visual-studio2022新建一个x86汇编项目-1" class="headerlink" title="一 用visual studio2022新建一个x86汇编项目"></a>一 <a href="../如何使用visualstudio写一个32位汇编程序/index.html">用visual studio2022新建一个x86汇编项目</a></h2><h2 id="二-在x86汇编程序中使用头文件-1"><a href="#二-在x86汇编程序中使用头文件-1" class="headerlink" title="二 在x86汇编程序中使用头文件"></a>二 在x86汇编程序中使用头文件</h2><h3 id="1-添加头文件，例如entry-inc"><a href="#1-添加头文件，例如entry-inc" class="headerlink" title="1.添加头文件，例如entry.inc"></a>1.添加头文件，例如entry.inc</h3><p>entry.inc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">;entry.inc</span><br><span class="line">.586</span><br><span class="line">.model flat,stdcall</span><br><span class="line">option casemap:none</span><br><span class="line"></span><br><span class="line">includelib ucrt.lib</span><br><span class="line">includelib User32.lib</span><br><span class="line">includelib kernel32.lib</span><br><span class="line">includelib legacy_stdio_definitions.lib</span><br><span class="line"></span><br><span class="line">ExitProcess proto dwCode:dword</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="备注："><a href="#备注：" class="headerlink" title="备注："></a>备注：</h3><p>汇编头文件后缀名为.inc</p>
+<p>删除默认代码，因为会报错</p>
+<p>声明放在头文件里面</p>
+<p>源文件里面使用include包含头文件,例:include entry.inc</p>
+<h3 id="2-修改entry-asm文件"><a href="#2-修改entry-asm文件" class="headerlink" title="2. 修改entry.asm文件"></a>2. 修改entry.asm文件</h3><p>entry.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">;entry.asm</span><br><span class="line">include entry.inc</span><br><span class="line"></span><br><span class="line">.code</span><br><span class="line">main proc</span><br><span class="line">	push 0</span><br><span class="line">	call ExitProcess</span><br><span class="line">main endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h2 id="三-invoke指令的使用-1"><a href="#三-invoke指令的使用-1" class="headerlink" title="三 invoke指令的使用"></a>三 invoke指令的使用</h2><h3 id="使用invoke指令可以方便调用win32-api"><a href="#使用invoke指令可以方便调用win32-api" class="headerlink" title="使用invoke指令可以方便调用win32 api"></a>使用<code>invoke</code>指令可以方便调用win32 api</h3><p>entry.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">;entry.asm</span><br><span class="line">include entry.inc</span><br><span class="line"></span><br><span class="line">.code</span><br><span class="line">main proc</span><br><span class="line">	;push 0</span><br><span class="line">	;call ExitProcess</span><br><span class="line">	invoke ExitProcess,0</span><br><span class="line">main endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h2 id="四-导入写好的头文件-1"><a href="#四-导入写好的头文件-1" class="headerlink" title="四.导入写好的头文件"></a>四.导入写好的头文件</h2><h3 id="1-下载masm，提取include文件夹"><a href="#1-下载masm，提取include文件夹" class="headerlink" title="1. 下载masm，提取include文件夹"></a>1.<a target="_blank" rel="noopener" href="http://masm32.com/download.htm"> 下载masm</a>，提取include文件夹</h3><h3 id="2-在项目中导入所需头文件"><a href="#2-在项目中导入所需头文件" class="headerlink" title="2.在项目中导入所需头文件"></a>2.在项目中导入所需头文件</h3><h3 id="3-代码示例"><a href="#3-代码示例" class="headerlink" title="3.代码示例"></a>3.代码示例</h3><p>entry.inc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">;entry.inc</span><br><span class="line">.586</span><br><span class="line">.model flat,stdcall</span><br><span class="line">option casemap:none</span><br><span class="line"></span><br><span class="line">include include/windows.inc</span><br><span class="line">include include/User32.inc</span><br><span class="line">include include/Kernel32.inc</span><br><span class="line">includelib ucrt.lib</span><br><span class="line">includelib User32.lib</span><br><span class="line">includelib kernel32.lib</span><br><span class="line">includelib legacy_stdio_definitions.lib</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">Format db &quot;how you doing&quot;</span><br></pre></td></tr></table></figure>
+
+<p>entry.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">;entry.asm</span><br><span class="line">include entry.inc</span><br><span class="line"></span><br><span class="line">.code</span><br><span class="line">main proc</span><br><span class="line">	invoke MessageBoxA,NULL,offset Format,offset Format,MB_OK</span><br><span class="line">	invoke ExitProcess,0</span><br><span class="line">main endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h2 id="五-无参宏与有参宏-1"><a href="#五-无参宏与有参宏-1" class="headerlink" title="五.无参宏与有参宏"></a>五.无参宏与有参宏</h2><p>entry.inc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">;entry.inc</span><br><span class="line">.586</span><br><span class="line">.model flat,stdcall</span><br><span class="line">option casemap:none</span><br><span class="line"></span><br><span class="line">include include/windows.inc</span><br><span class="line">include include/User32.inc</span><br><span class="line">include include/Kernel32.inc</span><br><span class="line">includelib ucrt.lib</span><br><span class="line">includelib User32.lib</span><br><span class="line">includelib kernel32.lib</span><br><span class="line">includelib legacy_stdio_definitions.lib</span><br><span class="line"></span><br><span class="line">RKVIR EQU 12				;无参宏？？？</span><br><span class="line">;有参宏，类似函数</span><br><span class="line">MyAdd MACRO n1				;MACRO声明有参宏，n1:给的一个参数</span><br><span class="line">	add eax,n1</span><br><span class="line">endm						;有参宏结束</span><br><span class="line">.data</span><br><span class="line">Format db &quot;how you doing&quot;</span><br></pre></td></tr></table></figure>
+
+<p>entry.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">;entry.asm</span><br><span class="line">include entry.inc</span><br><span class="line"></span><br><span class="line">.code</span><br><span class="line">main proc</span><br><span class="line">	mov eax,RKVIR</span><br><span class="line">	MyAdd &lt;1&gt;</span><br><span class="line">	invoke MessageBoxA,NULL,offset Format,offset Format,MB_OK</span><br><span class="line">	invoke ExitProcess,0</span><br><span class="line">main endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h2 id="六-用invoke调用封装的printf函数-1"><a href="#六-用invoke调用封装的printf函数-1" class="headerlink" title="六.用invoke调用封装的printf函数"></a>六.用invoke调用封装的printf函数</h2><p>entry.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">;entry.asm</span><br><span class="line">include entry.inc</span><br><span class="line"></span><br><span class="line">.code</span><br><span class="line">addx proc numA:dword,numB:dword</span><br><span class="line">	xor  eax,eax</span><br><span class="line">	add eax,numA</span><br><span class="line">	add eax,numB</span><br><span class="line">	ret</span><br><span class="line">addx endp</span><br><span class="line"></span><br><span class="line">printfString proc format:dword,var:dword</span><br><span class="line">	mov eax,var</span><br><span class="line">	push eax</span><br><span class="line">	mov eax,format</span><br><span class="line">	push eax</span><br><span class="line">	call printf</span><br><span class="line">	add esp,8</span><br><span class="line">	ret</span><br><span class="line">printfString endp</span><br><span class="line">main proc</span><br><span class="line">	invoke printfString,offset FormatString,offset Format</span><br><span class="line">	invoke addx,10,20</span><br><span class="line">	mov eax,RKVIR</span><br><span class="line">	MyAdd &lt;1&gt;</span><br><span class="line">	invoke MessageBoxA,NULL,offset Format,offset Format,MB_OK</span><br><span class="line">	invoke ExitProcess,0</span><br><span class="line">main endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>entry.inc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">;entry.inc</span><br><span class="line">.586</span><br><span class="line">.model flat,stdcall</span><br><span class="line">option casemap:none</span><br><span class="line"></span><br><span class="line">include include/windows.inc</span><br><span class="line">include include/User32.inc</span><br><span class="line">include include/Kernel32.inc</span><br><span class="line">includelib ucrt.lib</span><br><span class="line">includelib User32.lib</span><br><span class="line">includelib kernel32.lib</span><br><span class="line">includelib legacy_stdio_definitions.lib</span><br><span class="line"></span><br><span class="line">extern printf:proc</span><br><span class="line"></span><br><span class="line">RKVIR EQU 12				;无参宏？？？</span><br><span class="line">;有参宏，类似函数</span><br><span class="line">MyAdd MACRO n1				;MACRO声明有参宏，n1:给的一个参数</span><br><span class="line">	add eax,n1</span><br><span class="line">endm						;有参宏结束</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">Format db &quot;how you doing&quot;</span><br><span class="line">FormatString db &quot;what&#x27;s up&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="七-结构体的使用方法-1"><a href="#七-结构体的使用方法-1" class="headerlink" title="七 结构体的使用方法"></a>七 结构体的使用方法</h2><p>entry.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">;entry.asm</span><br><span class="line">include entry.inc</span><br><span class="line"></span><br><span class="line">.code</span><br><span class="line">addx proc numA:dword,numB:dword</span><br><span class="line">	xor  eax,eax</span><br><span class="line">	add eax,numA</span><br><span class="line">	add eax,numB</span><br><span class="line">	ret</span><br><span class="line">addx endp</span><br><span class="line"></span><br><span class="line">printfString proc format:dword,var:dword</span><br><span class="line">	mov eax,var</span><br><span class="line">	push eax</span><br><span class="line">	mov eax,format</span><br><span class="line">	push eax</span><br><span class="line">	call printf</span><br><span class="line">	add esp,8</span><br><span class="line">	ret</span><br><span class="line">printfString endp</span><br><span class="line"></span><br><span class="line">main proc</span><br><span class="line">	mov MyPoint.x,123</span><br><span class="line">	mov MyPoint.y,456</span><br><span class="line">	invoke printfString,offset FormatString,offset Format</span><br><span class="line">	invoke addx,10,20</span><br><span class="line">	mov eax,RKVIR</span><br><span class="line">	MyAdd &lt;1&gt;</span><br><span class="line">	invoke MessageBoxA,NULL,offset Format,offset Format,MB_OK</span><br><span class="line">	invoke ExitProcess,0</span><br><span class="line">main endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>entry.inc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">;entry.inc</span><br><span class="line">.586</span><br><span class="line">.model flat,stdcall</span><br><span class="line">option casemap:none</span><br><span class="line"></span><br><span class="line">include include/windows.inc</span><br><span class="line">include include/User32.inc</span><br><span class="line">include include/Kernel32.inc</span><br><span class="line">includelib ucrt.lib</span><br><span class="line">includelib User32.lib</span><br><span class="line">includelib kernel32.lib</span><br><span class="line">includelib legacy_stdio_definitions.lib</span><br><span class="line"></span><br><span class="line">extern printf:proc</span><br><span class="line"></span><br><span class="line">RKVIR EQU 12				;无参宏？？？</span><br><span class="line"></span><br><span class="line">Point struct</span><br><span class="line">	x word ?</span><br><span class="line">	y word ?</span><br><span class="line">Point ends</span><br><span class="line"></span><br><span class="line">;有参宏，类似函数</span><br><span class="line">MyAdd MACRO n1				;MACRO声明有参宏，n1:给的一个参数</span><br><span class="line">	add eax,n1</span><br><span class="line">endm						;有参宏结束</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">Format db &quot;how you doing&quot;</span><br><span class="line">FormatString db &quot;what&#x27;s up&quot;</span><br><span class="line">MyPoint Point&lt;?&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="八-api中使用结构体-1"><a href="#八-api中使用结构体-1" class="headerlink" title="八 api中使用结构体"></a>八 api中使用结构体</h2><p>entry.inc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">;entry.inc</span><br><span class="line">.586</span><br><span class="line">.model flat,stdcall</span><br><span class="line">option casemap:none</span><br><span class="line"></span><br><span class="line">include include/windows.inc</span><br><span class="line">include include/User32.inc</span><br><span class="line">include include/Kernel32.inc</span><br><span class="line">includelib ucrt.lib</span><br><span class="line">includelib User32.lib</span><br><span class="line">includelib kernel32.lib</span><br><span class="line">includelib legacy_stdio_definitions.lib</span><br><span class="line"></span><br><span class="line">extern printf:proc</span><br><span class="line"></span><br><span class="line">RKVIR EQU 12				;无参宏？？？</span><br><span class="line"></span><br><span class="line">Point struct</span><br><span class="line">	x word ?</span><br><span class="line">	y word ?</span><br><span class="line">Point ends</span><br><span class="line"></span><br><span class="line">;有参宏，类似函数</span><br><span class="line">MyAdd MACRO n1				;MACRO声明有参宏，n1:给的一个参数</span><br><span class="line">	add eax,n1</span><br><span class="line">endm						;有参宏结束</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">Format db &quot;how you doing&quot;</span><br><span class="line">FormatString db &quot;what&#x27;s up&quot;</span><br><span class="line">MyPoint Point&lt;?&gt;</span><br><span class="line">FilePtah db&quot;C:\\Windows\\System32\\cmd.exe&quot;</span><br><span class="line">StartInfo STARTUPINFO &lt;?&gt;</span><br><span class="line">ProcessInfo PROCESS_INFORMATION &lt;?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>entry.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">;entry.asm</span><br><span class="line">include entry.inc</span><br><span class="line"></span><br><span class="line">.code</span><br><span class="line">addx proc numA:dword,numB:dword</span><br><span class="line">	xor  eax,eax</span><br><span class="line">	add eax,numA</span><br><span class="line">	add eax,numB</span><br><span class="line">	ret</span><br><span class="line">addx endp</span><br><span class="line"></span><br><span class="line">printfString proc format:dword,var:dword</span><br><span class="line">	mov eax,var</span><br><span class="line">	push eax</span><br><span class="line">	mov eax,format</span><br><span class="line">	push eax</span><br><span class="line">	call printf</span><br><span class="line">	add esp,8</span><br><span class="line">	ret</span><br><span class="line">printfString endp</span><br><span class="line"></span><br><span class="line">main proc</span><br><span class="line">	invoke GetStartupInfo,addr StartInfo</span><br><span class="line">	invoke CreateProcess,ADDR FilePtah,NULL,NULL,NULL,NULL,NORMAL_PRIORITY_CLASS,NULL,NULL,addr StartInfo,addr ProcessInfo</span><br><span class="line">	mov MyPoint.x,123</span><br><span class="line">	mov MyPoint.y,456</span><br><span class="line">	invoke printfString,offset FormatString,offset Format</span><br><span class="line">	invoke addx,10,20</span><br><span class="line">	mov eax,RKVIR</span><br><span class="line">	MyAdd &lt;1&gt;</span><br><span class="line">	invoke MessageBoxA,NULL,offset Format,offset Format,MB_OK</span><br><span class="line">	invoke ExitProcess,0</span><br><span class="line">main endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E7%BB%99x86%E6%B1%87%E7%BC%96%E6%B7%BB%E5%8A%A0%E5%A4%B4%E6%96%87%E4%BB%B6%E5%92%8C%E4%BD%BF%E7%94%A8%E7%BB%93%E6%9E%84%E4%BD%93/" data-id="cljzovrdh0011g89bfde9g4xw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E5%9C%A8x86%E6%B1%87%E7%BC%96%E4%B8%AD%E4%BD%BF%E7%94%A8%E4%BC%AA%E6%8C%87%E4%BB%A4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          如何在x86汇编中使用伪指令
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E7%94%A8x86%E6%B1%87%E7%BC%96%E8%BF%9B%E8%A1%8C%E8%BF%9B%E5%88%B6%E4%B8%8E%E4%BD%8D%E8%BF%90%E7%AE%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">如何用x86汇编进行进制与位运算</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-%E7%A8%8B%E5%BA%8F/" rel="tag">c++程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" rel="tag">c++语言程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qt5-8/" rel="tag">qt5.8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 17.5px;">64位汇编程序</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/c-%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c++程序</a> <a href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c++语言程序</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/qt5-8/" style="font-size: 10px;">qt5.8</a> <a href="/tags/termux/" style="font-size: 12.5px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 20px;">x86汇编程序</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/05/06/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/">使用qt5.8开发数据库程序</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/">jsp项目的环境配置与使用</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/22/android/%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%89%93%E5%BC%80android%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%B9%B6root/">通过命令行打开android模拟器并root</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/">termux安装kali(Nethunter)与ubuntu</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/21/termux/termux%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8Bssh/">termux开启远程ssh</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      
+  <span id="busuanzi_container_site_pv">
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv" style='display:none'>
+          本站访客数<span id="busuanzi_value_site_uv"></span>人
+  </span>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 Theqiqi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

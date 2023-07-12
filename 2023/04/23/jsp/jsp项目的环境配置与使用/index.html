@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>jsp项目的环境配置与使用 | Theqiqi_blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="目录jsp开发的环境配置使用eclipse开发第一个jsp项目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jsp项目的环境配置与使用">
+<meta property="og:url" content="http://example.com/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="目录jsp开发的环境配置使用eclipse开发第一个jsp项目">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-24T00:16:01.000Z">
+<meta property="article:modified_time" content="2023-05-15T13:21:49.421Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Theqiqi_blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Theqiqi_blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-jsp/jsp项目的环境配置与使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+
+	<span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+		  <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+<a href="/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/" class="article-date">
+  <time datetime="2023-04-24T00:16:01.000Z" itemprop="datePublished">2023-04-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      jsp项目的环境配置与使用
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="jsp开发的环境配置"><a href="#jsp开发的环境配置" class="headerlink" title="jsp开发的环境配置"></a>jsp开发的环境配置</h2><h2 id="使用eclipse开发第一个jsp项目"><a href="#使用eclipse开发第一个jsp项目" class="headerlink" title="使用eclipse开发第一个jsp项目"></a>使用eclipse开发第一个jsp项目</h2><span id="more"></span>
+
+<h2 id="jsp开发的环境配置-1"><a href="#jsp开发的环境配置-1" class="headerlink" title="jsp开发的环境配置"></a>jsp开发的环境配置</h2><ol>
+<li>下载安装javajdk</li>
+<li>下载安装eclipse</li>
+<li>下载安装Tomcat</li>
+</ol>
+<h3 id="下载安装javajdk"><a href="#下载安装javajdk" class="headerlink" title="下载安装javajdk"></a>下载安装javajdk</h3><p>官网下载javajdk,版本选择jkd17</p>
+<p>下载完成后安装</p>
+<p>安装完成后进行配置,在系统中配置环境变量</p>
+<p>1.添加变量名与变量值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#变量名</span><br><span class="line">CLASSPATH</span><br><span class="line">#变量值</span><br><span class="line">.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;</span><br></pre></td></tr></table></figure>
+
+<p>2.添加变量名与变量值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#变量名</span><br><span class="line">JAVA_HOME</span><br><span class="line">#变量值</span><br><span class="line">C:\Program Files\Java\jdk-17.0.4.1</span><br></pre></td></tr></table></figure>
+
+<p>3.在变量名为Path中添加两条值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#Path</span><br><span class="line">%JAVA_HOME%\bin</span><br><span class="line">%JAVA_HOME%\jre\bin</span><br></pre></td></tr></table></figure>
+
+<p>4.在命令行窗口中通过javac验证环境是否配置成功</p>
+<h3 id="下载安装eclipse"><a href="#下载安装eclipse" class="headerlink" title="下载安装eclipse"></a>下载安装eclipse</h3><p>在官方网站下载Eclipse,版本选择2022-12,Eclipse IDE for Enterprise Java and Web Developers。</p>
+<p>下载完成后安装。</p>
+<h3 id="下载安装Tomcat"><a href="#下载安装Tomcat" class="headerlink" title="下载安装Tomcat"></a>下载安装Tomcat</h3><p>官网下载Tomcat,版本选择Tomcat10.1.</p>
+<p>下载完成后安装。</p>
+<h2 id="使用eclipse开发第一个jsp项目-1"><a href="#使用eclipse开发第一个jsp项目-1" class="headerlink" title="使用eclipse开发第一个jsp项目"></a>使用eclipse开发第一个jsp项目</h2><ol>
+<li><p>运行eclipse并配置Tomcat</p>
+</li>
+<li><p>新建jsp项目</p>
+</li>
+<li><p>新建jsp文件</p>
+</li>
+<li><p>运行jsp项目</p>
+</li>
+</ol>
+<h3 id="运行eclipse"><a href="#运行eclipse" class="headerlink" title="运行eclipse"></a>运行eclipse</h3><ol>
+<li>通过双击eclipse运行eclipse-&gt;选择workspace路径-&gt;之后会进入eclipse主界面.</li>
+<li>在Windows-&gt;preferences中选择Server-&gt;Runtime Environments.</li>
+<li>点击Add-&gt;Apache-&gt;Apache Tomcat v10.1,点击next.</li>
+<li>在Tomcat installation directory中填入Tomcat的安装目录-&gt;点击Finish.</li>
+</ol>
+<h3 id="新建jsp项目"><a href="#新建jsp项目" class="headerlink" title="新建jsp项目"></a>新建jsp项目</h3><ol>
+<li>点击file-&gt;new-&gt;Dynamic Web Project</li>
+<li>在弹出的界面中输入项目名称hello</li>
+<li>点击next-&gt;next-&gt;Finish.</li>
+</ol>
+<h3 id="新建jsp文件"><a href="#新建jsp文件" class="headerlink" title="新建jsp文件"></a>新建jsp文件</h3><ol>
+<li>打开hello-&gt;src-&gt;main-&gt;webapp</li>
+<li>鼠标右键webapp-&gt;选择New-&gt;JSP File，</li>
+<li>更改文件名为hello.jsp-&gt;选择html5-&gt;点击Finish.</li>
+<li>在body标签里输入hello world.</li>
+</ol>
+<h3 id="运行jsp项目"><a href="#运行jsp项目" class="headerlink" title="运行jsp项目"></a>运行jsp项目</h3><ol>
+<li>在hello.jsp文件中点击鼠标右键选择Run As-&gt;Run on Server</li>
+<li>在弹出的界面中选择Tomcat服务器-&gt;点击Next-&gt;选择hello项目-&gt;点击Finish.</li>
+<li>运行后在浏览器中会显示hello world,运行结果如下图所示:</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/" data-id="cljzovrd9000lg89bfg0z60zj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/05/06/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用qt5.8开发数据库程序
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/04/22/android/%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%89%93%E5%BC%80android%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%B9%B6root/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">通过命令行打开android模拟器并root</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-%E7%A8%8B%E5%BA%8F/" rel="tag">c++程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" rel="tag">c++语言程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qt5-8/" rel="tag">qt5.8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 17.5px;">64位汇编程序</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/c-%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c++程序</a> <a href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c++语言程序</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/qt5-8/" style="font-size: 10px;">qt5.8</a> <a href="/tags/termux/" style="font-size: 12.5px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 20px;">x86汇编程序</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/05/06/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/">使用qt5.8开发数据库程序</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/">jsp项目的环境配置与使用</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/22/android/%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%89%93%E5%BC%80android%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%B9%B6root/">通过命令行打开android模拟器并root</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/">termux安装kali(Nethunter)与ubuntu</a>
+          </li>
+        
+          <li>
+            <a href="/2023/04/21/termux/termux%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8Bssh/">termux开启远程ssh</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      
+  <span id="busuanzi_container_site_pv">
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv" style='display:none'>
+          本站访客数<span id="busuanzi_value_site_uv"></span>人
+  </span>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2023 Theqiqi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
