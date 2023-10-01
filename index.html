@@ -64,6 +64,132 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-mingw&amp;gcc等编译器的使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+<a href="/2023/08/17/mingw&gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
+  <time datetime="2023-08-17T09:24:01.000Z" itemprop="datePublished">2023-08-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/17/mingw&gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/">mingw&amp;gcc等编译器的使用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#gcc%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8">GCC编译器的基本使用</a><ul>
+<li><a href="#gcc%E7%9A%84%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B">gcc的编译过程</a></li>
+<li><a href="#gcc%E7%BC%96%E8%AF%91%E5%99%A8%E7%BC%96%E8%AF%91c">GCC编译器编译c++</a></li>
+<li><a href="#gcc%E7%BC%96%E8%AF%91%E8%A3%B8%E6%9C%BA%E7%A8%8B%E5%BA%8F">gcc编译裸机程序</a></li>
+<li><a href="#gcc%E7%BC%96%E8%AF%91%E5%8A%A8%E6%80%81%E5%BA%93">GCC编译动态库</a></li>
+<li><a href="#gcc%E7%BC%96%E8%AF%91%E9%9D%99%E6%80%81%E5%BA%93">GCC编译静态库</a></li>
+<li><a href="#mingw%E4%B8%AD%E7%9A%84%E6%B1%87%E7%BC%96%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95">mingw中的汇编命令用法</a></li>
+<li><a href="#gcc%E7%94%9F%E6%88%90intel%E8%AF%AD%E6%B3%95%E7%9A%84%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81">gcc生成intel语法的汇编代码</a></li>
+</ul>
+</li>
+<li><a href="#nasm%E6%B1%87%E7%BC%96%E5%99%A8">NASM汇编器</a><ul>
+<li><a href="#%E4%BD%BF%E7%94%A8%E4%BB%A5%E4%B8%8B%E5%91%BD%E4%BB%A4%E5%B0%86%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E7%BC%96%E8%AF%91%E6%88%90%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6">使用以下命令将汇编代码编译成可执行文件：</a></li>
+<li><a href="#nasm%E5%B0%86%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6">NASM将汇编代码生成为二进制文件</a></li>
+<li><a href="#nasm%E9%87%8C%E7%9A%84ndisasm%E5%B7%A5%E5%85%B7%E5%B0%86%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E5%8F%8D%E6%B1%87%E7%BC%96">NASM里的ndisasm工具将二进制代码反汇编</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2%E4%B8%8E%E5%8F%8D%E6%B1%87%E7%BC%96%E5%B7%A5%E5%85%B7">格式转换与反汇编工具</a><ul>
+<li><a href="#objcopy">objcopy</a></li>
+<li><a href="#objdump">objdump</a></li>
+<li><a href="#gdb">gdb</a></li>
+<li><a href="#%E4%B8%80%E4%BA%9B%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7">一些其他工具</a><ul>
+<li><a href="#od">od#</a></li>
+<li><a href="#xxd">xxd#</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#vs2019%E7%BC%96%E8%AF%91%E5%99%A8">vs2019编译器</a></li>
+</ul>
+        
+          <p class="article-more-link">
+            <a href="/2023/08/17/mingw&gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/08/17/mingw&gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="cln7b1yi20002wgd1czyz3fm2" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-first pragram/第一个爬虫程序" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+<a href="/2023/07/07/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/" class="article-date">
+  <time datetime="2023-07-07T23:00:01.000Z" itemprop="datePublished">2023-07-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/07/07/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/">第一个爬虫程序</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#first-web-crawler">First web crawler</a><ul>
+<li><a href="#development">Development</a><ul>
+<li><a href="#install-python">Install python</a></li>
+</ul>
+</li>
+<li><a href="#first--crawler-program">First  crawler program</a><ul>
+<li><a href="#install-dependent-environment">Install dependent environment</a></li>
+<li><a href="#first-crawler-code">First crawler code</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E8%B1%86%E7%93%A3%E7%BD%91%E9%A1%B5%E4%BF%A1%E6%81%AF">获取豆瓣网页信息</a>
+        
+          <p class="article-more-link">
+            <a href="/2023/07/07/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/07/07/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/" data-id="cln7b1yih0013wgd1arqm72cl" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-qt/用qt5.8开发数据库程序" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
@@ -87,7 +213,32 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><ul>
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a><ul>
+<li><a href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83">开发环境</a></li>
+<li><a href="#%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B">开发过程</a><ul>
+<li><a href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E5%88%86">mysql数据库部分</a></li>
+<li><a href="#qt%E5%BC%80%E5%8F%91%E9%83%A8%E5%88%86">qt开发部分</a></li>
+</ul>
+</li>
+<li><a href="#%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E4%BF%AE%E5%A4%8D">出现的问题及修复</a></li>
+<li><a href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83-1">开发环境</a></li>
+<li><a href="#%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B-1">开发过程</a><ul>
+<li><a href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E5%88%86-1">mysql数据库部分</a></li>
+<li><a href="#qt%E5%BC%80%E5%8F%91%E9%83%A8%E5%88%86-1">qt开发部分</a><ul>
+<li><a href="#%E6%96%B0%E5%BB%BAqt%E9%A1%B9%E7%9B%AE%E5%91%BD%E5%90%8D%E4%B8%BAlogin_test">新建qt项目,命名为login_test</a><ul>
+<li><a href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81">完整代码</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E4%BF%AE%E5%A4%8D-1">出现的问题及修复</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><ul>
 <li>mysql5.0</li>
 <li>qt5.8</li>
 </ul>
@@ -100,7 +251,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/05/06/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/" data-id="cljzp9glv000zrs9bgm51grd4" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/05/06/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/" data-id="cln7b1yij001bwgd17drg3rln" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/qt5-8/" rel="tag">qt5.8</a></li></ul>
@@ -112,10 +263,213 @@
 
 
   
-    <article id="post-jsp/jsp项目的环境配置与使用" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-c&amp;c++/使用opengl图形库画窗口图形" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
-<a href="/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/" class="article-date">
+<a href="/2023/05/01/c&c++/%E4%BD%BF%E7%94%A8opengl%E5%9B%BE%E5%BD%A2%E5%BA%93%E7%94%BB%E7%AA%97%E5%8F%A3%E5%9B%BE%E5%BD%A2/" class="article-date">
+  <time datetime="2023-05-01T19:02:01.000Z" itemprop="datePublished">2023-05-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/05/01/c&c++/%E4%BD%BF%E7%94%A8opengl%E5%9B%BE%E5%BD%A2%E5%BA%93%E7%94%BB%E7%AA%97%E5%8F%A3%E5%9B%BE%E5%BD%A2/">使用opengl图形库画窗口图形</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#%E5%9C%A8c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E4%B8%AD%E4%BD%BF%E7%94%A8opengl">在c语言程序中使用openGL</a><ul>
+<li><a href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83">配置环境</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8opengl%E7%94%BB%E4%B8%80%E4%B8%AA%E8%8C%B6%E5%A3%B6">使用openGL画一个茶壶</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8opengl%E5%9C%A8%E5%B1%8F%E5%B9%95%E4%B8%8A%E7%94%BB%E5%9B%BE">使用opengl在屏幕上画图</a></li>
+<li><a href="#%E5%8E%BB%E9%99%A4%E6%8E%A7%E5%88%B6%E5%8F%B0">去除控制台</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9C%A8win32%E7%A8%8B%E5%BA%8F%E4%B8%AD%E4%BD%BF%E7%94%A8opengl">在win32程序中使用openGL</a><ul>
+<li><a href="#%E4%BD%BF%E7%94%A8opengl%E7%94%BB%E4%B8%AA%E8%8C%B6%E5%A3%B6%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E8%87%AA%E5%B8%A6opengl%E5%BA%93">使用openGL画个茶壶，操作系统自带opengl库</a></li>
+<li><a href="#%E5%9C%A8win32%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F%E4%B8%AD%E4%BD%BF%E7%94%A8opengl%E7%94%BB%E4%B8%AA%E7%BA%A2%E8%89%B2%E7%9F%A9%E5%BD%A2">在win32窗口程序中使用openGL画个红色矩形</a>
+        
+          <p class="article-more-link">
+            <a href="/2023/05/01/c&c++/%E4%BD%BF%E7%94%A8opengl%E5%9B%BE%E5%BD%A2%E5%BA%93%E7%94%BB%E7%AA%97%E5%8F%A3%E5%9B%BE%E5%BD%A2/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/05/01/c&c++/%E4%BD%BF%E7%94%A8opengl%E5%9B%BE%E5%BD%A2%E5%BA%93%E7%94%BB%E7%AA%97%E5%8F%A3%E5%9B%BE%E5%BD%A2/" data-id="cln7b1yi60009wgd15ccv290i" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-win32api/一些win32api使用方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+<a href="/2023/05/01/win32api/%E4%B8%80%E4%BA%9Bwin32api%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" class="article-date">
+  <time datetime="2023-05-01T07:00:02.000Z" itemprop="datePublished">2023-05-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/05/01/win32api/%E4%B8%80%E4%BA%9Bwin32api%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/">一些win32api使用方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#%E9%9F%B3%E9%A2%91">音频</a><ul>
+<li><a href="#cc%E5%9C%A8%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%A8%8B%E5%BA%8F%E4%B8%AD%E8%B0%83%E7%94%A8api%E6%92%AD%E6%94%BE%E9%9F%B3%E9%A2%91">c&#x2F;c++在控制台程序中调用api播放音频</a></li>
+</ul>
+</li>
+<li><a href="#debug">Debug</a><ul>
+<li><a href="#output-debug-information-in-win32-application">Output debug information in win32 application</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8E%BB%E9%99%A4%E6%8E%A7%E5%88%B6%E5%8F%B0">去除控制台</a><ul>
+<li><a href="#%E4%BD%BF%E7%94%A8%E9%A2%84%E5%A4%84%E7%90%86%E5%91%BD%E4%BB%A4">使用预处理命令</a></li>
+</ul>
+</li>
+<li><a href="#%E9%80%9A%E8%BF%87main%E5%87%BD%E6%95%B0%E7%94%BB%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F">通过main函数画窗口程序</a><ul>
+<li><a href="#1%E4%BB%8E-main-%E5%87%BD%E6%95%B0%E5%BC%80%E5%A7%8B%E5%86%99%E4%B8%80%E4%B8%AA-windows-gui-%E7%A8%8B%E5%BA%8F-winmain-%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0%E9%80%9A%E8%BF%87%E7%9B%B8%E5%BA%94%E7%9A%84-api-%E5%BE%97%E5%88%B0">1从 main() 函数开始写一个 Windows GUI 程序。 WinMain() 函数的参数通过相应的 API 得到。</a></li>
+<li><a href="#2%E5%AE%8C%E5%96%84gui%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3">2完善GUI创建窗口</a></li>
+<li><a href="#%E9%80%9A%E8%BF%87%E5%9C%A8main%E5%87%BD%E6%95%B0%E9%87%8C%E8%B0%83%E7%94%A8winmain%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0gui%E7%A8%8B%E5%BA%8F">通过在main函数里调用WinMain函数实现GUI程序</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E5%91%BD%E4%BB%A4">编译命令</a></li>
+</ul>
+</li>
+<li><a href="#%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%89%93%E5%8D%B0%E5%A4%9A%E8%AF%AD%E8%A8%80">控制台打印多语言</a><ul>
+<li><a href="#%E6%96%B9%E6%B3%95%E4%B8%80setlocale%E4%B8%8Ewprintf">方法一<code>setlocale</code>与<code>wprintf</code>:</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95%E4%BA%8C-writeconsolew-">方法二: <code>WriteConsoleW </code></a></li>
+<li><a href="#%E6%96%B9%E6%B3%95%E4%B8%89write-console">方法三:<code>Write Console</code></a></li>
+</ul>
+</li>
+<li><a href="#%E9%94%AE%E7%9B%98%E6%B6%88%E6%81%AF%E4%B8%8E%E9%BC%A0%E6%A0%87%E6%B6%88%E6%81%AF">键盘消息与鼠标消息</a><ul>
+<li><a href="#%E9%94%AE%E7%9B%98%E6%B6%88%E6%81%AF">键盘消息</a></li>
+<li><a href="#%E9%94%AE%E7%9B%98%E9%92%A9%E5%AD%90">键盘钩子</a></li>
+<li><a href="#%E5%85%A8%E5%B1%80%E7%83%AD%E9%94%AE">全局热键</a><ul>
+<li><a href="#%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%A8%8B%E5%BA%8F%E5%85%A8%E5%B1%80%E7%83%AD%E9%94%AE">控制台程序全局热键</a></li>
+<li><a href="#%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F%E5%85%A8%E5%B1%80%E7%83%AD%E9%94%AE">窗口程序全局热键</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8gdi%E7%BB%98%E5%9B%BE">使用GDI绘图</a><ul>
+<li><a href="#%E4%BD%BF%E7%94%A8gid%E7%94%BB%E4%B8%80%E6%9D%A1%E7%BA%BF">使用GID画一条线</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8win32api%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87%E5%B9%B6%E6%B7%BB%E5%8A%A0%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6%E4%B8%8E%E9%94%AE%E7%9B%98%E4%BA%8B%E4%BB%B6">使用win32api加载图片并添加鼠标事件与键盘事件</a></li>
+</ul>
+</li>
+<li><a href="#%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8F">示例程序</a><ul>
+<li><a href="#%E5%BE%AE%E8%BD%AF%E7%A4%BA%E4%BE%8B%E7%A8%8B%E5%BA%8Fwin32%E7%AA%97%E5%8F%A3%E6%95%B0%E5%AD%97%E6%97%B6%E9%92%9F%E7%A8%8B%E5%BA%8F">微软示例程序win32窗口数字时钟程序</a></li>
+<li><a href="#winmain%E5%85%A5%E5%8F%A3%E7%9A%84%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F">WinMain入口的窗口程序</a></li>
+</ul>
+</li>
+</ul>
+        
+          <p class="article-more-link">
+            <a href="/2023/05/01/win32api/%E4%B8%80%E4%BA%9Bwin32api%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/05/01/win32api/%E4%B8%80%E4%BA%9Bwin32api%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" data-id="cln7b1yik001fwgd1h30ndl3v" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/win32api/" rel="tag">win32api</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-first pragram/用c语言开发第一个win32api窗口程序" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+<a href="/2023/05/01/first%20pragram/%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAwin32api%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F/" class="article-date">
+  <time datetime="2023-05-01T07:00:01.000Z" itemprop="datePublished">2023-05-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/05/01/first%20pragram/%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAwin32api%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F/">用c语言开发第一个win32api窗口程序</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#%E5%89%8D%E5%9B%A0">前因</a></li>
+<li><a href="#%E8%BF%87%E7%A8%8B">过程</a><ul>
+<li><a href="#%E4%B8%80-%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%A8%8B%E5%BA%8F">一 第一个控制台程序</a></li>
+<li><a href="#%E4%BA%8C-%E7%AC%AC%E4%B8%80%E4%B8%AAwin32api%E7%9A%84%E4%BD%BF%E7%94%A8">二 第一个win32api的使用</a></li>
+<li><a href="#%E4%B8%89-%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F">三 第一个windows窗口程序</a><ul>
+<li><a href="#1%E4%BF%AE%E6%94%B9%E6%BA%90maincpp%E6%96%87%E4%BB%B6%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8win32api%E4%B8%AD%E7%9A%84%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0">1.修改源main.cpp文件代码，调用win32api中的窗口函数</a></li>
+<li><a href="#2%E5%AE%8C%E5%96%84%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F%E7%BB%99%E7%AA%97%E5%8F%A3%E6%B7%BB%E5%8A%A0%E6%8E%A7%E4%BB%B6">2.完善第一个windows窗口程序,给窗口添加控件</a></li>
+<li><a href="#3%E7%BB%A7%E7%BB%AD%E5%AE%8C%E5%96%84%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F%E4%BD%BF%E7%94%A8%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86">3.继续完善第一个windows窗口程序,使用消息处理</a></li>
+<li><a href="#4%E5%AE%8C%E5%96%84%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86">4.完善消息处理</a></li>
+</ul>
+</li>
+<li><a href="#win32api%E5%B0%81%E8%A3%85%E5%90%8E%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F">win32api封装后创建窗口程序</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E">补充说明</a>
+        
+          <p class="article-more-link">
+            <a href="/2023/05/01/first%20pragram/%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAwin32api%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/05/01/first%20pragram/%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAwin32api%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F/" data-id="cln7b1yig0011wgd16b0r6s6e" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-first pragram/jsp项目的环境配置与使用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+<a href="/2023/04/23/first%20pragram/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/" class="article-date">
   <time datetime="2023-04-24T00:16:01.000Z" itemprop="datePublished">2023-04-23</time>
 </a>
     
@@ -127,7 +481,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/">jsp项目的环境配置与使用</a>
+      <a class="article-title" href="/2023/04/23/first%20pragram/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/">jsp项目的环境配置与使用</a>
     </h1>
   
 
@@ -135,19 +489,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="jsp开发的环境配置"><a href="#jsp开发的环境配置" class="headerlink" title="jsp开发的环境配置"></a>jsp开发的环境配置</h2><h2 id="使用eclipse开发第一个jsp项目"><a href="#使用eclipse开发第一个jsp项目" class="headerlink" title="使用eclipse开发第一个jsp项目"></a>使用eclipse开发第一个jsp项目</h2>
+        <ul>
+<li><a href="#jsp%E5%BC%80%E5%8F%91%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE">jsp开发的环境配置</a><ul>
+<li><a href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85javajdk">下载安装javajdk</a></li>
+<li><a href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85eclipse">下载安装eclipse</a></li>
+<li><a href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85tomcat">下载安装Tomcat</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8eclipse%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAjsp%E9%A1%B9%E7%9B%AE">使用eclipse开发第一个jsp项目</a><ul>
+<li><a href="#%E8%BF%90%E8%A1%8Ceclipse">运行eclipse</a></li>
+<li><a href="#%E6%96%B0%E5%BB%BAjsp%E9%A1%B9%E7%9B%AE">新建jsp项目</a></li>
+<li><a href="#%E6%96%B0%E5%BB%BAjsp%E6%96%87%E4%BB%B6">新建jsp文件</a></li>
+<li><a href="#%E8%BF%90%E8%A1%8Cjsp%E9%A1%B9%E7%9B%AE">运行jsp项目</a>
         
           <p class="article-more-link">
-            <a href="/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/#more">Read More</a>
+            <a href="/2023/04/23/first%20pragram/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/" data-id="cljzp9glt000prs9bftgubbc1" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/04/23/first%20pragram/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/" data-id="cln7b1yig000zwgd16infevf1" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li></ul>
 
     </footer>
   </div>
@@ -180,13 +545,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
-<li><p>下载安装android7x86_64googleapi</p>
-</li>
-<li><p>管理员身份打开cmd运行安卓模拟器</p>
-</li>
-<li><p>开始root</p>
-</li>
-<li><p>测试root是否成功</p>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a><ul>
+<li><a href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85android7x86_64googleapi">下载安装android7x86_64googleapi</a></li>
+<li><a href="#%E7%AE%A1%E7%90%86%E5%91%98%E8%BA%AB%E4%BB%BD%E6%89%93%E5%BC%80cmd%E8%BF%90%E8%A1%8C%E5%AE%89%E5%8D%93%E6%A8%A1%E6%8B%9F%E5%99%A8">管理员身份打开cmd运行安卓模拟器</a></li>
+<li><a href="#%E5%BC%80%E5%A7%8Broot">开始root</a></li>
+</ul>
 </li>
 </ul>
         
@@ -197,7 +560,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/22/android/%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%89%93%E5%BC%80android%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%B9%B6root/" data-id="cljzp9gli0001rs9b4uey7xjl" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/04/22/android/%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%89%93%E5%BC%80android%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%B9%B6root/" data-id="cln7b1yi10001wgd1fjtpdyzw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/" rel="tag">android</a></li></ul>
@@ -232,7 +595,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-安装一些软件包和git"><a href="#一-安装一些软件包和git" class="headerlink" title="一 安装一些软件包和git"></a>一 安装一些软件包和git</h2><h2 id="二-安装kali"><a href="#二-安装kali" class="headerlink" title="二 安装kali"></a>二 安装kali</h2><h2 id="三-安装Debian"><a href="#三-安装Debian" class="headerlink" title="三 安装Debian"></a>三 安装Debian</h2>
+        <ul>
+<li><a href="#%E4%B8%80-%E5%AE%89%E8%A3%85%E4%B8%80%E4%BA%9B%E8%BD%AF%E4%BB%B6%E5%8C%85%E5%92%8Cgit">一 安装一些软件包和git</a></li>
+<li><a href="#%E4%BA%8C-%E5%AE%89%E8%A3%85kali">二 安装kali</a><ul>
+<li><a href="#1-%E5%AE%89%E8%A3%85kali">1 安装kali</a></li>
+<li><a href="#2%E5%90%AF%E5%8A%A8%E5%92%8C%E8%AE%BE%E7%BD%AEkali-linux">2启动和设置Kali Linux</a></li>
+<li><a href="#3%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5">3相关链接</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E5%AE%89%E8%A3%85debian">三 安装Debian</a><ul>
+<li><a href="#1-%E5%AE%89%E8%A3%85sudo%E8%BD%AF%E4%BB%B6">1 安装sudo软件</a></li>
+<li><a href="#2%E5%85%88%E5%AE%89%E8%A3%85%E5%9F%BA%E7%A1%80%E4%BB%B6proot-distro">2先安装基础件proot-distro</a></li>
+<li><a href="#3-%E6%9F%A5%E7%9C%8B%E5%8F%AF%E5%AE%89%E8%A3%85%E7%9A%84linux%E7%B3%BB%E7%BB%9F">3 查看可安装的Linux系统</a></li>
+<li><a href="#4%E5%AE%89%E8%A3%85ubuntu">4安装ubuntu</a></li>
+<li><a href="#5%E5%AE%89%E8%A3%85%E5%AE%8C%E6%88%90%E5%90%8E%E8%BF%9B%E5%85%A5-linuxubuntu%E7%8E%AF%E5%A2%83%E7%9A%84%E6%8C%87%E4%BB%A4%E4%B8%BA">5安装完成后，进入 Linux(Ubuntu)环境的指令为：</a></li>
+<li><a href="#6%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5">6相关链接</a>
         
           <p class="article-more-link">
             <a href="/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/#more">Read More</a>
@@ -241,7 +618,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/" data-id="cljzp9glv0011rs9b412t850r" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/" data-id="cln7b1yih0015wgd1ef8618xc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/termux/" rel="tag">termux</a></li></ul>
@@ -276,7 +653,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-下载termux"><a href="#一-下载termux" class="headerlink" title="一 下载termux"></a>一 下载termux</h2><h2 id="二-切换软件源"><a href="#二-切换软件源" class="headerlink" title="二 切换软件源"></a>二 切换软件源</h2><h2 id="三-安装openssh并开启"><a href="#三-安装openssh并开启" class="headerlink" title="三 安装openssh并开启"></a>三 安装openssh并开启</h2><h2 id="四-远程连接"><a href="#四-远程连接" class="headerlink" title="四 远程连接"></a>四 远程连接</h2><h2 id="五-其他"><a href="#五-其他" class="headerlink" title="五 其他"></a>五 其他</h2>
+        <ul>
+<li><a href="#%E4%B8%80-%E4%B8%8B%E8%BD%BDtermux">一 下载termux</a></li>
+<li><a href="#%E4%BA%8C-%E5%88%87%E6%8D%A2%E8%BD%AF%E4%BB%B6%E6%BA%90">二 切换软件源</a></li>
+<li><a href="#%E4%B8%89-%E5%AE%89%E8%A3%85openssh%E5%B9%B6%E5%BC%80%E5%90%AF">三 安装openssh并开启</a><ul>
+<li><a href="#1%E5%AE%89%E8%A3%85openssh%E5%91%BD%E4%BB%A4">1安装openssh命令</a></li>
+<li><a href="#2%E4%BD%BF%E7%94%A8ssh%E5%91%BD%E4%BB%A4%E6%A3%80%E6%9F%A5">2使用<code>ssh</code>命令检查</a></li>
+<li><a href="#3%E4%BD%BF%E7%94%A8passwd%E8%AE%BE%E7%BD%AE%E5%AF%86%E7%A0%81">3使用<code>passwd</code>设置密码</a></li>
+<li><a href="#4%E4%BD%BF%E7%94%A8sshd%E5%91%BD%E4%BB%A4%E5%BC%80%E5%90%AFssh">4使用<code>sshd</code>命令开启ssh</a></li>
+<li><a href="#5%E7%94%A8sshd%E5%90%AF%E7%94%A8%E6%97%B6%E5%A6%82%E6%9E%9C%E5%87%BA%E7%8E%B0no-hostkeys-available----exiting%E4%BD%BF%E7%94%A8ssh-keygen--a%E4%BF%AE%E5%A4%8D">5用sshd启用时如果出现no hostkeys available – exiting使用<code>ssh-keygen -A</code>修复</a></li>
+<li><a href="#6%E4%BD%BF%E7%94%A8whoami%E6%9F%A5%E7%9C%8B%E7%94%A8%E6%88%B7%E5%90%8D">6使用<code>whoami</code>查看用户名</a></li>
+<li><a href="#7%E4%BD%BF%E7%94%A8ifconfig%E6%9F%A5%E7%9C%8Bip%E5%9C%B0%E5%9D%80">7使用ifconfig查看ip地址</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5">四 远程连接</a></li>
+<li><a href="#%E4%BA%94-%E5%85%B6%E4%BB%96">五 其他</a>
         
           <p class="article-more-link">
             <a href="/2023/04/21/termux/termux%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8Bssh/#more">Read More</a>
@@ -285,230 +676,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/21/termux/termux%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8Bssh/" data-id="cljzp9glw0013rs9bcmb7a1jx" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/04/21/termux/termux%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8Bssh/" data-id="cln7b1yii0017wgd1az5k1n5f" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/termux/" rel="tag">termux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-mysql/mysql数据库的增删改查" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    
-<a href="/2023/04/17/mysql/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/" class="article-date">
-  <time datetime="2023-04-18T00:06:02.000Z" itemprop="datePublished">2023-04-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/17/mysql/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/">mysql数据库的增删改查</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一对多关系表"><a href="#一对多关系表" class="headerlink" title="一对多关系表"></a>一对多关系表</h2><h2 id="多对多关系"><a href="#多对多关系" class="headerlink" title="多对多关系"></a>多对多关系</h2>
-        
-          <p class="article-more-link">
-            <a href="/2023/04/17/mysql/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/17/mysql/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/" data-id="cljzp9glv000xrs9b4h1yhe4t" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-mysql/mysql_connect" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    
-<a href="/2023/04/17/mysql/mysql_connect/" class="article-date">
-  <time datetime="2023-04-18T00:06:01.000Z" itemprop="datePublished">2023-04-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/17/mysql/mysql_connect/">mysql_connect</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一下载安装mysql"><a href="#一下载安装mysql" class="headerlink" title="一下载安装mysql"></a>一下载安装mysql</h2><h2 id="二连接"><a href="#二连接" class="headerlink" title="二连接"></a>二连接</h2><h2 id="三-mysql语句"><a href="#三-mysql语句" class="headerlink" title="三 mysql语句"></a>三 mysql语句</h2>
-        
-          <p class="article-more-link">
-            <a href="/2023/04/17/mysql/mysql_connect/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/17/mysql/mysql_connect/" data-id="cljzp9glu000vrs9b6sl7e88f" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-assembly_x86/如何使用visualstudio2022在c语言中内连x86汇编" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    
-<a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio2022%E5%9C%A8c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%86%85%E8%BF%9Ex86%E6%B1%87%E7%BC%96/" class="article-date">
-  <time datetime="2023-04-05T18:02:08.000Z" itemprop="datePublished">2023-04-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio2022%E5%9C%A8c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%86%85%E8%BF%9Ex86%E6%B1%87%E7%BC%96/">如何使用visualstudio2022在c语言中内连x86汇编</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-使用visualstudio2022新建一个c语言项目"><a href="#一-使用visualstudio2022新建一个c语言项目" class="headerlink" title="一 使用visualstudio2022新建一个c语言项目"></a>一 使用visualstudio2022新建一个c语言项目</h2><h2 id="二-c语言内连x86汇编的具体代码示例"><a href="#二-c语言内连x86汇编的具体代码示例" class="headerlink" title="二 c语言内连x86汇编的具体代码示例"></a>二 c语言内连x86汇编的具体代码示例</h2>
-        
-          <p class="article-more-link">
-            <a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio2022%E5%9C%A8c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%86%85%E8%BF%9Ex86%E6%B1%87%E7%BC%96/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio2022%E5%9C%A8c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%86%85%E8%BF%9Ex86%E6%B1%87%E7%BC%96/" data-id="cljzp9glo000ars9b9ne7hcnw" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-c++/如何在c++项目中使用动态链接库以及远程线程注入与hook" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    
-<a href="/2023/04/05/c++/%E5%A6%82%E4%BD%95%E5%9C%A8c++%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E4%BB%A5%E5%8F%8A%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E6%B3%A8%E5%85%A5%E4%B8%8Ehook/" class="article-date">
-  <time datetime="2023-04-05T18:02:07.000Z" itemprop="datePublished">2023-04-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/05/c++/%E5%A6%82%E4%BD%95%E5%9C%A8c++%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E4%BB%A5%E5%8F%8A%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E6%B3%A8%E5%85%A5%E4%B8%8Ehook/">如何在c++项目中使用动态链接库以及远程线程注入与hook</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-调用DLL函数"><a href="#一-调用DLL函数" class="headerlink" title="一 调用DLL函数"></a>一 调用DLL函数</h2><h2 id="二-加载User32-dll中的MessageBoxA函数"><a href="#二-加载User32-dll中的MessageBoxA函数" class="headerlink" title="二 加载User32.dll中的MessageBoxA函数"></a>二 加载User32.dll中的MessageBoxA函数</h2><h2 id="三-通过远程线程注入dll"><a href="#三-通过远程线程注入dll" class="headerlink" title="三 通过远程线程注入dll"></a>三 通过远程线程注入dll</h2><h2 id="四-hook注入dll-没有成功"><a href="#四-hook注入dll-没有成功" class="headerlink" title="四 hook注入dll(没有成功)"></a>四 hook注入dll(没有成功)</h2><h2 id="五"><a href="#五" class="headerlink" title="五"></a>五</h2><h2 id="六dll项目给外部调用"><a href="#六dll项目给外部调用" class="headerlink" title="六dll项目给外部调用"></a>六dll项目给外部调用</h2>
-        
-          <p class="article-more-link">
-            <a href="/2023/04/05/c++/%E5%A6%82%E4%BD%95%E5%9C%A8c++%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E4%BB%A5%E5%8F%8A%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E6%B3%A8%E5%85%A5%E4%B8%8Ehook/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/05/c++/%E5%A6%82%E4%BD%95%E5%9C%A8c++%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E4%BB%A5%E5%8F%8A%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E6%B3%A8%E5%85%A5%E4%B8%8Ehook/" data-id="cljzp9glt000rrs9b8v439gzz" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-%E7%A8%8B%E5%BA%8F/" rel="tag">c++程序</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-c++/如何新建一个dll文件并在远程线程中加载" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    
-<a href="/2023/04/05/c++/%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AAdll%E6%96%87%E4%BB%B6%E5%B9%B6%E5%9C%A8%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%AD%E5%8A%A0%E8%BD%BD/" class="article-date">
-  <time datetime="2023-04-05T18:02:07.000Z" itemprop="datePublished">2023-04-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/05/c++/%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AAdll%E6%96%87%E4%BB%B6%E5%B9%B6%E5%9C%A8%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%AD%E5%8A%A0%E8%BD%BD/">如何新建一个dll文件并在远程线程中加载</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-使用visualstudio2022创建一个动态链接库项目"><a href="#一-使用visualstudio2022创建一个动态链接库项目" class="headerlink" title="一 使用visualstudio2022创建一个动态链接库项目"></a>一 使用visualstudio2022创建一个动态链接库项目</h2><h2 id="二-c-语言程序远程注入的代码示例"><a href="#二-c-语言程序远程注入的代码示例" class="headerlink" title="二 c++语言程序远程注入的代码示例"></a>二 c++语言程序远程注入的代码示例</h2>
-        
-          <p class="article-more-link">
-            <a href="/2023/04/05/c++/%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AAdll%E6%96%87%E4%BB%B6%E5%B9%B6%E5%9C%A8%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%AD%E5%8A%A0%E8%BD%BD/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/05/c++/%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AAdll%E6%96%87%E4%BB%B6%E5%B9%B6%E5%9C%A8%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E4%B8%AD%E5%8A%A0%E8%BD%BD/" data-id="cljzp9glu000trs9b1n96228q" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" rel="tag">c++语言程序</a></li></ul>
 
     </footer>
   </div>
@@ -535,7 +706,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-%E7%A8%8B%E5%BA%8F/" rel="tag">c++程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" rel="tag">c++语言程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qt5-8/" rel="tag">qt5.8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" rel="tag">c语言程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qt5-8/" rel="tag">qt5.8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win32api/" rel="tag">win32api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
     </div>
   </div>
 
@@ -545,7 +716,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 17.5px;">64位汇编程序</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/c-%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c++程序</a> <a href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c++语言程序</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/qt5-8/" style="font-size: 10px;">qt5.8</a> <a href="/tags/termux/" style="font-size: 12.5px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 20px;">x86汇编程序</a>
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 17.5px;">64位汇编程序</a> <a href="/tags/Hacking/" style="font-size: 15px;">Hacking</a> <a href="/tags/OpenGL/" style="font-size: 10px;">OpenGL</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/compiled/" style="font-size: 10px;">compiled</a> <a href="/tags/c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c语言程序</a> <a href="/tags/first-pragram/" style="font-size: 15px;">first pragram</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/qt5-8/" style="font-size: 10px;">qt5.8</a> <a href="/tags/termux/" style="font-size: 12.5px;">termux</a> <a href="/tags/win32api/" style="font-size: 10px;">win32api</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 20px;">x86汇编程序</a>
     </div>
   </div>
 
@@ -554,7 +725,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li></ul>
     </div>
   </div>
 
@@ -567,23 +738,23 @@
       <ul>
         
           <li>
+            <a href="/2023/08/17/mingw&gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/">mingw&amp;gcc等编译器的使用</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/07/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/">第一个爬虫程序</a>
+          </li>
+        
+          <li>
             <a href="/2023/05/06/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/">使用qt5.8开发数据库程序</a>
           </li>
         
           <li>
-            <a href="/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/">jsp项目的环境配置与使用</a>
+            <a href="/2023/05/01/c&c++/%E4%BD%BF%E7%94%A8opengl%E5%9B%BE%E5%BD%A2%E5%BA%93%E7%94%BB%E7%AA%97%E5%8F%A3%E5%9B%BE%E5%BD%A2/">使用opengl图形库画窗口图形</a>
           </li>
         
           <li>
-            <a href="/2023/04/22/android/%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%89%93%E5%BC%80android%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%B9%B6root/">通过命令行打开android模拟器并root</a>
-          </li>
-        
-          <li>
-            <a href="/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/">termux安装kali(Nethunter)与ubuntu</a>
-          </li>
-        
-          <li>
-            <a href="/2023/04/21/termux/termux%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8Bssh/">termux开启远程ssh</a>
+            <a href="/2023/05/01/win32api/%E4%B8%80%E4%BA%9Bwin32api%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/">一些win32api使用方法</a>
           </li>
         
       </ul>

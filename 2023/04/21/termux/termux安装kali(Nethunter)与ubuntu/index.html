@@ -7,15 +7,15 @@
   
   <title>termux安装kali(Nethunter)与ubuntu | Theqiqi_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="目录一 安装一些软件包和git二 安装kali三 安装Debian">
+  <meta name="description" content="一 安装一些软件包和git 二 安装kali 1 安装kali 2启动和设置Kali Linux 3相关链接   三 安装Debian 1 安装sudo软件 2先安装基础件proot-distro 3 查看可安装的Linux系统 4安装ubuntu 5安装完成后，进入 Linux(Ubuntu)环境的指令为： 6相关链接">
 <meta property="og:type" content="article">
 <meta property="og:title" content="termux安装kali(Nethunter)与ubuntu">
 <meta property="og:url" content="http://example.com/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/index.html">
 <meta property="og:site_name" content="Theqiqi_blog">
-<meta property="og:description" content="目录一 安装一些软件包和git二 安装kali三 安装Debian">
+<meta property="og:description" content="一 安装一些软件包和git 二 安装kali 1 安装kali 2启动和设置Kali Linux 3相关链接   三 安装Debian 1 安装sudo软件 2先安装基础件proot-distro 3 查看可安装的Linux系统 4安装ubuntu 5安装完成后，进入 Linux(Ubuntu)环境的指令为： 6相关链接">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-04-22T00:01:02.000Z">
-<meta property="article:modified_time" content="2023-06-18T02:18:58.997Z">
+<meta property="article:modified_time" content="2023-10-01T09:34:57.771Z">
 <meta property="article:author" content="Theqiqi">
 <meta property="article:tag" content="termux">
 <meta name="twitter:card" content="summary">
@@ -95,11 +95,27 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-安装一些软件包和git"><a href="#一-安装一些软件包和git" class="headerlink" title="一 安装一些软件包和git"></a>一 安装一些软件包和git</h2><h2 id="二-安装kali"><a href="#二-安装kali" class="headerlink" title="二 安装kali"></a>二 安装kali</h2><h2 id="三-安装Debian"><a href="#三-安装Debian" class="headerlink" title="三 安装Debian"></a>三 安装Debian</h2><span id="more"></span>
+        <ul>
+<li><a href="#%E4%B8%80-%E5%AE%89%E8%A3%85%E4%B8%80%E4%BA%9B%E8%BD%AF%E4%BB%B6%E5%8C%85%E5%92%8Cgit">一 安装一些软件包和git</a></li>
+<li><a href="#%E4%BA%8C-%E5%AE%89%E8%A3%85kali">二 安装kali</a><ul>
+<li><a href="#1-%E5%AE%89%E8%A3%85kali">1 安装kali</a></li>
+<li><a href="#2%E5%90%AF%E5%8A%A8%E5%92%8C%E8%AE%BE%E7%BD%AEkali-linux">2启动和设置Kali Linux</a></li>
+<li><a href="#3%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5">3相关链接</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E5%AE%89%E8%A3%85debian">三 安装Debian</a><ul>
+<li><a href="#1-%E5%AE%89%E8%A3%85sudo%E8%BD%AF%E4%BB%B6">1 安装sudo软件</a></li>
+<li><a href="#2%E5%85%88%E5%AE%89%E8%A3%85%E5%9F%BA%E7%A1%80%E4%BB%B6proot-distro">2先安装基础件proot-distro</a></li>
+<li><a href="#3-%E6%9F%A5%E7%9C%8B%E5%8F%AF%E5%AE%89%E8%A3%85%E7%9A%84linux%E7%B3%BB%E7%BB%9F">3 查看可安装的Linux系统</a></li>
+<li><a href="#4%E5%AE%89%E8%A3%85ubuntu">4安装ubuntu</a></li>
+<li><a href="#5%E5%AE%89%E8%A3%85%E5%AE%8C%E6%88%90%E5%90%8E%E8%BF%9B%E5%85%A5-linuxubuntu%E7%8E%AF%E5%A2%83%E7%9A%84%E6%8C%87%E4%BB%A4%E4%B8%BA">5安装完成后，进入 Linux(Ubuntu)环境的指令为：</a></li>
+<li><a href="#6%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5">6相关链接</a><span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h2 id="一-安装一些软件包和git"><a href="#一-安装一些软件包和git" class="headerlink" title="一 安装一些软件包和git"></a>一 安装一些软件包和git</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pkg upgrade &amp;&amp; pkg install git &amp;&amp; pkg install python &amp;&amp; pkg install python2</span><br></pre></td></tr></table></figure>
 
-<h2 id="一-安装一些软件包和git-1"><a href="#一-安装一些软件包和git-1" class="headerlink" title="一 安装一些软件包和git"></a>一 安装一些软件包和git</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pkg upgrade &amp;&amp; pkg install git &amp;&amp; pkg install python &amp;&amp; pkg install python2</span><br></pre></td></tr></table></figure>
-
-<h2 id="二-安装kali-1"><a href="#二-安装kali-1" class="headerlink" title="二 安装kali"></a>二 安装kali</h2><h3 id="1-安装kali"><a href="#1-安装kali" class="headerlink" title="1 安装kali"></a>1 安装kali</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">termux-setup-storage</span><br><span class="line">pkg install wget</span><br><span class="line">wget -O install-nethunter-termux https://offs.ec/2MceZWr</span><br><span class="line"><span class="built_in">chmod</span> +x install-nethunter-termux</span><br><span class="line">./install-nethunter-termux</span><br></pre></td></tr></table></figure>
+<h2 id="二-安装kali"><a href="#二-安装kali" class="headerlink" title="二 安装kali"></a>二 安装kali</h2><h3 id="1-安装kali"><a href="#1-安装kali" class="headerlink" title="1 安装kali"></a>1 安装kali</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">termux-setup-storage</span><br><span class="line">pkg install wget</span><br><span class="line">wget -O install-nethunter-termux https://offs.ec/2MceZWr</span><br><span class="line"><span class="built_in">chmod</span> +x install-nethunter-termux</span><br><span class="line">./install-nethunter-termux</span><br></pre></td></tr></table></figure>
 
 <p>需要等很久。。。。。。。。。</p>
 <h3 id="2启动和设置Kali-Linux"><a href="#2启动和设置Kali-Linux" class="headerlink" title="2启动和设置Kali Linux"></a>2启动和设置Kali Linux</h3><ol>
@@ -118,7 +134,7 @@
 <li><a target="_blank" rel="noopener" href="https://www.kali.org/docs/nethunter/nethunter-rootless/">NetHunter Rootless</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.crisisshelter.org/install-kali-nethunter-using-termux-android/">Install Kali Nethunter using Termux on Android [No root]</a></li>
 </ul>
-<h2 id="三-安装Debian-1"><a href="#三-安装Debian-1" class="headerlink" title="三 安装Debian"></a>三 安装Debian</h2><h3 id="1-安装sudo软件"><a href="#1-安装sudo软件" class="headerlink" title="1 安装sudo软件"></a>1 安装sudo软件</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#安装sudo</span></span><br><span class="line">pkg install tsu</span><br></pre></td></tr></table></figure>
+<h2 id="三-安装Debian"><a href="#三-安装Debian" class="headerlink" title="三 安装Debian"></a>三 安装Debian</h2><h3 id="1-安装sudo软件"><a href="#1-安装sudo软件" class="headerlink" title="1 安装sudo软件"></a>1 安装sudo软件</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#安装sudo</span></span><br><span class="line">pkg install tsu</span><br></pre></td></tr></table></figure>
 
 <h3 id="2先安装基础件proot-distro"><a href="#2先安装基础件proot-distro" class="headerlink" title="2先安装基础件proot-distro"></a>2先安装基础件proot-distro</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#安装proot-distro</span></span><br><span class="line">pkg install proot-distro</span><br></pre></td></tr></table></figure>
 
@@ -133,7 +149,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/" data-id="cljzp9glv0011rs9b412t850r" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/" data-id="cln7b1yih0015wgd1ef8618xc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/termux/" rel="tag">termux</a></li></ul>
@@ -175,7 +191,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-%E7%A8%8B%E5%BA%8F/" rel="tag">c++程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" rel="tag">c++语言程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qt5-8/" rel="tag">qt5.8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" rel="tag">c语言程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qt5-8/" rel="tag">qt5.8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win32api/" rel="tag">win32api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
     </div>
   </div>
 
@@ -185,7 +201,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 17.5px;">64位汇编程序</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/c-%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c++程序</a> <a href="/tags/c-%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c++语言程序</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/qt5-8/" style="font-size: 10px;">qt5.8</a> <a href="/tags/termux/" style="font-size: 12.5px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 20px;">x86汇编程序</a>
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 17.5px;">64位汇编程序</a> <a href="/tags/Hacking/" style="font-size: 15px;">Hacking</a> <a href="/tags/OpenGL/" style="font-size: 10px;">OpenGL</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/compiled/" style="font-size: 10px;">compiled</a> <a href="/tags/c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c语言程序</a> <a href="/tags/first-pragram/" style="font-size: 15px;">first pragram</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/qt5-8/" style="font-size: 10px;">qt5.8</a> <a href="/tags/termux/" style="font-size: 12.5px;">termux</a> <a href="/tags/win32api/" style="font-size: 10px;">win32api</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 20px;">x86汇编程序</a>
     </div>
   </div>
 
@@ -194,7 +210,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li></ul>
     </div>
   </div>
 
@@ -207,23 +223,23 @@
       <ul>
         
           <li>
+            <a href="/2023/08/17/mingw&gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/">mingw&amp;gcc等编译器的使用</a>
+          </li>
+        
+          <li>
+            <a href="/2023/07/07/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/">第一个爬虫程序</a>
+          </li>
+        
+          <li>
             <a href="/2023/05/06/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/">使用qt5.8开发数据库程序</a>
           </li>
         
           <li>
-            <a href="/2023/04/23/jsp/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/">jsp项目的环境配置与使用</a>
+            <a href="/2023/05/01/c&c++/%E4%BD%BF%E7%94%A8opengl%E5%9B%BE%E5%BD%A2%E5%BA%93%E7%94%BB%E7%AA%97%E5%8F%A3%E5%9B%BE%E5%BD%A2/">使用opengl图形库画窗口图形</a>
           </li>
         
           <li>
-            <a href="/2023/04/22/android/%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%89%93%E5%BC%80android%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%B9%B6root/">通过命令行打开android模拟器并root</a>
-          </li>
-        
-          <li>
-            <a href="/2023/04/21/termux/termux%E5%AE%89%E8%A3%85kali(Nethunter)%E4%B8%8Eubuntu/">termux安装kali(Nethunter)与ubuntu</a>
-          </li>
-        
-          <li>
-            <a href="/2023/04/21/termux/termux%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8Bssh/">termux开启远程ssh</a>
+            <a href="/2023/05/01/win32api/%E4%B8%80%E4%BA%9Bwin32api%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/">一些win32api使用方法</a>
           </li>
         
       </ul>
