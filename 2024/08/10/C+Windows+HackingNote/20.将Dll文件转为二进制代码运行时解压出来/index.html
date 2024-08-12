@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>20.将Dll文件转为二进制代码运行时解压出来 | Theqiqi_blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用C语言读取与写入文件 1. c语言读取文件 2.C语言写入给文本文件中写入字符串 3.C语言以二进制的方式读取文本 4.C语言以二进制的方式读取文本并打印字符串 5.C语言以二进制的方式读取文本并打印16进制数据 6. C语言以二进制的方式写入文件   使用C语言在windows读取与写入文件 1. windows读取文件 2.windows给文本文件中写入字符串 3. windows以二进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="20.将Dll文件转为二进制代码运行时解压出来">
+<meta property="og:url" content="http://example.com/2024/08/10/C+Windows+HackingNote/20.%E5%B0%86Dll%E6%96%87%E4%BB%B6%E8%BD%AC%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%8E%8B%E5%87%BA%E6%9D%A5/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="使用C语言读取与写入文件 1. c语言读取文件 2.C语言写入给文本文件中写入字符串 3.C语言以二进制的方式读取文本 4.C语言以二进制的方式读取文本并打印字符串 5.C语言以二进制的方式读取文本并打印16进制数据 6. C语言以二进制的方式写入文件   使用C语言在windows读取与写入文件 1. windows读取文件 2.windows给文本文件中写入字符串 3. windows以二进">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-08-10T15:32:00.000Z">
+<meta property="article:modified_time" content="2024-08-12T08:37:09.975Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="c+windows+hacking">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Theqiqi_blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Theqiqi_blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-C+Windows+HackingNote/20.将Dll文件转为二进制代码运行时解压出来" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+
+	<span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+		  <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+<a href="/2024/08/10/C+Windows+HackingNote/20.%E5%B0%86Dll%E6%96%87%E4%BB%B6%E8%BD%AC%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%8E%8B%E5%87%BA%E6%9D%A5/" class="article-date">
+  <time datetime="2024-08-10T15:32:00.000Z" itemprop="datePublished">2024-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      20.将Dll文件转为二进制代码运行时解压出来
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6">使用C语言读取与写入文件</a><ul>
+<li><a href="#1-c%E8%AF%AD%E8%A8%80%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6">1. c语言读取文件</a></li>
+<li><a href="#2c%E8%AF%AD%E8%A8%80%E5%86%99%E5%85%A5%E7%BB%99%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E4%B8%AD%E5%86%99%E5%85%A5%E5%AD%97%E7%AC%A6%E4%B8%B2">2.C语言写入给文本文件中写入字符串</a></li>
+<li><a href="#3c%E8%AF%AD%E8%A8%80%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E8%AF%BB%E5%8F%96%E6%96%87%E6%9C%AC">3.C语言以二进制的方式读取文本</a></li>
+<li><a href="#4c%E8%AF%AD%E8%A8%80%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E8%AF%BB%E5%8F%96%E6%96%87%E6%9C%AC%E5%B9%B6%E6%89%93%E5%8D%B0%E5%AD%97%E7%AC%A6%E4%B8%B2">4.C语言以二进制的方式读取文本并打印字符串</a></li>
+<li><a href="#5c%E8%AF%AD%E8%A8%80%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E8%AF%BB%E5%8F%96%E6%96%87%E6%9C%AC%E5%B9%B6%E6%89%93%E5%8D%B016%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE">5.C语言以二进制的方式读取文本并打印16进制数据</a></li>
+<li><a href="#6-c%E8%AF%AD%E8%A8%80%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6">6. C语言以二进制的方式写入文件</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6">使用C语言在windows读取与写入文件</a><ul>
+<li><a href="#1-windows%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6">1. windows读取文件</a></li>
+<li><a href="#2windows%E7%BB%99%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E4%B8%AD%E5%86%99%E5%85%A5%E5%AD%97%E7%AC%A6%E4%B8%B2">2.windows给文本文件中写入字符串</a></li>
+<li><a href="#3-windows%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E8%AF%BB%E5%8F%96%E6%96%87%E6%9C%AC%E5%B9%B6%E6%89%93%E5%8D%B0%E5%AD%97%E7%AC%A6%E4%B8%B2">3. windows以二进制的方式读取文本并打印字符串</a></li>
+<li><a href="#4-windows%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E8%AF%BB%E5%8F%96%E6%96%87%E6%9C%AC%E5%B9%B6%E6%89%93%E5%8D%B016%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE">4. windows以二进制的方式读取文本并打印16进制数据</a></li>
+<li><a href="#6-windows%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6">6. windows以二进制的方式写入文件</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%B0%86dll%E6%96%87%E4%BB%B6%E6%89%93%E5%8C%85%E5%88%B0exe%E7%A8%8B%E5%BA%8F%E4%B8%AD">使用C语言在windows系统中将Dll文件打包到exe程序中</a><ul>
+<li><a href="#1%E4%BD%BF%E7%94%A8winhex%E5%B0%86%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6">1.使用WinHex将二进制文件复制</a></li>
+<li><a href="#2%E5%B0%86%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E7%B2%98%E8%B4%B4%E5%88%B0c%E8%AF%AD%E8%A8%80%E6%BA%90%E7%A0%81%E4%B8%AD">2.将二进制代码粘贴到c语言源码中</a></li>
+<li><a href="#3%E7%BC%96%E5%86%99c%E8%AF%AD%E8%A8%80%E4%BB%A3%E7%A0%81%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6">3.编写c语言代码写入文件</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="使用C语言读取与写入文件"><a href="#使用C语言读取与写入文件" class="headerlink" title="使用C语言读取与写入文件"></a>使用C语言读取与写入文件</h1><h2 id="1-c语言读取文件"><a href="#1-c语言读取文件" class="headerlink" title="1. c语言读取文件"></a>1. c语言读取文件</h2><ol>
+<li><p>新建一个文本文件，命名为first.txt。</p>
+</li>
+<li><p>在first.txt中编辑文本。</p>
+</li>
+</ol>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6">使用C语言读取与写入文件</a><ul>
+<li><a href="#1-c%E8%AF%AD%E8%A8%80%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6">1. c语言读取文件</a></li>
+<li><a href="#2c%E8%AF%AD%E8%A8%80%E5%86%99%E5%85%A5%E7%BB%99%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E4%B8%AD%E5%86%99%E5%85%A5%E5%AD%97%E7%AC%A6%E4%B8%B2">2.C语言写入给文本文件中写入字符串</a></li>
+<li><a href="#3c%E8%AF%AD%E8%A8%80%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E8%AF%BB%E5%8F%96%E6%96%87%E6%9C%AC">3.C语言以二进制的方式读取文本</a></li>
+<li><a href="#4c%E8%AF%AD%E8%A8%80%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E8%AF%BB%E5%8F%96%E6%96%87%E6%9C%AC%E5%B9%B6%E6%89%93%E5%8D%B0%E5%AD%97%E7%AC%A6%E4%B8%B2">4.C语言以二进制的方式读取文本并打印字符串</a></li>
+<li><a href="#5c%E8%AF%AD%E8%A8%80%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E8%AF%BB%E5%8F%96%E6%96%87%E6%9C%AC%E5%B9%B6%E6%89%93%E5%8D%B016%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE">5.C语言以二进制的方式读取文本并打印16进制数据</a></li>
+<li><a href="#6-c%E8%AF%AD%E8%A8%80%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6">6. C语言以二进制的方式写入文件</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6">使用C语言在windows读取与写入文件</a><ul>
+<li><a href="#1-windows%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6">1. windows读取文件</a></li>
+<li><a href="#2windows%E7%BB%99%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E4%B8%AD%E5%86%99%E5%85%A5%E5%AD%97%E7%AC%A6%E4%B8%B2">2.windows给文本文件中写入字符串</a></li>
+<li><a href="#3-windows%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E8%AF%BB%E5%8F%96%E6%96%87%E6%9C%AC%E5%B9%B6%E6%89%93%E5%8D%B0%E5%AD%97%E7%AC%A6%E4%B8%B2">3. windows以二进制的方式读取文本并打印字符串</a></li>
+<li><a href="#4-windows%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E8%AF%BB%E5%8F%96%E6%96%87%E6%9C%AC%E5%B9%B6%E6%89%93%E5%8D%B016%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE">4. windows以二进制的方式读取文本并打印16进制数据</a></li>
+<li><a href="#6-windows%E4%BB%A5%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6">6. windows以二进制的方式写入文件</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%B0%86dll%E6%96%87%E4%BB%B6%E6%89%93%E5%8C%85%E5%88%B0exe%E7%A8%8B%E5%BA%8F%E4%B8%AD">使用C语言在windows系统中将Dll文件打包到exe程序中</a><ul>
+<li><a href="#1%E4%BD%BF%E7%94%A8winhex%E5%B0%86%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6">1.使用WinHex将二进制文件复制</a></li>
+<li><a href="#2%E5%B0%86%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E7%B2%98%E8%B4%B4%E5%88%B0c%E8%AF%AD%E8%A8%80%E6%BA%90%E7%A0%81%E4%B8%AD">2.将二进制代码粘贴到c语言源码中</a></li>
+<li><a href="#3%E7%BC%96%E5%86%99c%E8%AF%AD%E8%A8%80%E4%BB%A3%E7%A0%81%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6">3.编写c语言代码写入文件</a></li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li><p>编写C语言代码在程序中读取文本内容。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> _CRT_SECURE_NO_WARNINGS</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	FILE* fp = <span class="literal">NULL</span>;</span><br><span class="line">	<span class="type">char</span> buff[<span class="number">255</span>];</span><br><span class="line"></span><br><span class="line">	fp = fopen(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">	fgets(buff, <span class="number">255</span>, (FILE*)fp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;1: %s\n&quot;</span>, buff);</span><br><span class="line">	fgets(buff, <span class="number">255</span>, (FILE*)fp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;2: %s\n&quot;</span>, buff);</span><br><span class="line">	fgets(buff, <span class="number">255</span>, (FILE*)fp);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;3: %s\n&quot;</span>, buff);</span><br><span class="line">	fclose(fp);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译运行</p>
+</li>
+</ol>
+<h2 id="2-C语言写入给文本文件中写入字符串"><a href="#2-C语言写入给文本文件中写入字符串" class="headerlink" title="2.C语言写入给文本文件中写入字符串"></a>2.C语言写入给文本文件中写入字符串</h2><ol>
+<li>编写代码</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> _CRT_SECURE_NO_WARNINGS</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	FILE* fp = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">	fp = fopen(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, <span class="string">&quot;w+&quot;</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(fp, <span class="string">&quot;This is testing for fprintf...\n&quot;</span>);</span><br><span class="line">	<span class="built_in">fputs</span>(<span class="string">&quot;This is testing for fputs...\n&quot;</span>, fp);</span><br><span class="line">	fclose(fp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>打开first.txt查看文件发现文本内容更改</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">This is testing <span class="keyword">for</span> <span class="built_in">fprintf</span>...</span><br><span class="line">This is testing <span class="keyword">for</span> <span class="built_in">fputs</span>...</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-C语言以二进制的方式读取文本"><a href="#3-C语言以二进制的方式读取文本" class="headerlink" title="3.C语言以二进制的方式读取文本"></a>3.C语言以二进制的方式读取文本</h2><ol>
+<li><p>编写C语言代码,以二进制的方式读取文本。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> _CRT_SECURE_NO_WARNINGS</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    FILE* file;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> buffer[<span class="number">100</span>]; <span class="comment">// 用于存储读取的数据</span></span><br><span class="line">    <span class="type">size_t</span> bytesRead;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 以二进制模式打开文件</span></span><br><span class="line">    file = fopen(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, <span class="string">&quot;rb&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (file == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;无法打开文件&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 读取文件内容</span></span><br><span class="line">    bytesRead = fread(buffer, <span class="keyword">sizeof</span>(<span class="type">unsigned</span> <span class="type">char</span>), <span class="keyword">sizeof</span>(buffer), file);</span><br><span class="line">    <span class="keyword">if</span> (bytesRead &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 处理读取的数据</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;读取了 %zu 字节\n&quot;</span>, bytesRead);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关闭文件</span></span><br><span class="line">    fclose(file);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="4-C语言以二进制的方式读取文本并打印字符串"><a href="#4-C语言以二进制的方式读取文本并打印字符串" class="headerlink" title="4.C语言以二进制的方式读取文本并打印字符串"></a>4.C语言以二进制的方式读取文本并打印字符串</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> _CRT_SECURE_NO_WARNINGS</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    FILE* file;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> buffer[<span class="number">100</span>]; <span class="comment">// 用于存储读取的数据</span></span><br><span class="line">    <span class="type">size_t</span> bytesRead;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 以二进制模式打开文件</span></span><br><span class="line">    file = fopen(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, <span class="string">&quot;rb&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (file == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;无法打开文件&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 读取文件内容</span></span><br><span class="line">    bytesRead = fread(buffer, <span class="keyword">sizeof</span>(<span class="type">unsigned</span> <span class="type">char</span>), <span class="keyword">sizeof</span>(buffer), file);</span><br><span class="line">    <span class="keyword">if</span> (bytesRead &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 以字符形式打印读取的数据</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;读取了 %zu 字节:\n&quot;</span>, bytesRead);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; bytesRead; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, buffer[i]);</span><br><span class="line">   </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关闭文件</span></span><br><span class="line">    fclose(file);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5-C语言以二进制的方式读取文本并打印16进制数据"><a href="#5-C语言以二进制的方式读取文本并打印16进制数据" class="headerlink" title="5.C语言以二进制的方式读取文本并打印16进制数据"></a>5.C语言以二进制的方式读取文本并打印16进制数据</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> _CRT_SECURE_NO_WARNINGS</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    FILE* file;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> buffer[<span class="number">100</span>]; <span class="comment">// 用于存储读取的数据</span></span><br><span class="line">    <span class="type">size_t</span> bytesRead;</span><br><span class="line">    <span class="comment">// 以二进制模式打开文件</span></span><br><span class="line">    file = fopen(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, <span class="string">&quot;rb&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (file == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;无法打开文件&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 读取文件内容</span></span><br><span class="line">    bytesRead = fread(buffer, <span class="keyword">sizeof</span>(<span class="type">unsigned</span> <span class="type">char</span>), <span class="keyword">sizeof</span>(buffer), file);</span><br><span class="line">    <span class="keyword">if</span> (bytesRead &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 以十六进制格式打印读取的数据</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;读取了 %zu 字节:\n&quot;</span>, bytesRead);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; bytesRead; i++) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;0x%02X &quot;</span>, buffer[i]); <span class="comment">// 以两位十六进制格式打印</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 关闭文件</span></span><br><span class="line">    fclose(file);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-C语言以二进制的方式写入文件"><a href="#6-C语言以二进制的方式写入文件" class="headerlink" title="6. C语言以二进制的方式写入文件"></a>6. C语言以二进制的方式写入文件</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> _CRT_SECURE_NO_WARNINGS</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    FILE* file;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> data[] = &#123; <span class="number">0x65</span>, <span class="number">0x66</span>, <span class="number">0x67</span>, <span class="number">0x68</span>, <span class="number">0x69</span> &#125;; <span class="comment">// 要写入的数据</span></span><br><span class="line">    <span class="type">size_t</span> bytesWritten;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 以二进制模式打开文件（写入模式）</span></span><br><span class="line">    file = fopen(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, <span class="string">&quot;wb&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (file == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        perror(<span class="string">&quot;无法打开文件&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 写入数据到文件</span></span><br><span class="line">    bytesWritten = fwrite(data, <span class="keyword">sizeof</span>(<span class="type">unsigned</span> <span class="type">char</span>), <span class="keyword">sizeof</span>(data), file);</span><br><span class="line">    <span class="keyword">if</span> (bytesWritten != <span class="keyword">sizeof</span>(data)) &#123;</span><br><span class="line">        perror(<span class="string">&quot;写入文件时出错&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;成功写入 %zu 字节\n&quot;</span>, bytesWritten);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关闭文件</span></span><br><span class="line">    fclose(file);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="使用C语言在windows读取与写入文件"><a href="#使用C语言在windows读取与写入文件" class="headerlink" title="使用C语言在windows读取与写入文件"></a>使用C语言在windows读取与写入文件</h1><h2 id="1-windows读取文件"><a href="#1-windows读取文件" class="headerlink" title="1. windows读取文件"></a>1. windows读取文件</h2><ol>
+<li><p>新建一个文本文件，命名为first.txt。</p>
+</li>
+<li><p>在first.txt中编辑文本。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.windows read file</span><br><span class="line">2. cotine</span><br><span class="line">3. 6666666666666</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>C语言使用win32api在程序中读取文本内容。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> </span><br><span class="line">&#123;</span><br><span class="line">    HANDLE hFile;</span><br><span class="line">    DWORD bytesRead;</span><br><span class="line">    <span class="type">char</span> buffer[<span class="number">100</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打开文件</span></span><br><span class="line">    hFile = CreateFileA(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, GENERIC_READ, <span class="number">0</span>, <span class="literal">NULL</span>, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (hFile == INVALID_HANDLE_VALUE) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;无法打开文件，错误代码: %lu\n&quot;</span>, GetLastError());</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 读取文件内容</span></span><br><span class="line">    <span class="keyword">if</span> (ReadFile(hFile, buffer, <span class="keyword">sizeof</span>(buffer) - <span class="number">1</span>, &amp;bytesRead, <span class="literal">NULL</span>)) &#123;</span><br><span class="line">        buffer[bytesRead] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">// 添加字符串结束符</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;读取的内容:\n%s&quot;</span>, buffer);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;读取文件时出错，错误代码: %lu\n&quot;</span>, GetLastError());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关闭文件</span></span><br><span class="line">    CloseHandle(hFile);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译运行</p>
+</li>
+</ol>
+<h2 id="2-windows给文本文件中写入字符串"><a href="#2-windows给文本文件中写入字符串" class="headerlink" title="2.windows给文本文件中写入字符串"></a>2.windows给文本文件中写入字符串</h2><ol>
+<li>编写代码</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    HANDLE hFile;</span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* data = <span class="string">&quot;Hello, World!\n&quot;</span>; <span class="comment">// 要写入的字符串</span></span><br><span class="line">    DWORD bytesWritten;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 以写入模式打开文件（如果文件不存在则创建）</span></span><br><span class="line">    hFile = CreateFileA(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, GENERIC_WRITE, <span class="number">0</span>, <span class="literal">NULL</span>, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (hFile == INVALID_HANDLE_VALUE) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;无法打开文件，错误代码: %lu\n&quot;</span>, GetLastError());</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 写入字符串到文件</span></span><br><span class="line">    <span class="keyword">if</span> (WriteFile(hFile, data, <span class="built_in">strlen</span>(data), &amp;bytesWritten, <span class="literal">NULL</span>)) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;成功写入 %lu 字节\n&quot;</span>, bytesWritten);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;写入文件时出错，错误代码: %lu\n&quot;</span>, GetLastError());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关闭文件</span></span><br><span class="line">    CloseHandle(hFile);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>打开first.txt查看文件发现文本内容更改</li>
+</ol>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello, World!</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-windows以二进制的方式读取文本并打印字符串"><a href="#3-windows以二进制的方式读取文本并打印字符串" class="headerlink" title="3. windows以二进制的方式读取文本并打印字符串"></a>3. windows以二进制的方式读取文本并打印字符串</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    HANDLE hFile;</span><br><span class="line">    DWORD bytesRead;</span><br><span class="line">    <span class="type">char</span> buffer[<span class="number">100</span>]; <span class="comment">// 用于存储读取的数据</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 以二进制模式打开文件</span></span><br><span class="line">    hFile = CreateFileA(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, GENERIC_READ, <span class="number">0</span>, <span class="literal">NULL</span>, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (hFile == INVALID_HANDLE_VALUE) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;无法打开文件，错误代码: %lu\n&quot;</span>, GetLastError());</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 读取文件内容</span></span><br><span class="line">    <span class="keyword">if</span> (ReadFile(hFile, buffer, <span class="keyword">sizeof</span>(buffer) - <span class="number">1</span>, &amp;bytesRead, <span class="literal">NULL</span>)) &#123;</span><br><span class="line">        buffer[bytesRead] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">// 添加字符串结束符</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;读取的内容:\n%s&quot;</span>, buffer); <span class="comment">// 以字符串形式打印</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;读取文件时出错，错误代码: %lu\n&quot;</span>, GetLastError());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关闭文件</span></span><br><span class="line">    CloseHandle(hFile);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4-windows以二进制的方式读取文本并打印16进制数据"><a href="#4-windows以二进制的方式读取文本并打印16进制数据" class="headerlink" title="4. windows以二进制的方式读取文本并打印16进制数据"></a>4. windows以二进制的方式读取文本并打印16进制数据</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    HANDLE hFile;</span><br><span class="line">    DWORD bytesRead;</span><br><span class="line">    <span class="type">char</span> buffer[<span class="number">100</span>]; <span class="comment">// 用于存储读取的数据</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 以二进制模式打开文件</span></span><br><span class="line">    hFile = CreateFileA(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, GENERIC_READ, <span class="number">0</span>, <span class="literal">NULL</span>, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (hFile == INVALID_HANDLE_VALUE) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;无法打开文件，错误代码: %lu\n&quot;</span>, GetLastError());</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 读取文件内容</span></span><br><span class="line">    <span class="keyword">if</span> (ReadFile(hFile, buffer, <span class="keyword">sizeof</span>(buffer), &amp;bytesRead, <span class="literal">NULL</span>)) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;成功读取 %lu 字节:\n&quot;</span>, bytesRead);</span><br><span class="line">        <span class="comment">// 打印读取的内容（以十六进制格式）</span></span><br><span class="line">        <span class="keyword">for</span> (DWORD i = <span class="number">0</span>; i &lt; bytesRead; i++) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;0x%02X &quot;</span>, (<span class="type">unsigned</span> <span class="type">char</span>)buffer[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;读取文件时出错，错误代码: %lu\n&quot;</span>, GetLastError());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关闭文件</span></span><br><span class="line">    CloseHandle(hFile);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="6-windows以二进制的方式写入文件"><a href="#6-windows以二进制的方式写入文件" class="headerlink" title="6. windows以二进制的方式写入文件"></a>6. windows以二进制的方式写入文件</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    HANDLE hFile;</span><br><span class="line">    <span class="type">char</span> data[] = &#123; <span class="number">0x65</span>, <span class="number">0x66</span>, <span class="number">0x67</span>, <span class="number">0x68</span>, <span class="number">0x69</span>, <span class="number">0x70</span> &#125;; <span class="comment">// 要写入的字符数组</span></span><br><span class="line">    DWORD bytesWritten;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 以二进制模式打开文件（如果文件不存在则创建）</span></span><br><span class="line">    hFile = CreateFileA(<span class="string">&quot;D:\\Users\\3\\Desktop\\first.txt&quot;</span>, GENERIC_WRITE, <span class="number">0</span>, <span class="literal">NULL</span>, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (hFile == INVALID_HANDLE_VALUE) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;无法打开文件，错误代码: %lu\n&quot;</span>, GetLastError());</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 写入数据到文件</span></span><br><span class="line">    <span class="keyword">if</span> (WriteFile(hFile, data, <span class="keyword">sizeof</span>(data), &amp;bytesWritten, <span class="literal">NULL</span>)) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;成功写入 %lu 字节\n&quot;</span>, bytesWritten);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;写入文件时出错，错误代码: %lu\n&quot;</span>, GetLastError());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关闭文件</span></span><br><span class="line">    CloseHandle(hFile);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="使用C语言在windows系统中将Dll文件打包到exe程序中"><a href="#使用C语言在windows系统中将Dll文件打包到exe程序中" class="headerlink" title="使用C语言在windows系统中将Dll文件打包到exe程序中"></a>使用C语言在windows系统中将Dll文件打包到exe程序中</h1><h2 id="1-使用WinHex将二进制文件复制"><a href="#1-使用WinHex将二进制文件复制" class="headerlink" title="1.使用WinHex将二进制文件复制"></a>1.使用WinHex将二进制文件复制</h2><p>在WinHex选中编辑-&gt;复制选块-&gt;c源码</p>
+<h2 id="2-将二进制代码粘贴到c语言源码中"><a href="#2-将二进制代码粘贴到c语言源码中" class="headerlink" title="2.将二进制代码粘贴到c语言源码中"></a>2.将二进制代码粘贴到c语言源码中</h2><h2 id="3-编写c语言代码写入文件"><a href="#3-编写c语言代码写入文件" class="headerlink" title="3.编写c语言代码写入文件"></a>3.编写c语言代码写入文件</h2><p>源码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;DllFile.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DRIVER_FILE_NAME <span class="string">L&quot;dll1.dll&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DRIVER_FILE_PATH <span class="string">L&quot;D:\\Users\\3\\Desktop\\dll1.dll&quot;</span></span></span><br><span class="line">DWORD <span class="title function_">WriteDriverFile</span><span class="params">(WCHAR* DriverFilePath)</span></span><br><span class="line">&#123;</span><br><span class="line">    HANDLE hFile = CreateFileW(DriverFilePath, GENERIC_ALL, FILE_SHARE_READ | FILE_SHARE_WRITE, <span class="literal">NULL</span>,</span><br><span class="line">        CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (hFile == <span class="literal">NULL</span>) &#123; <span class="keyword">return</span> <span class="number">-1</span>; &#125;</span><br><span class="line">    DWORD dwRet = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (WriteFile(hFile, g_DllFile, <span class="keyword">sizeof</span>(g_DllFile), &amp;dwRet, <span class="literal">NULL</span>) == FALSE)</span><br><span class="line">    &#123;</span><br><span class="line">        CloseHandle(hFile);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    CloseHandle(hFile);</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (WriteDriverFile(DRIVER_FILE_PATH) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;写入失败 错误码:&quot;</span>, GetLastError());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>二进制文件内容概括</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DllBuffer.h</span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> g_DllFile[<span class="number">111768</span>] =&#123;<span class="number">0x4D</span>,................................&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/08/10/C+Windows+HackingNote/20.%E5%B0%86Dll%E6%96%87%E4%BB%B6%E8%BD%AC%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%8E%8B%E5%87%BA%E6%9D%A5/" data-id="clzqr9day000r34d180hb3s1z" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/08/11/C+Windows+HackingNote/21.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8syscall%E9%87%8D%E5%86%99%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          21.使用C语言与汇编语言调用syscall重写进程相关函数
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/08/10/C+Windows+HackingNote/19.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9D%97%E5%8F%A5%E6%9F%84/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">19.使用C语言获取进程模块句柄</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MFC/" rel="tag">MFC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/" rel="tag">Socket</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/" rel="tag">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-driver/" rel="tag">c++windows+driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" rel="tag">c语言的万种用法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsp/" rel="tag">jsp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 15.71px;">64位汇编程序</a> <a href="/tags/Hacking/" style="font-size: 12.86px;">Hacking</a> <a href="/tags/MFC/" style="font-size: 10px;">MFC</a> <a href="/tags/OpenGL/" style="font-size: 10px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 12.86px;">Qt</a> <a href="/tags/Socket/" style="font-size: 11.43px;">Socket</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/assembly/" style="font-size: 10px;">assembly</a> <a href="/tags/c/" style="font-size: 15.71px;">c++</a> <a href="/tags/c-windows-driver/" style="font-size: 10px;">c++windows+driver</a> <a href="/tags/c-windows-hacking/" style="font-size: 20px;">c+windows+hacking</a> <a href="/tags/compiled/" style="font-size: 10px;">compiled</a> <a href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" style="font-size: 14.29px;">c语言的万种用法</a> <a href="/tags/first-pragram/" style="font-size: 17.14px;">first pragram</a> <a href="/tags/jsp/" style="font-size: 10px;">jsp</a> <a href="/tags/mysql/" style="font-size: 11.43px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/termux/" style="font-size: 11.43px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 18.57px;">x86汇编程序</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/08/">August 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/23.C%E8%AF%AD%E8%A8%80InlineHook/">23.C语言实现InlineHook</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/22.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">22.使用C语言获取系统架构</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/21.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8syscall%E9%87%8D%E5%86%99%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/">21.使用C语言与汇编语言调用syscall重写进程相关函数</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/20.%E5%B0%86Dll%E6%96%87%E4%BB%B6%E8%BD%AC%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%8E%8B%E5%87%BA%E6%9D%A5/">20.将Dll文件转为二进制代码运行时解压出来</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/19.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9D%97%E5%8F%A5%E6%9F%84/">19.使用C语言获取进程模块句柄</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      
+  <span id="busuanzi_container_site_pv">
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv" style='display:none'>
+          本站访客数<span id="busuanzi_value_site_uv"></span>人
+  </span>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2024 Theqiqi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

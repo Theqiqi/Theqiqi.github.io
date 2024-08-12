@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>16.寻找植物大战丧尸call并使用C语言调用 | Theqiqi_blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用CE寻找种植Call并编写自动汇编脚本 1. 通过CE找到汇编Call（掠过） 2. 编写自动汇编脚本   通过Dll将代码注入 1. 编写动态链接库 2. 编写C语言程序将dll加载到程序中   使用C语言根据种植Call编写自动种植脚本 1. 在x64dbg中编写汇编代码后转为机器码(略过) 2. 使用C语言编写自动种植功能    使用CE寻找种植Call并编写自动汇编脚本1. 通过CE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="16.寻找植物大战丧尸call并使用C语言调用">
+<meta property="og:url" content="http://example.com/2024/08/09/C+Windows+HackingNote/16.%E5%AF%BB%E6%89%BE%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E4%B8%A7%E5%B0%B8call%E5%B9%B6%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="使用CE寻找种植Call并编写自动汇编脚本 1. 通过CE找到汇编Call（掠过） 2. 编写自动汇编脚本   通过Dll将代码注入 1. 编写动态链接库 2. 编写C语言程序将dll加载到程序中   使用C语言根据种植Call编写自动种植脚本 1. 在x64dbg中编写汇编代码后转为机器码(略过) 2. 使用C语言编写自动种植功能    使用CE寻找种植Call并编写自动汇编脚本1. 通过CE">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-08-09T12:43:01.000Z">
+<meta property="article:modified_time" content="2024-08-12T08:51:17.308Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="c+windows+hacking">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Theqiqi_blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Theqiqi_blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-C+Windows+HackingNote/16.寻找植物大战丧尸call并使用C语言调用" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+
+	<span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+		  <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+<a href="/2024/08/09/C+Windows+HackingNote/16.%E5%AF%BB%E6%89%BE%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E4%B8%A7%E5%B0%B8call%E5%B9%B6%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8/" class="article-date">
+  <time datetime="2024-08-09T12:43:01.000Z" itemprop="datePublished">2024-08-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      16.寻找植物大战丧尸call并使用C语言调用
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#%E4%BD%BF%E7%94%A8ce%E5%AF%BB%E6%89%BE%E7%A7%8D%E6%A4%8Dcall%E5%B9%B6%E7%BC%96%E5%86%99%E8%87%AA%E5%8A%A8%E6%B1%87%E7%BC%96%E8%84%9A%E6%9C%AC">使用CE寻找种植Call并编写自动汇编脚本</a><ul>
+<li><a href="#1-%E9%80%9A%E8%BF%87ce%E6%89%BE%E5%88%B0%E6%B1%87%E7%BC%96call%E6%8E%A0%E8%BF%87">1. 通过CE找到汇编Call（掠过）</a></li>
+<li><a href="#2-%E7%BC%96%E5%86%99%E8%87%AA%E5%8A%A8%E6%B1%87%E7%BC%96%E8%84%9A%E6%9C%AC">2. 编写自动汇编脚本</a></li>
+</ul>
+</li>
+<li><a href="#%E9%80%9A%E8%BF%87dll%E5%B0%86%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5">通过Dll将代码注入</a><ul>
+<li><a href="#1-%E7%BC%96%E5%86%99%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93">1. 编写动态链接库</a></li>
+<li><a href="#2-%E7%BC%96%E5%86%99c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E5%B0%86dll%E5%8A%A0%E8%BD%BD%E5%88%B0%E7%A8%8B%E5%BA%8F%E4%B8%AD">2. 编写C语言程序将dll加载到程序中</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E6%A0%B9%E6%8D%AE%E7%A7%8D%E6%A4%8Dcall%E7%BC%96%E5%86%99%E8%87%AA%E5%8A%A8%E7%A7%8D%E6%A4%8D%E8%84%9A%E6%9C%AC">使用C语言根据种植Call编写自动种植脚本</a><ul>
+<li><a href="#1-%E5%9C%A8x64dbg%E4%B8%AD%E7%BC%96%E5%86%99%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E5%90%8E%E8%BD%AC%E4%B8%BA%E6%9C%BA%E5%99%A8%E7%A0%81%E7%95%A5%E8%BF%87">1. 在x64dbg中编写汇编代码后转为机器码(略过)</a></li>
+<li><a href="#2-%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E7%BC%96%E5%86%99%E8%87%AA%E5%8A%A8%E7%A7%8D%E6%A4%8D%E5%8A%9F%E8%83%BD">2. 使用C语言编写自动种植功能</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="使用CE寻找种植Call并编写自动汇编脚本"><a href="#使用CE寻找种植Call并编写自动汇编脚本" class="headerlink" title="使用CE寻找种植Call并编写自动汇编脚本"></a>使用CE寻找种植Call并编写自动汇编脚本</h1><h2 id="1-通过CE找到汇编Call（掠过）"><a href="#1-通过CE找到汇编Call（掠过）" class="headerlink" title="1. 通过CE找到汇编Call（掠过）"></a>1. 通过CE找到汇编Call（掠过）</h2><h2 id="2-编写自动汇编脚本"><a href="#2-编写自动汇编脚本" class="headerlink" title="2. 编写自动汇编脚本"></a>2. 编写自动汇编脚本</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">[ENABLE]</span><br><span class="line">//code from here to &#x27;[DISABLE]&#x27; will be used to enable the cheat</span><br><span class="line"></span><br><span class="line">alloc(newmem,1024)</span><br><span class="line">createthread(newmem)</span><br><span class="line">newmem:</span><br><span class="line"></span><br><span class="line">//根据基地址和偏移量计算第一个参数的变量地址</span><br><span class="line">mov ebx,00729670</span><br><span class="line">mov ebx,[ebx]</span><br><span class="line">mov ebx,[ebx+868]</span><br><span class="line"></span><br><span class="line">//call function</span><br><span class="line">push FFFFFFFF       //常量-1</span><br><span class="line">push 2             //种植ID 此刻为樱桃炸弹</span><br><span class="line">mov eax,4         //Y轴座标</span><br><span class="line">push 0             //x轴坐标</span><br><span class="line"></span><br><span class="line">push ebx//地址[PlantsVsZombies.exe+329670]+868</span><br><span class="line">call 0040FA10//函数地址</span><br><span class="line">ret</span><br><span class="line"></span><br><span class="line">[DISABLE]</span><br><span class="line">//code from here till the end of the code will be used to disable the cheat</span><br><span class="line">dealloc(newmem)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="通过Dll将代码注入"><a href="#通过Dll将代码注入" class="headerlink" title="通过Dll将代码注入"></a>通过Dll将代码注入</h1><h2 id="1-编写动态链接库"><a href="#1-编写动态链接库" class="headerlink" title="1. 编写动态链接库"></a>1. 编写动态链接库</h2><p>dllmain.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dllmain.c : Defines the entry point for the DLL application.</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">AsmPlant_</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BOOL APIENTRY <span class="title function_">DllMain</span><span class="params">(HMODULE hModule,</span></span><br><span class="line"><span class="params">    DWORD  ul_reason_for_call,</span></span><br><span class="line"><span class="params">    LPVOID lpReserved</span></span><br><span class="line"><span class="params">)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">        AsmPlant_();</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">        MessageBoxA(GetDesktopWindow, <span class="string">&quot;Unload dll&quot;</span>, <span class="string">&quot;title&quot;</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>plant.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">; Plant.asm</span><br><span class="line">.586</span><br><span class="line">.model flat,stdcall,c</span><br><span class="line">option casemap:none</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line">AsmPlant_ proc</span><br><span class="line">	;根据基地址和偏移量计算第一个参数的变量地址</span><br><span class="line">	mov ebx,00729670h</span><br><span class="line">	mov ebx,[ebx]</span><br><span class="line">	mov ebx,[ebx+868h]</span><br><span class="line">	</span><br><span class="line">	;call function</span><br><span class="line">	push 0FFFFFFFFh       ;//常量-1</span><br><span class="line">	push 2             ;//种植ID 此刻为樱桃炸弹</span><br><span class="line">	mov eax,4         ;//Y轴座标</span><br><span class="line">	push 0             ;//x轴坐标</span><br><span class="line">	</span><br><span class="line">	push ebx ;//地址[PlantsVsZombies.exe+329670]+868</span><br><span class="line">	mov ecx,0040FA10h</span><br><span class="line">	call ecx;//函数地址</span><br><span class="line">	ret</span><br><span class="line">AsmPlant_ endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-编写C语言程序将dll加载到程序中"><a href="#2-编写C语言程序将dll加载到程序中" class="headerlink" title="2. 编写C语言程序将dll加载到程序中"></a>2. 编写C语言程序将dll加载到程序中</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Message.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">BOOL <span class="title function_">Inject</span><span class="params">(DWORD dwProcessID, <span class="type">const</span> WCHAR* szPath)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//LoadLibrary</span></span><br><span class="line">    <span class="comment">//CreateRemoteThread</span></span><br><span class="line">    <span class="comment">//1.打开目标进程获取句柄</span></span><br><span class="line">    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessID);</span><br><span class="line">    <span class="comment">//2.在目标进程体内申请空间</span></span><br><span class="line">    LPVOID lpAddress = VirtualAllocEx(hProcess, <span class="literal">NULL</span>, <span class="number">0x100</span>, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);</span><br><span class="line">    <span class="comment">//3.写入DLL路径</span></span><br><span class="line">    SIZE_T sWriteLength = <span class="number">0</span>;</span><br><span class="line">    BOOL bRet = WriteProcessMemory(hProcess, lpAddress, szPath, ((wcslen(szPath) + <span class="number">1</span>) * <span class="number">2</span>), &amp;sWriteLength);</span><br><span class="line">    <span class="keyword">if</span> (bRet == FALSE)</span><br><span class="line">    &#123;</span><br><span class="line">        MessageBoxW(<span class="literal">NULL</span>, <span class="string">L&quot;WriteProcessMemory Failed!&quot;</span>, <span class="string">L&quot;Error&quot;</span>, MB_OK);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//4.创建远程线程，执行回调</span></span><br><span class="line">    HANDLE hThread = CreateRemoteThread(hProcess, <span class="literal">NULL</span>, <span class="literal">NULL</span>, (LPTHREAD_START_ROUTINE)LoadLibraryW, lpAddress, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">//5.等待远程线程执行结束（LoadLibrary返回了）</span></span><br><span class="line">    WaitForSingleObject(hThread, INFINITE);</span><br><span class="line">    <span class="comment">//6.释放空间</span></span><br><span class="line">    VirtualFreeEx(hProcess, lpAddress, <span class="number">0</span>, MEM_RELEASE);</span><br><span class="line">    <span class="comment">//7.释放句柄</span></span><br><span class="line">    CloseHandle(hProcess);</span><br><span class="line">    CloseHandle(hThread);</span><br><span class="line">    <span class="comment">//8.返回结果</span></span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//传入的两个参数分别为进程id与dll的绝对路径</span></span><br><span class="line">    Inject(<span class="number">19756</span>, <span class="string">L&quot;D:\\test\\CC++\\C+Windows+Pragrma\\C+windows\\Debug\\Dll1.dll&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用C语言根据种植Call编写自动种植脚本"><a href="#使用C语言根据种植Call编写自动种植脚本" class="headerlink" title="使用C语言根据种植Call编写自动种植脚本"></a>使用C语言根据种植Call编写自动种植脚本</h1><h2 id="1-在x64dbg中编写汇编代码后转为机器码-略过"><a href="#1-在x64dbg中编写汇编代码后转为机器码-略过" class="headerlink" title="1. 在x64dbg中编写汇编代码后转为机器码(略过)"></a>1. 在x64dbg中编写汇编代码后转为机器码(略过)</h2><p>汇编代码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>二进制代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-使用C语言编写自动种植功能"><a href="#2-使用C语言编写自动种植功能" class="headerlink" title="2. 使用C语言编写自动种植功能"></a>2. 使用C语言编写自动种植功能</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Tlhelp32.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">PlantCall</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD pid = <span class="literal">NULL</span>;</span><br><span class="line">	HWND hWnd = FindWindowW(<span class="literal">NULL</span>, <span class="string">L&quot;Plants vs. Zombies&quot;</span>);</span><br><span class="line">	<span class="keyword">if</span> (hWnd == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		wprintf(<span class="string">L&quot;Module wrong %p\n&quot;</span>, hWnd);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		wprintf(<span class="string">L&quot;Module %p\n&quot;</span>, hWnd);</span><br><span class="line">	&#125;</span><br><span class="line">	GetWindowThreadProcessId(hWnd, &amp;pid);</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, <span class="number">0</span>, pid);</span><br><span class="line">	<span class="keyword">if</span> (hProcess == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		wprintf(<span class="string">L&quot;hProcess wrong %p\n&quot;</span>, hProcess);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		wprintf(<span class="string">L&quot;hProcess %p\n&quot;</span>, hProcess);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//获取模块地址</span></span><br><span class="line">	DWORD modaddr = <span class="literal">NULL</span>;</span><br><span class="line">	MODULEENTRY32 modentry;</span><br><span class="line">	<span class="built_in">memset</span>(&amp;modentry, <span class="number">0</span>, <span class="keyword">sizeof</span>(modentry));</span><br><span class="line">	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);</span><br><span class="line">	modentry.dwSize = <span class="keyword">sizeof</span>(MODULEENTRY32);</span><br><span class="line">	Module32FirstW(hSnapshot, &amp;modentry);</span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> (wcscmp(modentry.szModule, <span class="string">L&quot;PlantsVsZombies.exe&quot;</span>) == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			wprintf(<span class="string">L&quot;Module %s\n&quot;</span>, modentry.szModule);</span><br><span class="line">			modaddr = (DWORD)modentry.hModule;</span><br><span class="line">			CloseHandle(hSnapshot);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125; <span class="keyword">while</span> (Module32Next(hSnapshot, &amp;modentry));</span><br><span class="line">	<span class="comment">//shellcode</span></span><br><span class="line">	BYTE shellcode[<span class="number">1024</span>] = &#123;</span><br><span class="line">		<span class="number">0x60</span>, <span class="number">0xE8</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x5D</span>, <span class="number">0x8D</span>, <span class="number">0x6D</span>, <span class="number">0x1D</span>, <span class="number">0x68</span>, <span class="number">0xFF</span>, <span class="number">0xFF</span>, <span class="number">0xFF</span>, <span class="number">0xFF</span>, <span class="number">0x6A</span>,</span><br><span class="line">		<span class="number">0x02</span>, <span class="number">0x8B</span>, <span class="number">0x45</span>, <span class="number">0x00</span>, <span class="number">0x8B</span>, <span class="number">0x4D</span>, <span class="number">0x04</span>, <span class="number">0x51</span>, <span class="number">0x8B</span>, <span class="number">0x55</span>, <span class="number">0x08</span>, <span class="number">0x52</span>, <span class="number">0x8B</span>, <span class="number">0x4D</span>, <span class="number">0x0C</span>, <span class="number">0xFF</span>,</span><br><span class="line">		<span class="number">0xD1</span>, <span class="number">0x61</span>, <span class="number">0xC3</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span>,</span><br><span class="line">		<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00</span></span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="comment">//对象指针 pObj [[PlantsVsZombies.exe+329670]+0x868]</span></span><br><span class="line">	<span class="comment">//函数指针 pFunc PlantsVsZombies.exe+FA10</span></span><br><span class="line">	DWORD x = <span class="number">8</span>;</span><br><span class="line">	DWORD y = <span class="number">0</span>;</span><br><span class="line">	DWORD pObj = modaddr;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;module addr pOBJ is %p\n&quot;</span>, pObj);</span><br><span class="line">	ReadProcessMemory(hProcess, (LPVOID)(pObj + <span class="number">0x329670</span>), &amp;pObj, <span class="number">4</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;pOBJ is %p\n&quot;</span>, pObj);</span><br><span class="line">	ReadProcessMemory(hProcess, (LPVOID)(pObj + <span class="number">0x868</span>), &amp;pObj, <span class="number">4</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;pOBJ is %p\n&quot;</span>, pObj);</span><br><span class="line">	DWORD pFunc = modaddr + <span class="number">0xFA10</span>;</span><br><span class="line">	<span class="comment">//*(DWORD*)(shellcode + 0x10)==种植ID</span></span><br><span class="line">	*(<span class="type">char</span>*)(shellcode + <span class="number">0x10</span>) = <span class="number">0x02</span>;</span><br><span class="line">	*(DWORD*)(shellcode + <span class="number">0x23</span>) = y;</span><br><span class="line">	*(DWORD*)(shellcode + <span class="number">0x27</span>) = x;</span><br><span class="line">	*(DWORD*)(shellcode + <span class="number">0x2B</span>) = pObj;</span><br><span class="line">	*(DWORD*)(shellcode + <span class="number">0x2F</span>) = pFunc;</span><br><span class="line">	<span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		*(DWORD*)(shellcode + <span class="number">0x23</span>) = y;</span><br><span class="line">		LPVOID calladdr = VirtualAllocEx(hProcess, <span class="literal">NULL</span>, <span class="number">1024</span>, MEM_COMMIT, PAGE_EXECUTE_READWRITE);</span><br><span class="line">		<span class="keyword">if</span> (calladdr == <span class="number">0</span>)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%p is %p\n&quot;</span>, &amp;calladdr, calladdr);</span><br><span class="line">		WriteProcessMemory(hProcess, calladdr, shellcode, <span class="number">1024</span>, <span class="literal">NULL</span>);</span><br><span class="line">		HANDLE hRemote = CreateRemoteThread(hProcess, <span class="literal">NULL</span>, <span class="literal">NULL</span>, (LPTHREAD_START_ROUTINE)calladdr, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">		WaitForSingleObject(hRemote, INFINITE);</span><br><span class="line">		y++;</span><br><span class="line">		<span class="keyword">if</span> (y == <span class="number">5</span>) y = <span class="number">0</span>;</span><br><span class="line">		Sleep(<span class="number">1000</span>);</span><br><span class="line">		CloseHandle(hRemote);</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	PlantCall();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/08/09/C+Windows+HackingNote/16.%E5%AF%BB%E6%89%BE%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E4%B8%A7%E5%B0%B8call%E5%B9%B6%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8/" data-id="clzqr9dav000j34d1g9bd4xbh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/08/09/C+Windows+HackingNote/17.C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%BE%97%E7%AA%97%E5%8F%A3%E5%8F%A5%E6%9F%84%E4%B8%8E%E8%BF%9B%E7%A8%8B%E5%8F%A5%E6%9F%84/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          17.C语言获得窗口句柄与进程句柄
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/08/08/C+Windows+HackingNote/15.%E4%BD%BF%E7%94%A8CE%E5%AF%BB%E6%89%BE%E8%BF%9B%E7%A8%8B%E4%B8%AD%E7%9A%84MessageBoxA%E5%87%BD%E6%95%B0Call%E5%B9%B6%E8%B0%83%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">15.寻找进程中的MessageBoxA函数Call并调用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MFC/" rel="tag">MFC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/" rel="tag">Socket</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/" rel="tag">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-driver/" rel="tag">c++windows+driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" rel="tag">c语言的万种用法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsp/" rel="tag">jsp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 15.71px;">64位汇编程序</a> <a href="/tags/Hacking/" style="font-size: 12.86px;">Hacking</a> <a href="/tags/MFC/" style="font-size: 10px;">MFC</a> <a href="/tags/OpenGL/" style="font-size: 10px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 12.86px;">Qt</a> <a href="/tags/Socket/" style="font-size: 11.43px;">Socket</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/assembly/" style="font-size: 10px;">assembly</a> <a href="/tags/c/" style="font-size: 15.71px;">c++</a> <a href="/tags/c-windows-driver/" style="font-size: 10px;">c++windows+driver</a> <a href="/tags/c-windows-hacking/" style="font-size: 20px;">c+windows+hacking</a> <a href="/tags/compiled/" style="font-size: 10px;">compiled</a> <a href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" style="font-size: 14.29px;">c语言的万种用法</a> <a href="/tags/first-pragram/" style="font-size: 17.14px;">first pragram</a> <a href="/tags/jsp/" style="font-size: 10px;">jsp</a> <a href="/tags/mysql/" style="font-size: 11.43px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/termux/" style="font-size: 11.43px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 18.57px;">x86汇编程序</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/08/">August 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/23.C%E8%AF%AD%E8%A8%80InlineHook/">23.C语言实现InlineHook</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/22.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">22.使用C语言获取系统架构</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/21.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8syscall%E9%87%8D%E5%86%99%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/">21.使用C语言与汇编语言调用syscall重写进程相关函数</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/20.%E5%B0%86Dll%E6%96%87%E4%BB%B6%E8%BD%AC%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%8E%8B%E5%87%BA%E6%9D%A5/">20.将Dll文件转为二进制代码运行时解压出来</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/19.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9D%97%E5%8F%A5%E6%9F%84/">19.使用C语言获取进程模块句柄</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      
+  <span id="busuanzi_container_site_pv">
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv" style='display:none'>
+          本站访客数<span id="busuanzi_value_site_uv"></span>人
+  </span>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2024 Theqiqi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>22.使用C语言获取系统架构 | Theqiqi_blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用C语言获取系统架构1. 使用GetNativeSystemInfo获取系统架构1234567891011121314151617181920212223#include &lt;windows.h&gt;#include &lt;stdio.h&gt;BOOL Is64BitOS()&amp;#123;     SYSTEM_INFO stInfo &#x3D; &amp;#123; 0 &amp;#125;;     Get">
+<meta property="og:type" content="article">
+<meta property="og:title" content="22.使用C语言获取系统架构">
+<meta property="og:url" content="http://example.com/2024/08/11/C+Windows+HackingNote/22.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="使用C语言获取系统架构1. 使用GetNativeSystemInfo获取系统架构1234567891011121314151617181920212223#include &lt;windows.h&gt;#include &lt;stdio.h&gt;BOOL Is64BitOS()&amp;#123;     SYSTEM_INFO stInfo &#x3D; &amp;#123; 0 &amp;#125;;     Get">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-08-11T06:29:00.000Z">
+<meta property="article:modified_time" content="2024-08-12T08:15:18.546Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="c+windows+hacking">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Theqiqi_blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Theqiqi_blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-C+Windows+HackingNote/22.使用C语言获取系统架构" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+
+	<span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+		  <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+<a href="/2024/08/11/C+Windows+HackingNote/22.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/" class="article-date">
+  <time datetime="2024-08-11T06:29:00.000Z" itemprop="datePublished">2024-08-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      22.使用C语言获取系统架构
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="使用C语言获取系统架构"><a href="#使用C语言获取系统架构" class="headerlink" title="使用C语言获取系统架构"></a>使用C语言获取系统架构</h1><h2 id="1-使用GetNativeSystemInfo获取系统架构"><a href="#1-使用GetNativeSystemInfo获取系统架构" class="headerlink" title="1. 使用GetNativeSystemInfo获取系统架构"></a>1. 使用<code>GetNativeSystemInfo</code>获取系统架构</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">BOOL <span class="title function_">Is64BitOS</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">     SYSTEM_INFO stInfo = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">     GetNativeSystemInfo(&amp;stInfo);</span><br><span class="line">     <span class="keyword">if</span> (stInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64</span><br><span class="line">         || stInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)</span><br><span class="line">     &#123;</span><br><span class="line">         <span class="keyword">return</span> TRUE;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> FALSE;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (Is64BitOS())</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;x64\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;x86\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-加载动态库里的GetNativeSystemInfo"><a href="#2-加载动态库里的GetNativeSystemInfo" class="headerlink" title="2.加载动态库里的GetNativeSystemInfo"></a>2.加载动态库里的<code>GetNativeSystemInfo</code></h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">BOOL <span class="title function_">Is64BitOS</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">typedef</span> <span class="title function_">VOID</span><span class="params">(WINAPI* LPFN_GetNativeSystemInfo)</span><span class="params">(__out LPSYSTEM_INFO lpSystemInfo)</span>;</span><br><span class="line">    LPFN_GetNativeSystemInfo fnGetNativeSystemInfo = (LPFN_GetNativeSystemInfo)GetProcAddress(GetModuleHandleA(<span class="string">&quot;kernel32&quot;</span>), <span class="string">&quot;GetNativeSystemInfo&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (fnGetNativeSystemInfo)</span><br><span class="line">    &#123;</span><br><span class="line">        SYSTEM_INFO stInfo = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">        fnGetNativeSystemInfo(&amp;stInfo);</span><br><span class="line">        <span class="keyword">if</span> (stInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64</span><br><span class="line">            || stInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> TRUE;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> FALSE;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (Is64BitOS())</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;x64\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;x86\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-判断进程是32位还是64位"><a href="#3-判断进程是32位还是64位" class="headerlink" title="3.判断进程是32位还是64位"></a>3.判断进程是32位还是64位</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;TlHelp32.h&gt;</span>  </span></span><br><span class="line"></span><br><span class="line">BOOL <span class="title function_">IsWow64</span><span class="params">(HANDLE hProcess)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">typedef</span> <span class="title function_">BOOL</span><span class="params">(WINAPI* LPFN_ISWOW64PROCESS)</span> <span class="params">(HANDLE, PBOOL)</span>;</span><br><span class="line">    LPFN_ISWOW64PROCESS fnIsWow64Process;</span><br><span class="line"></span><br><span class="line">    BOOL bIsWow64 = FALSE;</span><br><span class="line">    fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(</span><br><span class="line">        GetModuleHandleA(<span class="string">&quot;kernel32&quot;</span>), <span class="string">&quot;IsWow64Process&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">NULL</span> != fnIsWow64Process)</span><br><span class="line">    &#123;</span><br><span class="line">        fnIsWow64Process(hProcess, &amp;bIsWow64);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bIsWow64;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">DWORD <span class="title function_">processNameToId</span><span class="params">(LPCTSTR lpszProcessName)</span></span><br><span class="line">&#123;</span><br><span class="line">    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, <span class="number">0</span>);</span><br><span class="line">    PROCESSENTRY32W pe;</span><br><span class="line">    pe.dwSize = <span class="keyword">sizeof</span>(PROCESSENTRY32W);</span><br><span class="line">    <span class="keyword">if</span> (!Process32FirstW(hSnapshot, &amp;pe)) &#123;</span><br><span class="line">        MessageBoxA(<span class="literal">NULL</span>,</span><br><span class="line">            <span class="string">&quot;The frist entry of the process list has not been copyied to the buffer&quot;</span>, <span class="string">&quot;Notice&quot;</span>, MB_ICONINFORMATION | MB_OK);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (Process32NextW(hSnapshot, &amp;pe)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!wcscmp(lpszProcessName, pe.szExeFile)) &#123;</span><br><span class="line">            <span class="keyword">return</span> pe.th32ProcessID;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    BOOL bWow64;</span><br><span class="line">    <span class="type">wchar_t</span>* szExeName = <span class="string">L&quot;Notepad.exe&quot;</span>;</span><br><span class="line">    DWORD dwProcessId = processNameToId(szExeName);</span><br><span class="line">    <span class="keyword">if</span> (dwProcessId == <span class="number">0</span>) &#123;</span><br><span class="line">        MessageBoxA(<span class="literal">NULL</span>, <span class="string">&quot;The target process have not been found !&quot;</span>, <span class="string">&quot;Notice&quot;</span>, MB_ICONINFORMATION | MB_OK);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    HANDLE hTargetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">    <span class="keyword">if</span> (!hTargetProcess) &#123;</span><br><span class="line">        MessageBoxA(<span class="literal">NULL</span>, <span class="string">&quot;Open target process failed !&quot;</span>,</span><br><span class="line">            <span class="string">&quot;Notice&quot;</span>, MB_ICONINFORMATION | MB_OK);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    bWow64 = IsWow64(hTargetProcess);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (bWow64)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;32-bit process\n&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;64-bit process\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/08/11/C+Windows+HackingNote/22.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/" data-id="clzqr9daz000t34d1hvgagl31" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/08/11/C+Windows+HackingNote/23.C%E8%AF%AD%E8%A8%80InlineHook/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          23.C语言实现InlineHook
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/08/11/C+Windows+HackingNote/21.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8syscall%E9%87%8D%E5%86%99%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">21.使用C语言与汇编语言调用syscall重写进程相关函数</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MFC/" rel="tag">MFC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/" rel="tag">Socket</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/" rel="tag">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-driver/" rel="tag">c++windows+driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" rel="tag">c语言的万种用法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsp/" rel="tag">jsp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 15.71px;">64位汇编程序</a> <a href="/tags/Hacking/" style="font-size: 12.86px;">Hacking</a> <a href="/tags/MFC/" style="font-size: 10px;">MFC</a> <a href="/tags/OpenGL/" style="font-size: 10px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 12.86px;">Qt</a> <a href="/tags/Socket/" style="font-size: 11.43px;">Socket</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/assembly/" style="font-size: 10px;">assembly</a> <a href="/tags/c/" style="font-size: 15.71px;">c++</a> <a href="/tags/c-windows-driver/" style="font-size: 10px;">c++windows+driver</a> <a href="/tags/c-windows-hacking/" style="font-size: 20px;">c+windows+hacking</a> <a href="/tags/compiled/" style="font-size: 10px;">compiled</a> <a href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" style="font-size: 14.29px;">c语言的万种用法</a> <a href="/tags/first-pragram/" style="font-size: 17.14px;">first pragram</a> <a href="/tags/jsp/" style="font-size: 10px;">jsp</a> <a href="/tags/mysql/" style="font-size: 11.43px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/termux/" style="font-size: 11.43px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 18.57px;">x86汇编程序</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/08/">August 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/23.C%E8%AF%AD%E8%A8%80InlineHook/">23.C语言实现InlineHook</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/22.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">22.使用C语言获取系统架构</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/21.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8syscall%E9%87%8D%E5%86%99%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/">21.使用C语言与汇编语言调用syscall重写进程相关函数</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/20.%E5%B0%86Dll%E6%96%87%E4%BB%B6%E8%BD%AC%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%8E%8B%E5%87%BA%E6%9D%A5/">20.将Dll文件转为二进制代码运行时解压出来</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/19.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9D%97%E5%8F%A5%E6%9F%84/">19.使用C语言获取进程模块句柄</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      
+  <span id="busuanzi_container_site_pv">
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv" style='display:none'>
+          本站访客数<span id="busuanzi_value_site_uv"></span>人
+  </span>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2024 Theqiqi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

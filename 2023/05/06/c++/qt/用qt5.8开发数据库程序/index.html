@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>使用qt5.8开发数据库程序 | Theqiqi_blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="目录 目录 开发环境 开发过程 mysql数据库部分 qt开发部分   出现的问题及修复 开发环境 开发过程 mysql数据库部分 qt开发部分 新建qt项目,命名为login_test 完整代码       出现的问题及修复">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用qt5.8开发数据库程序">
+<meta property="og:url" content="http://example.com/2023/05/06/c++/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="目录 目录 开发环境 开发过程 mysql数据库部分 qt开发部分   出现的问题及修复 开发环境 开发过程 mysql数据库部分 qt开发部分 新建qt项目,命名为login_test 完整代码       出现的问题及修复">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-05-06T00:18:01.000Z">
+<meta property="article:modified_time" content="2024-08-12T06:36:50.785Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Theqiqi_blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Theqiqi_blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-c++/qt/用qt5.8开发数据库程序" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+
+	<span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+		  <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+<a href="/2023/05/06/c++/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/" class="article-date">
+  <time datetime="2023-05-06T00:18:01.000Z" itemprop="datePublished">2023-05-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用qt5.8开发数据库程序
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#%E7%9B%AE%E5%BD%95">目录</a><ul>
+<li><a href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83">开发环境</a></li>
+<li><a href="#%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B">开发过程</a><ul>
+<li><a href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E5%88%86">mysql数据库部分</a></li>
+<li><a href="#qt%E5%BC%80%E5%8F%91%E9%83%A8%E5%88%86">qt开发部分</a></li>
+</ul>
+</li>
+<li><a href="#%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E4%BF%AE%E5%A4%8D">出现的问题及修复</a></li>
+<li><a href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83-1">开发环境</a></li>
+<li><a href="#%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B-1">开发过程</a><ul>
+<li><a href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E9%83%A8%E5%88%86-1">mysql数据库部分</a></li>
+<li><a href="#qt%E5%BC%80%E5%8F%91%E9%83%A8%E5%88%86-1">qt开发部分</a><ul>
+<li><a href="#%E6%96%B0%E5%BB%BAqt%E9%A1%B9%E7%9B%AE%E5%91%BD%E5%90%8D%E4%B8%BAlogin_test">新建qt项目,命名为login_test</a><ul>
+<li><a href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81">完整代码</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E4%BF%AE%E5%A4%8D-1">出现的问题及修复</a></li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+<h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><ul>
+<li>mysql5.0</li>
+<li>qt5.8</li>
+</ul>
+<h2 id="开发过程"><a href="#开发过程" class="headerlink" title="开发过程"></a>开发过程</h2><h3 id="mysql数据库部分"><a href="#mysql数据库部分" class="headerlink" title="mysql数据库部分"></a>mysql数据库部分</h3><h3 id="qt开发部分"><a href="#qt开发部分" class="headerlink" title="qt开发部分"></a>qt开发部分</h3><h2 id="出现的问题及修复"><a href="#出现的问题及修复" class="headerlink" title="出现的问题及修复"></a>出现的问题及修复</h2><!--more-->
+
+<h2 id="开发环境-1"><a href="#开发环境-1" class="headerlink" title="开发环境"></a>开发环境</h2><ul>
+<li>mysql5.0</li>
+<li>qt5.8</li>
+</ul>
+<h2 id="开发过程-1"><a href="#开发过程-1" class="headerlink" title="开发过程"></a>开发过程</h2><h3 id="mysql数据库部分-1"><a href="#mysql数据库部分-1" class="headerlink" title="mysql数据库部分"></a>mysql数据库部分</h3><p>开启</p>
+<p>连接</p>
+<p>在mysql中新建数据库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE DATABASE login_test DEFAULT CHARSET utf8;</span><br></pre></td></tr></table></figure>
+
+<p>选择数据库<code>login_test</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use login_test;</span><br></pre></td></tr></table></figure>
+
+<p>新建表格<code>user_login</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE user_login</span><br><span class="line">(</span><br><span class="line"> user_id int PRIMARY KEY AUTO_INCREMENT, </span><br><span class="line"> user_name varchar(60) NOT NULL, </span><br><span class="line"> user_pwd varchar(60) NOT NULL, </span><br><span class="line"> user_datetime datetime NOT NULL</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="qt开发部分-1"><a href="#qt开发部分-1" class="headerlink" title="qt开发部分"></a>qt开发部分</h3><h4 id="新建qt项目-命名为login-test"><a href="#新建qt项目-命名为login-test" class="headerlink" title="新建qt项目,命名为login_test"></a>新建qt项目,命名为login_test</h4><p><strong>需要实现的功能</strong></p>
+<ul>
+<li>初始化数据库</li>
+<li>用户注册</li>
+<li>用户登录</li>
+</ul>
+<p>初始化数据库函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Widget::InitDatabase</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Init database&quot;</span>;</span><br><span class="line">    m_DB = QSqlDatabase::<span class="built_in">addDatabase</span>(<span class="string">&quot;QMYSQL&quot;</span>);</span><br><span class="line">    m_DB.<span class="built_in">setHostName</span>(<span class="string">&quot;localhost&quot;</span>);</span><br><span class="line">    m_DB.<span class="built_in">setDatabaseName</span>(<span class="string">&quot;login_test&quot;</span>);</span><br><span class="line">    m_DB.<span class="built_in">setUserName</span>(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">    m_DB.<span class="built_in">setPassword</span>(<span class="string">&quot;123456&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!m_DB.<span class="built_in">open</span>())</span><br><span class="line">    &#123;</span><br><span class="line">         <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;open error&quot;</span>;</span><br><span class="line">         ui-&gt;user_login-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">         ui-&gt;user_register-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">         <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;open ok&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用户注册函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Widget::on_user_register_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QString strName = ui-&gt;user_name-&gt;<span class="built_in">text</span>();</span><br><span class="line">    QString strPwd = ui-&gt;user_pwd-&gt;<span class="built_in">text</span>();</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; strName &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; strPwd;</span><br><span class="line">    <span class="keyword">if</span> (strName.<span class="built_in">length</span>() == <span class="number">0</span> || strPwd.<span class="built_in">length</span>() == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;user name or pwd error&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    QString strSql = <span class="string">&quot;insert into user_login (user_name, user_pwd, user_datetime) values (&#x27;&quot;</span> + strName</span><br><span class="line">                     + <span class="string">&quot;&#x27;,&#x27;&quot;</span> + strPwd + <span class="string">&quot;&#x27;, now())&quot;</span>;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; strSql;</span><br><span class="line">    <span class="function">QSqlQuery <span class="title">query</span><span class="params">(m_DB)</span></span>;</span><br><span class="line">    <span class="keyword">if</span> (!query.<span class="built_in">exec</span>(strSql))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;sql exec error&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;register ok&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用户登录</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Widget::on_user_login_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QString strName = ui-&gt;user_name-&gt;<span class="built_in">text</span>();</span><br><span class="line">    QString strPwd = ui-&gt;user_pwd-&gt;<span class="built_in">text</span>();</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; strName &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; strPwd;</span><br><span class="line">    <span class="keyword">if</span> (strName.<span class="built_in">length</span>() == <span class="number">0</span> || strPwd.<span class="built_in">length</span>() == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;user name or pwd error&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    QString strSql = <span class="string">&quot;select user_id from user_login where user_name = &#x27;&quot;</span> + strName + <span class="string">&quot;&#x27; and user_pwd = &#x27;&quot;</span> + strPwd +<span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; strSql;</span><br><span class="line">    <span class="function">QSqlQuery <span class="title">query</span><span class="params">(m_DB)</span></span>;</span><br><span class="line">    <span class="keyword">if</span> (!query.<span class="built_in">exec</span>(strSql))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;sql exec error&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!query.<span class="built_in">next</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;login error&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;login ok&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h5><p>main.cpp</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;widget.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QApplication&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">QApplication <span class="title">a</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line">    Widget w;</span><br><span class="line">    w.<span class="built_in">InitDatabase</span>();</span><br><span class="line">    w.<span class="built_in">show</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> a.<span class="built_in">exec</span>();</span><br><span class="line">&#125;</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<p>widget.h</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//widget.h</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> WIDGET_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> WIDGET_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QWidget&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QSqlDatabase&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> Ui &#123;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Widget</span> : <span class="keyword">public</span> QWidget</span><br><span class="line">&#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">Widget</span><span class="params">(QWidget *parent = <span class="number">0</span>)</span></span>;</span><br><span class="line">    ~<span class="built_in">Widget</span>();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">InitDatabase</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">on_user_login_clicked</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">on_user_register_clicked</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Ui::Widget *ui;</span><br><span class="line">    QSqlDatabase m_DB;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">// WIDGET_H</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>widget.cpp</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//widget.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QDebug&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QSqlQuery&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;widget.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ui_widget.h&quot;</span></span></span><br><span class="line"></span><br><span class="line">Widget::<span class="built_in">Widget</span>(QWidget *parent) :</span><br><span class="line">    <span class="built_in">QWidget</span>(parent),</span><br><span class="line">    <span class="built_in">ui</span>(<span class="keyword">new</span> Ui::Widget)</span><br><span class="line">&#123;</span><br><span class="line">    ui-&gt;<span class="built_in">setupUi</span>(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Widget::~<span class="built_in">Widget</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> ui;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Widget::InitDatabase</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Init database&quot;</span>;</span><br><span class="line">    m_DB = QSqlDatabase::<span class="built_in">addDatabase</span>(<span class="string">&quot;QMYSQL&quot;</span>);</span><br><span class="line">    m_DB.<span class="built_in">setHostName</span>(<span class="string">&quot;localhost&quot;</span>);</span><br><span class="line">    m_DB.<span class="built_in">setDatabaseName</span>(<span class="string">&quot;login_test&quot;</span>);</span><br><span class="line">    m_DB.<span class="built_in">setUserName</span>(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">    m_DB.<span class="built_in">setPassword</span>(<span class="string">&quot;123456&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!m_DB.<span class="built_in">open</span>())</span><br><span class="line">    &#123;</span><br><span class="line">         <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;open error&quot;</span>;</span><br><span class="line">         ui-&gt;user_login-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">         ui-&gt;user_register-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">         <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;open ok&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Widget::on_user_login_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QString strName = ui-&gt;user_name-&gt;<span class="built_in">text</span>();</span><br><span class="line">    QString strPwd = ui-&gt;user_pwd-&gt;<span class="built_in">text</span>();</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; strName &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; strPwd;</span><br><span class="line">    <span class="keyword">if</span> (strName.<span class="built_in">length</span>() == <span class="number">0</span> || strPwd.<span class="built_in">length</span>() == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;user name or pwd error&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    QString strSql = <span class="string">&quot;select user_id from user_login where user_name = &#x27;&quot;</span> + strName + <span class="string">&quot;&#x27; and user_pwd = &#x27;&quot;</span> + strPwd +<span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; strSql;</span><br><span class="line">    <span class="function">QSqlQuery <span class="title">query</span><span class="params">(m_DB)</span></span>;</span><br><span class="line">    <span class="keyword">if</span> (!query.<span class="built_in">exec</span>(strSql))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;sql exec error&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!query.<span class="built_in">next</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;login error&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;login ok&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Widget::on_user_register_clicked</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    QString strName = ui-&gt;user_name-&gt;<span class="built_in">text</span>();</span><br><span class="line">    QString strPwd = ui-&gt;user_pwd-&gt;<span class="built_in">text</span>();</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; strName &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; strPwd;</span><br><span class="line">    <span class="keyword">if</span> (strName.<span class="built_in">length</span>() == <span class="number">0</span> || strPwd.<span class="built_in">length</span>() == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;user name or pwd error&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    QString strSql = <span class="string">&quot;insert into user_login (user_name, user_pwd, user_datetime) values (&#x27;&quot;</span> + strName</span><br><span class="line">                     + <span class="string">&quot;&#x27;,&#x27;&quot;</span> + strPwd + <span class="string">&quot;&#x27;, now())&quot;</span>;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; strSql;</span><br><span class="line">    <span class="function">QSqlQuery <span class="title">query</span><span class="params">(m_DB)</span></span>;</span><br><span class="line">    <span class="keyword">if</span> (!query.<span class="built_in">exec</span>(strSql))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;sql exec error&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;register ok&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>login_test.pro</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#-------------------------------------------------</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Project created by QtCreator 2023-05-06T16:33:01</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#-------------------------------------------------</span></span><br><span class="line"></span><br><span class="line">QT       += core gui sql</span><br><span class="line"></span><br><span class="line">greaterThan(QT_MAJOR_VERSION, 4): QT += widgets</span><br><span class="line"></span><br><span class="line">TARGET = login_test</span><br><span class="line">TEMPLATE = app</span><br><span class="line"></span><br><span class="line"><span class="comment"># The following define makes your compiler emit warnings if you use</span></span><br><span class="line"><span class="comment"># any feature of Qt which as been marked as deprecated (the exact warnings</span></span><br><span class="line"><span class="comment"># depend on your compiler). Please consult the documentation of the</span></span><br><span class="line"><span class="comment"># deprecated API in order to know how to port your code away from it.</span></span><br><span class="line">DEFINES += QT_DEPRECATED_WARNINGS</span><br><span class="line"></span><br><span class="line"><span class="comment"># You can also make your code fail to compile if you use deprecated APIs.</span></span><br><span class="line"><span class="comment"># In order to do so, uncomment the following line.</span></span><br><span class="line"><span class="comment"># You can also select to disable deprecated APIs only up to a certain version of Qt.</span></span><br><span class="line"><span class="comment">#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SOURCES += main.cpp\</span><br><span class="line">        widget.cpp</span><br><span class="line"></span><br><span class="line">HEADERS  += widget.h</span><br><span class="line"></span><br><span class="line">FORMS    += widget.ui</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="出现的问题及修复-1"><a href="#出现的问题及修复-1" class="headerlink" title="出现的问题及修复"></a>出现的问题及修复</h2><p><strong>运行程序时出现<code>driver not loaded</code></strong></p>
+<p><strong>分析原因</strong></p>
+<p>如果Qt只有32位的。连接64位的mysql，需要将libmysql.dll放到qt安装目录lib路径下.</p>
+<p><strong>解决方法</strong></p>
+<p>将mysql中的libmysql.dll 放在QT的安装目录的 D:\software\Qt\Qt5.8.0\5.8\mingw53_32\lib下即可！</p>
+<p>参考链接</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42280928/article/details/123324708">Qt5.12.6 连接Mysql8.0 QSqlDatabase:QMySQL driver not loaded</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42280928/article/details/103234558">32位Qt连接64位Mysql异常解决方案 异常位：QSqlDatabase:QMySQL driver not loaded</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/05/06/c++/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/" data-id="clzqr9dbt004434d14jgmf2fb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/07/07/first%20pragram/%E4%BD%BF%E7%94%A8Python%E8%BF%9B%E8%A1%8C%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E8%84%9A%E6%9C%AC/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用Python进行第一个爬虫脚本
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/05/01/c++/MFC%E4%B8%8Eqt%E4%B8%AD%E7%9A%84%E7%B1%BB%E6%98%AF%E4%BB%80%E4%B9%88/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MFC与qt中的类是什么</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MFC/" rel="tag">MFC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/" rel="tag">Socket</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/" rel="tag">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-driver/" rel="tag">c++windows+driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" rel="tag">c语言的万种用法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsp/" rel="tag">jsp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 15.71px;">64位汇编程序</a> <a href="/tags/Hacking/" style="font-size: 12.86px;">Hacking</a> <a href="/tags/MFC/" style="font-size: 10px;">MFC</a> <a href="/tags/OpenGL/" style="font-size: 10px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 12.86px;">Qt</a> <a href="/tags/Socket/" style="font-size: 11.43px;">Socket</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/assembly/" style="font-size: 10px;">assembly</a> <a href="/tags/c/" style="font-size: 15.71px;">c++</a> <a href="/tags/c-windows-driver/" style="font-size: 10px;">c++windows+driver</a> <a href="/tags/c-windows-hacking/" style="font-size: 20px;">c+windows+hacking</a> <a href="/tags/compiled/" style="font-size: 10px;">compiled</a> <a href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" style="font-size: 14.29px;">c语言的万种用法</a> <a href="/tags/first-pragram/" style="font-size: 17.14px;">first pragram</a> <a href="/tags/jsp/" style="font-size: 10px;">jsp</a> <a href="/tags/mysql/" style="font-size: 11.43px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/termux/" style="font-size: 11.43px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 18.57px;">x86汇编程序</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/08/">August 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/23.C%E8%AF%AD%E8%A8%80InlineHook/">23.C语言实现InlineHook</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/22.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">22.使用C语言获取系统架构</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/21.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8syscall%E9%87%8D%E5%86%99%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/">21.使用C语言与汇编语言调用syscall重写进程相关函数</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/20.%E5%B0%86Dll%E6%96%87%E4%BB%B6%E8%BD%AC%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%8E%8B%E5%87%BA%E6%9D%A5/">20.将Dll文件转为二进制代码运行时解压出来</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/19.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9D%97%E5%8F%A5%E6%9F%84/">19.使用C语言获取进程模块句柄</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      
+  <span id="busuanzi_container_site_pv">
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv" style='display:none'>
+          本站访客数<span id="busuanzi_value_site_uv"></span>人
+  </span>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2024 Theqiqi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

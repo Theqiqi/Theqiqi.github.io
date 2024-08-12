@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>13.c语言使用vs2022分析c语言程序并手写x86与x86_64内联汇编程序 | Theqiqi_blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="用C语言写一个x86内联汇编程序 1. 用C语言写一个程序,内容为调用MessageBoxA函数 2. 用C语言与x86内联汇编写一个程序,内容为调用MessageBoxA函数 3. 用C语言与x86内联汇编写一个程序,内容为使用内联汇编调用C语言函数 4.用C语言与x86内联汇编写一个程序,使用内联汇编调用C语言中的变量 5. 用C语言与x86内联汇编写一个程序,使用内联汇编调用C语言中的指针">
+<meta property="og:type" content="article">
+<meta property="og:title" content="13.c语言使用vs2022分析c语言程序并手写x86与x86_64内联汇编程序">
+<meta property="og:url" content="http://example.com/2024/08/06/C+Windows+HackingNote/13.c%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8vs2022%E5%88%86%E6%9E%90c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E5%B9%B6%E6%89%8B%E5%86%99x86%E4%B8%8Ex86_64%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="用C语言写一个x86内联汇编程序 1. 用C语言写一个程序,内容为调用MessageBoxA函数 2. 用C语言与x86内联汇编写一个程序,内容为调用MessageBoxA函数 3. 用C语言与x86内联汇编写一个程序,内容为使用内联汇编调用C语言函数 4.用C语言与x86内联汇编写一个程序,使用内联汇编调用C语言中的变量 5. 用C语言与x86内联汇编写一个程序,使用内联汇编调用C语言中的指针">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="d:/test/CC++/c生万物之windows程序开发/Hacking/C+Windows+Hacking/Messagewithc.jpg">
+<meta property="og:image" content="d:/test/CC++/c生万物之windows程序开发/Hacking/C+Windows+Hacking/AsmMessageAwithc.jpg">
+<meta property="og:image" content="d:/test/CC++/c生万物之windows程序开发/Hacking/C+Windows+Hacking/AsmMessage.jpg">
+<meta property="og:image" content="d:/test/CC++/c生万物之windows程序开发/Hacking/C+Windows+Hacking/AsmMessageWithVar.jpg">
+<meta property="og:image" content="d:/test/CC++/c生万物之windows程序开发/Hacking/C+Windows+Hacking/AsmMessageWithPoint.jpg">
+<meta property="og:image" content="http://example.com/.%5CC+Windows+Hacking%5CAsmMessageWithParameters.jpg">
+<meta property="og:image" content="http://example.com/.%5CC+Windows+Hacking%5CAsmMessageWithAsm.jpg">
+<meta property="article:published_time" content="2024-08-06T15:24:00.000Z">
+<meta property="article:modified_time" content="2024-08-12T07:49:02.678Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="c+windows+hacking">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:/test/CC++/c生万物之windows程序开发/Hacking/C+Windows+Hacking/Messagewithc.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Theqiqi_blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Theqiqi_blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-C+Windows+HackingNote/13.c语言使用vs2022分析c语言程序并手写x86与x86_64内联汇编程序" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+
+	<span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+		  <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+<a href="/2024/08/06/C+Windows+HackingNote/13.c%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8vs2022%E5%88%86%E6%9E%90c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E5%B9%B6%E6%89%8B%E5%86%99x86%E4%B8%8Ex86_64%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" class="article-date">
+  <time datetime="2024-08-06T15:24:00.000Z" itemprop="datePublished">2024-08-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      13.c语言使用vs2022分析c语言程序并手写x86与x86_64内联汇编程序
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AAx86%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F">用C语言写一个x86内联汇编程序</a><ul>
+<li><a href="#1-%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9%E4%B8%BA%E8%B0%83%E7%94%A8messageboxa%E5%87%BD%E6%95%B0">1. 用C语言写一个程序,内容为调用MessageBoxA函数</a></li>
+<li><a href="#2-%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Ex86%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9%E4%B8%BA%E8%B0%83%E7%94%A8messageboxa%E5%87%BD%E6%95%B0">2. 用C语言与x86内联汇编写一个程序,内容为调用MessageBoxA函数</a></li>
+<li><a href="#3-%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Ex86%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%86%85%E5%AE%B9%E4%B8%BA%E4%BD%BF%E7%94%A8%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0">3. 用C语言与x86内联汇编写一个程序,内容为使用内联汇编调用C语言函数</a></li>
+<li><a href="#4%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Ex86%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E4%BD%BF%E7%94%A8%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F">4.用C语言与x86内联汇编写一个程序,使用内联汇编调用C语言中的变量</a></li>
+<li><a href="#5-%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Ex86%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E4%BD%BF%E7%94%A8%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E6%8C%87%E9%92%88%E7%B1%BB%E5%9E%8B%E5%8F%98%E9%87%8F">5. 用C语言与x86内联汇编写一个程序,使用内联汇编调用C语言中的指针类型变量</a></li>
+<li><a href="#6-%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Ex86%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E4%BD%BF%E7%94%A8%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8messageboxa%E5%B9%B6%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0">6. 用C语言与x86内联汇编写一个程序,使用内联汇编调用MessageBoxA并传递参数</a></li>
+<li><a href="#7-%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Ex86%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E4%B8%8Ec%E8%AF%AD%E8%A8%80%E4%BB%A3%E7%A0%81%E5%88%86%E5%BC%80%E5%BC%95%E7%94%A8">7. 用C语言与x86内联汇编写一个程序,汇编指令与C语言代码分开引用</a></li>
+<li><a href="#8-%E5%85%B3%E4%BA%8Ex86%E6%B1%87%E7%BC%96%E7%9A%84%E5%86%99%E6%B3%95%E4%BB%A5%E5%8F%8A%E5%A0%86%E6%A0%88%E5%AE%9E%E9%AA%8C%E4%BB%A5%E4%B8%8B6%E4%B8%AA%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F%E5%A0%86%E6%A0%88%E5%AE%8C%E5%85%A8%E5%B9%B3%E8%A1%A1">8. 关于x86汇编的写法以及堆栈实验以下6个汇编程序堆栈完全平衡</a><ul>
+<li><a href="#1esp4%E4%B8%BA%E4%BC%A0%E8%BF%87%E6%9D%A5%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%82%E6%95%B0%E5%A6%82%E6%9E%9C%E6%9C%89%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0%E5%BA%94%E4%B8%BAesp8">1.[esp+4]为传过来的第一个参数,如果有二个参数，第二个参数应为[esp+8]</a></li>
+<li><a href="#2-%E4%BD%BF%E7%94%A8push%E5%8E%8B%E5%85%A5%E4%B8%80%E4%B8%AA%E5%8F%82%E6%95%B0%E5%90%8E%E9%9C%80%E8%A6%81%E5%B0%86esp%E5%8A%A04">2. 使用push压入一个参数后需要将esp加4</a></li>
+<li><a href="#3pop%E4%B8%80%E4%B8%AA%E5%AF%84%E5%AD%98%E5%99%A8%E7%AD%89%E5%90%8C%E4%BA%8Eadd-esp4">3.pop一个寄存器等同于<code>add esp,4</code></a></li>
+<li><a href="#4sub--esp4%E7%AD%89%E5%90%8C%E4%BA%8Epush-%E4%B8%80%E4%B8%AA%E5%AF%84%E5%AD%98%E5%99%A8">4.<code>sub  esp,4</code>等同于push 一个寄存器</a></li>
+<li><a href="#5%E4%BD%BF%E7%94%A8%E5%A0%86%E6%A0%88%E9%80%9A%E8%BF%87%E5%AF%84%E5%AD%98%E5%99%A8%E6%9D%A5%E8%B5%8B%E5%80%BC%E4%B8%8E%E5%8F%96%E5%80%BC">5.使用堆栈通过寄存器来赋值与取值</a></li>
+<li><a href="#6push%E4%B8%8Epop%E6%8C%87%E4%BB%A4%E5%8F%AF%E4%BB%A5%E6%93%8D%E4%BD%9C%E5%A0%86%E7%A9%BA%E9%97%B4">6.push与pop指令可以操作堆空间</a></li>
+</ul>
+</li>
+<li><a href="#9-c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E4%BD%BF%E7%94%A8naked%E5%87%BD%E6%95%B0%E5%86%85%E8%81%94x86%E6%B1%87%E7%BC%96">9. c语言程序使用Naked函数内联x86汇编</a></li>
+</ul>
+</li>
+<li><a href="#%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AAx86_64%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F">用C语言写一个x86_64内联汇编程序</a><ul>
+<li><a href="#1-%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Ex86%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F%E6%B1%87%E7%BC%96%E6%8C%87%E4%BB%A4%E4%B8%8Ec%E8%AF%AD%E8%A8%80%E4%BB%A3%E7%A0%81%E5%88%86%E5%BC%80%E5%BC%95%E7%94%A8">1. 用C语言与x86内联汇编写一个程序,汇编指令与C语言代码分开引用</a></li>
+<li><a href="#2%E5%85%B3%E4%BA%8Ex64%E7%9A%84%E5%A0%86%E6%A0%88%E5%B9%B3%E8%A1%A1%E4%BB%A5%E4%B8%8B3%E4%B8%AA%E7%A8%8B%E5%BA%8F%E5%A0%86%E6%A0%88%E5%AE%8C%E5%85%A8%E5%B9%B3%E8%A1%A1">2.关于x64的堆栈平衡,以下3个程序堆栈完全平衡</a><ul>
+<li><a href="#1%E4%BD%BF%E7%94%A8push%E4%B8%8Epop%E6%8C%87%E4%BB%A4%E5%B9%B3%E8%A1%A1%E5%A0%86%E6%A0%88">1.使用push与pop指令平衡堆栈</a></li>
+<li><a href="#2%E4%BD%BF%E7%94%A8sub-rsp8h%E4%B8%8Epop%E6%8C%87%E4%BB%A4%E5%B9%B3%E8%A1%A1%E5%A0%86%E6%A0%88">2.使用<code>sub rsp,8h</code>与pop指令平衡堆栈</a></li>
+<li><a href="#3-%E4%BD%BF%E7%94%A8%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE%E5%B9%B6call%E4%B8%A4%E6%AC%A1">3. 使用全局变量保存数据并call两次</a></li>
+</ul>
+</li>
+<li><a href="#3%E5%9C%A8x86_64%E4%BD%8D%E6%B1%87%E7%BC%96%E4%B8%AD%E5%86%99%E4%B8%80%E4%B8%AA%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8messageboxa%E7%9A%84%E7%A8%8B%E5%BA%8F">3.在x86_64位汇编中写一个汇编调用MessageBoxA的程序</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="用C语言写一个x86内联汇编程序"><a href="#用C语言写一个x86内联汇编程序" class="headerlink" title="用C语言写一个x86内联汇编程序"></a>用C语言写一个x86内联汇编程序</h1><h2 id="1-用C语言写一个程序-内容为调用MessageBoxA函数"><a href="#1-用C语言写一个程序-内容为调用MessageBoxA函数" class="headerlink" title="1. 用C语言写一个程序,内容为调用MessageBoxA函数"></a>1. 用C语言写一个程序,内容为调用MessageBoxA函数</h2><p>完整代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Message.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line">   </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0x%p&quot;</span>, &amp;MessageBoxA);</span><br><span class="line">    MessageBoxA(<span class="literal">NULL</span>, <span class="string">&quot;HellWorld&quot;</span>, <span class="string">&quot;Text&quot;</span>, MB_OK);</span><br><span class="line">    MSG msg;</span><br><span class="line">    <span class="keyword">while</span> (GetMessageW(&amp;msg, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>结果如图所示：</p>
+<p><img src="D:\test\CC++\c生万物之windows程序开发\Hacking\C+Windows+Hacking\Messagewithc.jpg" alt="Messagewithc"></p>
+<h2 id="2-用C语言与x86内联汇编写一个程序-内容为调用MessageBoxA函数"><a href="#2-用C语言与x86内联汇编写一个程序-内容为调用MessageBoxA函数" class="headerlink" title="2. 用C语言与x86内联汇编写一个程序,内容为调用MessageBoxA函数"></a>2. 用C语言与x86内联汇编写一个程序,内容为调用MessageBoxA函数</h2><p>完整代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line">    </span><br><span class="line"><span class="type">void</span> <span class="title function_">AsmMessageBoxA</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    __asm &#123;</span><br><span class="line">        push <span class="number">0</span></span><br><span class="line">        push <span class="number">0</span></span><br><span class="line">        push <span class="number">0</span></span><br><span class="line">        push <span class="number">0</span></span><br><span class="line">        mov edx, <span class="number">0x7515B730</span></span><br><span class="line">        call edx</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;MessageBoxA address is 0x%p\n&quot;</span>, &amp;MessageBoxA);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;AsmMessageBoxA() address is 0x%p\n&quot;</span>, &amp;AsmMessageBoxA);</span><br><span class="line">    AsmMessageBoxA();</span><br><span class="line">    MSG msg;</span><br><span class="line">    <span class="keyword">while</span> (GetMessageW(&amp;msg, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>结果如图所示：</p>
+<p><img src="D:\test\CC++\c生万物之windows程序开发\Hacking\C+Windows+Hacking\AsmMessageAwithc.jpg" alt="AsmMessageAwithc"></p>
+<h2 id="3-用C语言与x86内联汇编写一个程序-内容为使用内联汇编调用C语言函数"><a href="#3-用C语言与x86内联汇编写一个程序-内容为使用内联汇编调用C语言函数" class="headerlink" title="3. 用C语言与x86内联汇编写一个程序,内容为使用内联汇编调用C语言函数"></a>3. 用C语言与x86内联汇编写一个程序,内容为使用内联汇编调用C语言函数</h2><p>完整代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line">    </span><br><span class="line"><span class="type">void</span> <span class="title function_">Message</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    MessageBoxA(<span class="literal">NULL</span>, <span class="string">&quot;HellWorld&quot;</span>, <span class="string">&quot;Text&quot;</span>, MB_OK);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">AsmMessage</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    __asm &#123;</span><br><span class="line">        mov edx, <span class="number">0x0041140B</span> <span class="comment">//0x0041140B is Message() address</span></span><br><span class="line">        call edx</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;MessageBoxA address is 0x%p\n&quot;</span>, &amp;MessageBoxA);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Message() address is 0x%p\n&quot;</span>, &amp;Message);</span><br><span class="line">    AsmMessage();</span><br><span class="line">    MSG msg;</span><br><span class="line">    <span class="keyword">while</span> (GetMessageW(&amp;msg, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>结果如图所示：</p>
+<p><img src="D:\test\CC++\c生万物之windows程序开发\Hacking\C+Windows+Hacking\AsmMessage.jpg" alt="AsmMessage"></p>
+<h2 id="4-用C语言与x86内联汇编写一个程序-使用内联汇编调用C语言中的变量"><a href="#4-用C语言与x86内联汇编写一个程序-使用内联汇编调用C语言中的变量" class="headerlink" title="4.用C语言与x86内联汇编写一个程序,使用内联汇编调用C语言中的变量"></a>4.用C语言与x86内联汇编写一个程序,使用内联汇编调用C语言中的变量</h2><p>完整代码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line">    </span><br><span class="line"><span class="type">void</span> <span class="title function_">Message</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    MessageBoxA(<span class="literal">NULL</span>, <span class="string">&quot;HellWorld&quot;</span>, <span class="string">&quot;Text&quot;</span>, MB_OK);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">AsmMessage</span><span class="params">(<span class="type">unsigned</span> <span class="type">long</span> addr)</span></span><br><span class="line">&#123;</span><br><span class="line">    </span><br><span class="line">    __asm &#123;</span><br><span class="line">        mov edx,addr  <span class="comment">//addr is Message() address</span></span><br><span class="line">        call edx</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;MessageBoxA address is 0x%p\n&quot;</span>, &amp;MessageBoxA);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Message() address is 0x%p\n&quot;</span>, &amp;Message);</span><br><span class="line">    AsmMessage(&amp;Message);</span><br><span class="line">    MSG msg;</span><br><span class="line">    <span class="keyword">while</span> (GetMessageW(&amp;msg, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如图所示:</p>
+<p><img src="D:\test\CC++\c生万物之windows程序开发\Hacking\C+Windows+Hacking\AsmMessageWithVar.jpg" alt="AsmMessageWithVar"></p>
+<h2 id="5-用C语言与x86内联汇编写一个程序-使用内联汇编调用C语言中的指针类型变量"><a href="#5-用C语言与x86内联汇编写一个程序-使用内联汇编调用C语言中的指针类型变量" class="headerlink" title="5. 用C语言与x86内联汇编写一个程序,使用内联汇编调用C语言中的指针类型变量"></a>5. 用C语言与x86内联汇编写一个程序,使用内联汇编调用C语言中的指针类型变量</h2><p>完整代码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line">    </span><br><span class="line"><span class="type">void</span> <span class="title function_">Message</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    MessageBoxA(<span class="literal">NULL</span>, <span class="string">&quot;HellWorld&quot;</span>, <span class="string">&quot;Text&quot;</span>, MB_OK);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">AsmMessage</span><span class="params">(<span class="type">void</span>* paddr)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;paddr value is 0x%p\n&quot;</span>, paddr);</span><br><span class="line">    __asm &#123;</span><br><span class="line">        mov edx,[paddr]  <span class="comment">//addr is Message() address</span></span><br><span class="line">        call edx</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;MessageBoxA address is 0x%p\n&quot;</span>, &amp;MessageBoxA);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Message() address is 0x%p\n&quot;</span>, &amp;Message);</span><br><span class="line">    AsmMessage(&amp;Message);</span><br><span class="line">    MSG msg;</span><br><span class="line">    <span class="keyword">while</span> (GetMessageW(&amp;msg, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如图所示：</p>
+<p><img src="D:\test\CC++\c生万物之windows程序开发\Hacking\C+Windows+Hacking\AsmMessageWithPoint.jpg" alt="AsmMessageWithPoint"></p>
+<h2 id="6-用C语言与x86内联汇编写一个程序-使用内联汇编调用MessageBoxA并传递参数"><a href="#6-用C语言与x86内联汇编写一个程序-使用内联汇编调用MessageBoxA并传递参数" class="headerlink" title="6. 用C语言与x86内联汇编写一个程序,使用内联汇编调用MessageBoxA并传递参数"></a>6. 用C语言与x86内联汇编写一个程序,使用内联汇编调用MessageBoxA并传递参数</h2><p>以下为完整代码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line">    </span><br><span class="line"><span class="type">void</span> <span class="title function_">AsmMessageBoxA</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    HANDLE handle = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* Text = <span class="string">&quot;Hello,World&quot;</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* Title = <span class="string">&quot;Inline&quot;</span>;</span><br><span class="line">    <span class="type">int</span> style = MB_OK;</span><br><span class="line">    __asm &#123;   </span><br><span class="line">        push style</span><br><span class="line">        push Title</span><br><span class="line">        push Text</span><br><span class="line">        push handle</span><br><span class="line">        mov edx,MessageBoxA</span><br><span class="line">        call edx</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;MessageBoxA address is 0x%p\n&quot;</span>, &amp;MessageBoxA);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;AsmMessageBoxA() address is 0x%p\n&quot;</span>, &amp;AsmMessageBoxA);</span><br><span class="line">    AsmMessageBoxA();</span><br><span class="line">    MSG msg;</span><br><span class="line">    <span class="keyword">while</span> (GetMessageW(&amp;msg, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如图所示:</p>
+<p><img src="/.%5CC+Windows+Hacking%5CAsmMessageWithParameters.jpg" alt="AsmMessageWithParameters"></p>
+<h2 id="7-用C语言与x86内联汇编写一个程序-汇编指令与C语言代码分开引用"><a href="#7-用C语言与x86内联汇编写一个程序-汇编指令与C语言代码分开引用" class="headerlink" title="7. 用C语言与x86内联汇编写一个程序,汇编指令与C语言代码分开引用"></a>7. 用C语言与x86内联汇编写一个程序,汇编指令与C语言代码分开引用</h2><ol>
+<li><p>在项目中勾选Masm</p>
+</li>
+<li><p>新建一个文件命名为AsmMessage.asm</p>
+</li>
+<li><p>完整代码如下</p>
+<p>Message.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">;AsmMessage.asm</span><br><span class="line">.586</span><br><span class="line">.model flat,stdcall,c</span><br><span class="line">option casemap:none</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     mov eax,[esp+4]; eax = &#x27;paddr&#x27;</span><br><span class="line">     call eax</span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Message.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Message.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">AsmMessageBoxA_</span><span class="params">(<span class="type">void</span>* paddr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Message</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    MessageBoxA(<span class="literal">NULL</span>, <span class="string">&quot;HellWorld&quot;</span>, <span class="string">&quot;Text&quot;</span>, MB_OK);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;MessageBoxA address is 0x%p\n&quot;</span>, &amp;MessageBoxA);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;AsmMessageBoxA() address is 0x%p\n&quot;</span>, &amp;AsmMessageBoxA_);</span><br><span class="line">    AsmMessageBoxA_(&amp;Message);</span><br><span class="line">    MSG msg;</span><br><span class="line">    <span class="keyword">while</span> (GetMessageW(&amp;msg, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行结果如下:</p>
+</li>
+</ol>
+<p><img src="/.%5CC+Windows+Hacking%5CAsmMessageWithAsm.jpg" alt="AsmMessageWithAsm"></p>
+<h2 id="8-关于x86汇编的写法以及堆栈实验以下6个汇编程序堆栈完全平衡"><a href="#8-关于x86汇编的写法以及堆栈实验以下6个汇编程序堆栈完全平衡" class="headerlink" title="8. 关于x86汇编的写法以及堆栈实验以下6个汇编程序堆栈完全平衡"></a>8. 关于x86汇编的写法以及堆栈实验以下6个汇编程序堆栈完全平衡</h2><h3 id="1-esp-4-为传过来的第一个参数-如果有二个参数，第二个参数应为-esp-8"><a href="#1-esp-4-为传过来的第一个参数-如果有二个参数，第二个参数应为-esp-8" class="headerlink" title="1.[esp+4]为传过来的第一个参数,如果有二个参数，第二个参数应为[esp+8]"></a>1.[esp+4]为传过来的第一个参数,如果有二个参数，第二个参数应为[esp+8]</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">;AsmMessage.asm</span><br><span class="line">.586</span><br><span class="line">.model flat,c</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     mov eax,[esp+4]; eax = &#x27;paddr&#x27;</span><br><span class="line">     call eax</span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用push压入一个参数后需要将esp加4"><a href="#2-使用push压入一个参数后需要将esp加4" class="headerlink" title="2. 使用push压入一个参数后需要将esp加4"></a>2. 使用push压入一个参数后需要将esp加4</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">;AsmMessage.asm</span><br><span class="line">.586</span><br><span class="line">.model flat,c</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     push ebp</span><br><span class="line">     mov eax,[esp+8]; eax = &#x27;paddr&#x27;</span><br><span class="line">     call eax</span><br><span class="line">     add esp,4</span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-pop一个寄存器等同于add-esp-4"><a href="#3-pop一个寄存器等同于add-esp-4" class="headerlink" title="3.pop一个寄存器等同于add esp,4"></a>3.pop一个寄存器等同于<code>add esp,4</code></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">;AsmMessage.asm</span><br><span class="line">.586</span><br><span class="line">.model flat,c</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     push ebp</span><br><span class="line">     mov eax,[esp+8]; eax = &#x27;paddr&#x27;</span><br><span class="line">     call eax</span><br><span class="line">     pop ebp</span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-sub-esp-4等同于push-一个寄存器"><a href="#4-sub-esp-4等同于push-一个寄存器" class="headerlink" title="4.sub  esp,4等同于push 一个寄存器"></a>4.<code>sub  esp,4</code>等同于push 一个寄存器</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">;AsmMessage.asm</span><br><span class="line">.586</span><br><span class="line">.model flat,c</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     push ebp</span><br><span class="line">     sub esp,10h</span><br><span class="line">     mov eax,[esp+18h]; eax = &#x27;paddr&#x27;</span><br><span class="line">     call eax</span><br><span class="line">     add esp,14h</span><br><span class="line"></span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-使用堆栈通过寄存器来赋值与取值"><a href="#5-使用堆栈通过寄存器来赋值与取值" class="headerlink" title="5.使用堆栈通过寄存器来赋值与取值"></a>5.使用堆栈通过寄存器来赋值与取值</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">;AsmMessage.asm</span><br><span class="line">.586</span><br><span class="line">.model flat,c</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     sub esp,10h</span><br><span class="line">     mov ebx,10</span><br><span class="line">     mov [esp+12],ebx</span><br><span class="line">     mov [esp+8],ebx</span><br><span class="line">     mov [esp+4],ebx</span><br><span class="line">     mov [esp],ebx</span><br><span class="line">     mov eax,[esp+14h]; eax = &#x27;paddr&#x27;</span><br><span class="line">     call eax</span><br><span class="line">     add esp,10h</span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-push与pop指令可以操作堆空间"><a href="#6-push与pop指令可以操作堆空间" class="headerlink" title="6.push与pop指令可以操作堆空间"></a>6.push与pop指令可以操作堆空间</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">;AsmMessage.asm</span><br><span class="line">.586</span><br><span class="line">.model flat,c</span><br><span class="line"></span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     sub esp,10h</span><br><span class="line">     mov ebx,10</span><br><span class="line">     mov [esp+12],ebx</span><br><span class="line">     push [esp+12]</span><br><span class="line">     mov [esp+8],ebx</span><br><span class="line">     mov [esp+4],ebx</span><br><span class="line">     mov [esp],ebx</span><br><span class="line">     mov eax,[esp+18h]; eax = &#x27;paddr&#x27;</span><br><span class="line">     call eax</span><br><span class="line">     pop [esp+12]</span><br><span class="line">     pop [esp]</span><br><span class="line">     pop [esp+4]</span><br><span class="line">     pop [esp+8]</span><br><span class="line">     add esp,4</span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="9-c语言程序使用Naked函数内联x86汇编"><a href="#9-c语言程序使用Naked函数内联x86汇编" class="headerlink" title="9. c语言程序使用Naked函数内联x86汇编"></a>9. c语言程序使用Naked函数内联x86汇编</h2><p>完整代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Messageb.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Message</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    MessageBoxA(<span class="literal">NULL</span>, <span class="string">&quot;HellWorld&quot;</span>, <span class="string">&quot;Text&quot;</span>, MB_OK);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> __declspec(naked) MessageNaked(<span class="type">unsigned</span> <span class="type">long</span>* paddr)</span><br><span class="line">&#123;</span><br><span class="line">    __asm &#123;</span><br><span class="line">        mov edx, [esp+<span class="number">4</span>] <span class="comment">//addr is Message() address</span></span><br><span class="line">        call edx</span><br><span class="line">        ret</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;MessageBoxA address is 0x%p\n&quot;</span>, &amp;MessageBoxA);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Message() address is 0x%p\n&quot;</span>, &amp;Message);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Current pid is %d\n&quot;</span>,GetCurrentProcessId());</span><br><span class="line">    MessageNaked(&amp;Message);</span><br><span class="line">    MSG msg;</span><br><span class="line">    <span class="keyword">while</span> (GetMessageW(&amp;msg, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="用C语言写一个x86-64内联汇编程序"><a href="#用C语言写一个x86-64内联汇编程序" class="headerlink" title="用C语言写一个x86_64内联汇编程序"></a>用C语言写一个x86_64内联汇编程序</h1><h2 id="1-用C语言与x86内联汇编写一个程序-汇编指令与C语言代码分开引用"><a href="#1-用C语言与x86内联汇编写一个程序-汇编指令与C语言代码分开引用" class="headerlink" title="1. 用C语言与x86内联汇编写一个程序,汇编指令与C语言代码分开引用"></a>1. 用C语言与x86内联汇编写一个程序,汇编指令与C语言代码分开引用</h2><ol>
+<li><p>在项目中勾选Masm</p>
+</li>
+<li><p>新建一个文件命名为AsmMessage.asm</p>
+</li>
+<li><p>完整代码如下</p>
+<p>Message.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">;Message.asm</span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line"></span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     sub rsp,8h</span><br><span class="line">     call rcx  ;rcx = &#x27;paddr&#x27;</span><br><span class="line">	 add rsp,8h</span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>Message.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Message.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">int</span> <span class="title function_">AsmMessageBoxA_</span><span class="params">(<span class="type">void</span>* paddr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">Message</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    MessageBoxA(<span class="literal">NULL</span>, <span class="string">&quot;HellWorld&quot;</span>, <span class="string">&quot;Text&quot;</span>, MB_OK);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;MessageBoxA address is 0x%p\n&quot;</span>, &amp;MessageBoxA);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;AsmMessageBoxA() address is 0x%p\n&quot;</span>, &amp;AsmMessageBoxA_);</span><br><span class="line">    AsmMessageBoxA_(&amp;Message);</span><br><span class="line">    </span><br><span class="line">    MSG msg;</span><br><span class="line">    <span class="keyword">while</span> (GetMessageW(&amp;msg, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行成功</p>
+</li>
+</ol>
+<h2 id="2-关于x64的堆栈平衡-以下3个程序堆栈完全平衡"><a href="#2-关于x64的堆栈平衡-以下3个程序堆栈完全平衡" class="headerlink" title="2.关于x64的堆栈平衡,以下3个程序堆栈完全平衡"></a>2.关于x64的堆栈平衡,以下3个程序堆栈完全平衡</h2><h3 id="1-使用push与pop指令平衡堆栈"><a href="#1-使用push与pop指令平衡堆栈" class="headerlink" title="1.使用push与pop指令平衡堆栈"></a>1.使用push与pop指令平衡堆栈</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">;AsmMessage.asm</span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     push rcx</span><br><span class="line">     call rcx; rcx = &#x27;paddr&#x27;</span><br><span class="line">     pop rcx</span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用sub-rsp-8h与pop指令平衡堆栈"><a href="#2-使用sub-rsp-8h与pop指令平衡堆栈" class="headerlink" title="2.使用sub rsp,8h与pop指令平衡堆栈"></a>2.使用<code>sub rsp,8h</code>与pop指令平衡堆栈</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">;AsmMessage.asm</span><br><span class="line">.data</span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     sub rsp,8h</span><br><span class="line">     call rcx; rcx = &#x27;paddr&#x27;</span><br><span class="line">     pop [rsp+8]</span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-使用全局变量保存数据并call两次"><a href="#3-使用全局变量保存数据并call两次" class="headerlink" title="3. 使用全局变量保存数据并call两次"></a>3. 使用全局变量保存数据并call两次</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">;AsmMessage.asm</span><br><span class="line">.data</span><br><span class="line">paddr dq 0;</span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">     sub rsp,8h</span><br><span class="line">     mov paddr,rcx</span><br><span class="line">     call rcx; rcx = &#x27;paddr&#x27; </span><br><span class="line">     mov rcx,paddr</span><br><span class="line">     call rcx; rcx = &#x27;paddr&#x27;</span><br><span class="line">     add  rsp,8h</span><br><span class="line">     ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-在x86-64位汇编中写一个汇编调用MessageBoxA的程序"><a href="#3-在x86-64位汇编中写一个汇编调用MessageBoxA的程序" class="headerlink" title="3.在x86_64位汇编中写一个汇编调用MessageBoxA的程序"></a>3.在x86_64位汇编中写一个汇编调用MessageBoxA的程序</h2><ul>
+<li><p>Message.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Message.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">AsmMessageBoxA_</span><span class="params">(<span class="type">void</span>* pAddr)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;0x%p&quot;</span>, &amp;MessageBoxA);</span><br><span class="line">    MessageBoxA(<span class="literal">NULL</span>, <span class="string">&quot;HellWorld&quot;</span>, <span class="string">&quot;Text&quot;</span>, MB_OK);</span><br><span class="line">    AsmMessageBoxA_(&amp;MessageBoxA);</span><br><span class="line">    MSG msg;</span><br><span class="line">    <span class="keyword">while</span> (GetMessageW(&amp;msg, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>AsmMessage.asm</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">; AsmMessage.asm</span><br><span class="line">.data</span><br><span class="line">text db  &#x27;Call MessageBoxA Success&#x27;, 0</span><br><span class="line"></span><br><span class="line">.code</span><br><span class="line">AsmMessageBoxA_ proc</span><br><span class="line">	mov rbx, rcx; rcx = &#x27;paddr&#x27;</span><br><span class="line">	sub rsp, 28h</span><br><span class="line">	mov r9, 2</span><br><span class="line">	mov r8, 0</span><br><span class="line">	lea rdx, text</span><br><span class="line">	mov  rcx, 0</span><br><span class="line">	call rbx</span><br><span class="line">	add rsp, 28h</span><br><span class="line">	ret</span><br><span class="line">AsmMessageBoxA_ endp</span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/08/06/C+Windows+HackingNote/13.c%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8vs2022%E5%88%86%E6%9E%90c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E5%B9%B6%E6%89%8B%E5%86%99x86%E4%B8%8Ex86_64%E5%86%85%E8%81%94%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" data-id="clzqr9das000b34d18dlu5p2r" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/08/07/C+Windows+HackingNote/14.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E5%B0%86%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E5%8A%A0%E8%BD%BD%E5%88%B0%E8%BF%9B%E7%A8%8B%E5%90%8E%E8%B0%83%E7%94%A8%E6%B1%87%E7%BC%96Call/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          14.使用C语言将动态链接库加载到进程后调用汇编Call
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/08/06/C+Windows+HackingNote/12.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E5%B0%86%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%E9%80%9A%E8%BF%87%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%8A%A0%E8%BD%BD%E5%88%B0%E8%BF%9B%E7%A8%8B%E4%B8%AD/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">12.使用C语言将动态链接库通过远程线程加载到进程中</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MFC/" rel="tag">MFC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/" rel="tag">Socket</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/" rel="tag">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-driver/" rel="tag">c++windows+driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" rel="tag">c语言的万种用法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsp/" rel="tag">jsp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 15.71px;">64位汇编程序</a> <a href="/tags/Hacking/" style="font-size: 12.86px;">Hacking</a> <a href="/tags/MFC/" style="font-size: 10px;">MFC</a> <a href="/tags/OpenGL/" style="font-size: 10px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 12.86px;">Qt</a> <a href="/tags/Socket/" style="font-size: 11.43px;">Socket</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/assembly/" style="font-size: 10px;">assembly</a> <a href="/tags/c/" style="font-size: 15.71px;">c++</a> <a href="/tags/c-windows-driver/" style="font-size: 10px;">c++windows+driver</a> <a href="/tags/c-windows-hacking/" style="font-size: 20px;">c+windows+hacking</a> <a href="/tags/compiled/" style="font-size: 10px;">compiled</a> <a href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" style="font-size: 14.29px;">c语言的万种用法</a> <a href="/tags/first-pragram/" style="font-size: 17.14px;">first pragram</a> <a href="/tags/jsp/" style="font-size: 10px;">jsp</a> <a href="/tags/mysql/" style="font-size: 11.43px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/termux/" style="font-size: 11.43px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 18.57px;">x86汇编程序</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/08/">August 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/23.C%E8%AF%AD%E8%A8%80InlineHook/">23.C语言实现InlineHook</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/22.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">22.使用C语言获取系统架构</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/21.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8syscall%E9%87%8D%E5%86%99%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/">21.使用C语言与汇编语言调用syscall重写进程相关函数</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/20.%E5%B0%86Dll%E6%96%87%E4%BB%B6%E8%BD%AC%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%8E%8B%E5%87%BA%E6%9D%A5/">20.将Dll文件转为二进制代码运行时解压出来</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/19.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9D%97%E5%8F%A5%E6%9F%84/">19.使用C语言获取进程模块句柄</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      
+  <span id="busuanzi_container_site_pv">
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv" style='display:none'>
+          本站访客数<span id="busuanzi_value_site_uv"></span>人
+  </span>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2024 Theqiqi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

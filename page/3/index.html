@@ -64,11 +64,11 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-assembly_x86/如何使用x86汇编调用win32api" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-C+Windows+HackingNote/3.使用c语言在windows中写入数据到程序中" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
-<a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x86%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8win32api/" class="article-date">
-  <time datetime="2023-04-05T18:02:03.000Z" itemprop="datePublished">2023-04-05</time>
+<a href="/2024/08/04/C+Windows+HackingNote/3.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E4%B8%AD%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE%E5%88%B0%E7%A8%8B%E5%BA%8F%E4%B8%AD/" class="article-date">
+  <time datetime="2024-08-04T11:27:00.000Z" itemprop="datePublished">2024-08-04</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x86%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8win32api/">如何使用x86汇编调用win32api</a>
+      <a class="article-title" href="/2024/08/04/C+Windows+HackingNote/3.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E4%B8%AD%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE%E5%88%B0%E7%A8%8B%E5%BA%8F%E4%B8%AD/">3.使用c语言在windows中写入数据到程序中</a>
     </h1>
   
 
@@ -87,19 +87,52 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-用visual-studio2022新建一个x86汇编项目"><a href="#一-用visual-studio2022新建一个x86汇编项目" class="headerlink" title="一 用visual studio2022新建一个x86汇编项目"></a>一 用visual studio2022新建一个x86汇编项目</h2><h2 id="二-调用win32api-函数MessageBoxA的汇编程序代码"><a href="#二-调用win32api-函数MessageBoxA的汇编程序代码" class="headerlink" title="二 调用win32api  函数MessageBoxA的汇编程序代码"></a>二 调用win32api  函数<code>MessageBoxA</code>的汇编程序代码</h2><h2 id="三-调用退出进程函数ExitProcess的汇编程序代码"><a href="#三-调用退出进程函数ExitProcess的汇编程序代码" class="headerlink" title="三 调用退出进程函数ExitProcess的汇编程序代码"></a>三 调用退出进程函数<code>ExitProcess</code>的汇编程序代码</h2>
-        
-          <p class="article-more-link">
-            <a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x86%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8win32api/#more">Read More</a>
-          </p>
-        
+        <ul>
+<li><a href="#%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E4%B8%AD%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE%E5%88%B0%E7%A8%8B%E5%BA%8F%E4%B8%AD">使用c语言在windows中写入数据到程序中</a><ul>
+<li><a href="#1-c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%86%99%E6%95%B0%E6%8D%AE%E4%BD%BF%E7%94%A8%E8%B5%8B%E5%80%BC%E7%AC%A6%E5%8F%B7">1. C语言中写数据使用赋值符号<code>=</code></a></li>
+<li><a href="#2windows%E7%A8%8B%E5%BA%8F%E4%B8%AD%E4%BD%BF%E7%94%A8writeprocessmemory%E5%86%99%E6%95%B0%E6%8D%AE">2.windows程序中使用WriteProcessMemory写数据</a></li>
+<li><a href="#3%E5%86%99%E5%85%A5%E5%8D%95%E5%AD%97%E8%8A%82">3.写入单字节</a></li>
+<li><a href="#4-%E7%94%A8%E6%95%B0%E7%BB%84%E5%86%99%E5%85%A5%E5%A4%9A%E4%B8%AA%E5%AD%97%E8%8A%82">4. 用数组写入多个字节</a></li>
+<li><a href="#5-%E5%86%99%E5%85%A54%E4%B8%AA%E5%AD%97%E8%8A%82%E9%9B%86">5. 写入4个字节集</a></li>
+<li><a href="#6%E5%86%99%E5%85%A5%E5%A4%9A%E4%B8%AA%E5%AD%97%E8%8A%82%E9%9B%86">6.写入多个字节集</a></li>
+<li><a href="#7%E4%BD%BF%E7%94%A8%E6%95%B0%E7%BB%84%E5%86%99%E5%85%A5%E5%AD%97%E8%8A%82%E9%9B%86">7.使用数组写入字节集</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="使用c语言在windows中写入数据到程序中"><a href="#使用c语言在windows中写入数据到程序中" class="headerlink" title="使用c语言在windows中写入数据到程序中"></a>使用c语言在windows中写入数据到程序中</h1><h2 id="1-C语言中写数据使用赋值符号"><a href="#1-C语言中写数据使用赋值符号" class="headerlink" title="1. C语言中写数据使用赋值符号="></a>1. C语言中写数据使用赋值符号<code>=</code></h2><p>代码演示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Messageb.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i = <span class="number">666</span>;</span><br><span class="line">    label:</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var i vulue is     %d\n&quot;</span>, i);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var i address is   0x%p\n&quot;</span>, &amp;i);</span><br><span class="line">    <span class="type">int</span>* p = &amp;i;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var i vulue is     %d\n&quot;</span>, *p);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var i address is   0x%p\n&quot;</span>, p);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;point p address is 0x%p\n&quot;</span>, &amp;p);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;current Pid is %d\n&quot;</span>, GetCurrentProcessId());</span><br><span class="line">    getchar();</span><br><span class="line">    <span class="keyword">goto</span> label;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-windows程序中使用WriteProcessMemory写数据"><a href="#2-windows程序中使用WriteProcessMemory写数据" class="headerlink" title="2.windows程序中使用WriteProcessMemory写数据"></a>2.windows程序中使用WriteProcessMemory写数据</h2><p>使用<code>WriteProcessMemory</code>写入数据将保存在0x0019FEDC的值666改为2080，代码演示:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">66316</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	DWORD buffer = <span class="number">2080</span>;<span class="comment">//send for write data</span></span><br><span class="line">	SIZE_T nSize = <span class="keyword">sizeof</span>(buffer);<span class="comment">//read 4 bytes data</span></span><br><span class="line">	SIZE_T* writeLength = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully readed data size</span></span><br><span class="line">	WriteProcessMemory(hProcess, lpBaseAddr, &amp;buffer, nSize, writeLength);</span><br><span class="line">	ReadProcessMemory(hProcess, lpBaseAddr, &amp;buffer, nSize, writeLength);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Write address 0x%p data is %d\n&quot;</span>, lpBaseAddr, buffer);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Write data length is %d\n&quot;</span>, *writeLength);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果如图，修改成功</p>
+<p><img src="/.%5CC+Windows+Hacking%5C3_C+WindowsWrite1.jpg" alt="3_C+WindowsWrite1"></p>
+<p><img src="/.%5CC+Windows+Hacking%5C3_C+WindowsWrite2.jpg" alt="3_C+WindowsWrite2"></p>
+<h2 id="3-写入单字节"><a href="#3-写入单字节" class="headerlink" title="3.写入单字节"></a>3.写入单字节</h2><p>完整代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">85064</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	BYTE buffer = <span class="number">250</span>;<span class="comment">//send for write data</span></span><br><span class="line">	SIZE_T nSize = <span class="keyword">sizeof</span>(buffer);<span class="comment">//read 4 bytes data</span></span><br><span class="line">	SIZE_T* writeLength = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully readed data size</span></span><br><span class="line">	WriteProcessMemory(hProcess, lpBaseAddr, &amp;buffer, nSize, writeLength);</span><br><span class="line">	ReadProcessMemory(hProcess, lpBaseAddr, &amp;buffer, nSize, writeLength);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Write address 0x%p data is %d\n&quot;</span>, lpBaseAddr, buffer);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Write data length is %d\n&quot;</span>, *writeLength);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改成功</p>
+<p><img src="/.%5CC+Windows+Hacking%5C3_C+WindowsWrite3.jpg" alt="3_C+WindowsWrite3"></p>
+<h2 id="4-用数组写入多个字节"><a href="#4-用数组写入多个字节" class="headerlink" title="4. 用数组写入多个字节"></a>4. 用数组写入多个字节</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">85064</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> wSize 5</span></span><br><span class="line">	BYTE buffer[wSize] = &#123; <span class="number">240</span>,<span class="number">35</span>,<span class="number">35</span>,<span class="number">23</span>,<span class="number">9</span>&#125;;<span class="comment">//send for write data</span></span><br><span class="line">	SIZE_T nSize = <span class="keyword">sizeof</span>(BYTE) * <span class="number">5</span>;<span class="comment">//read 4 bytes data</span></span><br><span class="line">	SIZE_T* writeLength = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully readed data size</span></span><br><span class="line">	WriteProcessMemory(hProcess, lpBaseAddr, &amp;buffer, nSize, writeLength);</span><br><span class="line">	ReadProcessMemory(hProcess, lpBaseAddr, &amp;buffer, nSize, writeLength);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Write address 0x%p data is \t&quot;</span>, lpBaseAddr);</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; *writeLength; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, buffer[i]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\nWrite data length is %d\n&quot;</span>, *writeLength);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="5-写入4个字节集"><a href="#5-写入4个字节集" class="headerlink" title="5. 写入4个字节集"></a>5. 写入4个字节集</h2><p>代码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">85064</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	ULONG witeSize = <span class="number">4</span>;</span><br><span class="line">	SIZE_T nSize = <span class="keyword">sizeof</span>(SIZE_T*) * witeSize;<span class="comment">//write size 32/64 bit</span></span><br><span class="line">	BYTE** buffer = (BYTE**)<span class="built_in">malloc</span>(witeSize);<span class="comment">//send for write data</span></span><br><span class="line">	<span class="keyword">for</span> (ULONG i = <span class="number">0</span>; i &lt; witeSize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		*(buffer+i) = (BYTE*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(BYTE*));</span><br><span class="line">	&#125;</span><br><span class="line">	*buffer = <span class="number">0xDDDDD</span>;</span><br><span class="line">	SIZE_T* writeLength = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully writeed data size</span></span><br><span class="line">	WriteProcessMemory(hProcess, lpBaseAddr, buffer, nSize, writeLength);</span><br><span class="line">	ReadProcessMemory(hProcess, lpBaseAddr, buffer, nSize, writeLength);</span><br><span class="line">	<span class="keyword">if</span> (<span class="number">0</span> == *writeLength)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> writeSize = *writeLength / <span class="keyword">sizeof</span>(BYTE*);</span><br><span class="line">	<span class="keyword">if</span> (*writeLength % <span class="keyword">sizeof</span>(BYTE*) != <span class="number">0</span>)writeSize++;</span><br><span class="line">	<span class="keyword">for</span> (ULONG i = <span class="number">0</span>; i &lt; writeSize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d\t&quot;</span>, i + <span class="number">1</span>);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Write address 0x%p data is\t&quot;</span>, lpBaseAddr + i * <span class="keyword">sizeof</span>(BYTE*));</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;0x%p\n&quot;</span>, *(buffer+i));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Write data length is %d\n&quot;</span>, *writeLength);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<h2 id="6-写入多个字节集"><a href="#6-写入多个字节集" class="headerlink" title="6.写入多个字节集"></a>6.写入多个字节集</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">85064</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	ULONG wSize = <span class="number">9000</span>;</span><br><span class="line">	SIZE_T nSize = <span class="keyword">sizeof</span>(BYTE);<span class="comment">//write size 1 bytes</span></span><br><span class="line">	BYTE** buffer = (BYTE**)<span class="built_in">malloc</span>(wSize);<span class="comment">//send for write data</span></span><br><span class="line">	<span class="keyword">for</span> (ULONG i = <span class="number">0</span>; i &lt; wSize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		*(buffer + i) = (BYTE*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(BYTE));</span><br><span class="line">		*(buffer + i) = <span class="number">0x90</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	SIZE_T* writeLength = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully writeed data size</span></span><br><span class="line">	ULONG writeSize = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (ULONG i = <span class="number">0</span>; i &lt; wSize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		WriteProcessMemory(hProcess, lpBaseAddr + i, buffer + i, nSize, writeLength);</span><br><span class="line">		writeSize += *writeLength;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (ULONG i = <span class="number">0</span>; i &lt; wSize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		ReadProcessMemory(hProcess, lpBaseAddr + i, buffer + i, nSize, writeLength);</span><br><span class="line">		<span class="keyword">if</span> (<span class="number">0</span> == i % <span class="keyword">sizeof</span>(BYTE*))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;%d\t&quot;</span>, i / <span class="number">4</span> + <span class="number">1</span>);</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;Write address 0x%p data is\t0x&quot;</span>, lpBaseAddr + i * <span class="keyword">sizeof</span>(BYTE*));</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%02x&quot;</span>, *(buffer + i));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\nWrite data length is %d\n&quot;</span>, writeSize);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-使用数组写入字节集"><a href="#7-使用数组写入字节集" class="headerlink" title="7.使用数组写入字节集"></a>7.使用数组写入字节集</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">85064</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	SIZE_T nSize = <span class="keyword">sizeof</span>(BYTE);<span class="comment">//write size 1 bytes</span></span><br><span class="line">	<span class="meta">#<span class="keyword">define</span> wSize 10</span></span><br><span class="line">	BYTE *buffer[wSize] = &#123; <span class="number">0x4A</span>,<span class="number">0x4A</span> ,<span class="number">0x4A</span> ,<span class="number">0x4A</span> ,<span class="number">0x4A</span> ,<span class="number">0x4A</span> ,<span class="number">0x4A</span> ,<span class="number">0x4A</span> ,<span class="number">0x4A</span> ,<span class="number">0x4A</span> &#125;;</span><br><span class="line">	SIZE_T* writeLength = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully writeed data size</span></span><br><span class="line">	ULONG writeSize = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (ULONG i = <span class="number">0</span>; i &lt; wSize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		WriteProcessMemory(hProcess, lpBaseAddr + i, buffer[i], nSize, writeLength);</span><br><span class="line">		writeSize += *writeLength;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (ULONG i = <span class="number">0</span>; i &lt; wSize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		ReadProcessMemory(hProcess, lpBaseAddr + i, buffer[i], nSize, writeLength);</span><br><span class="line">		<span class="keyword">if</span> (<span class="number">0</span> == i % <span class="keyword">sizeof</span>(BYTE*))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;%d\t&quot;</span>, i / <span class="number">4</span> + <span class="number">1</span>);</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;Write address 0x%p data is\t0x&quot;</span>, lpBaseAddr + i * <span class="keyword">sizeof</span>(BYTE*));</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%02x&quot;</span>, *(buffer + i));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\nWrite data length is %d\n&quot;</span>, writeSize);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x86%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8win32api/" data-id="cln7b1yia000ewgd1gtd9er9y" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2024/08/04/C+Windows+HackingNote/3.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E4%B8%AD%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE%E5%88%B0%E7%A8%8B%E5%BA%8F%E4%B8%AD/" data-id="clzqr9daz000v34d1htx53qay" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li></ul>
 
     </footer>
   </div>
@@ -108,11 +141,11 @@
 
 
   
-    <article id="post-assembly_x86/如何使用x86汇编调用c语言printf函数" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-C+Windows+HackingNote/2.使用c语言在windows中读取程序的数据" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
-<a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x86%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80printf%E5%87%BD%E6%95%B0/" class="article-date">
-  <time datetime="2023-04-05T18:02:02.000Z" itemprop="datePublished">2023-04-05</time>
+<a href="/2024/08/03/C+Windows+HackingNote/2.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E4%B8%AD%E8%AF%BB%E5%8F%96%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%95%B0%E6%8D%AE/" class="article-date">
+  <time datetime="2024-08-03T12:43:01.000Z" itemprop="datePublished">2024-08-03</time>
 </a>
     
   </div>
@@ -123,7 +156,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x86%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80printf%E5%87%BD%E6%95%B0/">如何使用x86汇编调用c语言printf函数</a>
+      <a class="article-title" href="/2024/08/03/C+Windows+HackingNote/2.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E4%B8%AD%E8%AF%BB%E5%8F%96%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%95%B0%E6%8D%AE/">2.使用c语言在windows中读取程序的数据</a>
     </h1>
   
 
@@ -131,19 +164,90 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-用visuals-tudio2022新建一个x86汇编项目"><a href="#一-用visuals-tudio2022新建一个x86汇编项目" class="headerlink" title="一 用visuals tudio2022新建一个x86汇编项目"></a>一 用visuals tudio2022新建一个x86汇编项目</h2><h2 id="二-x86汇编调用c语言printf函数的代码部分"><a href="#二-x86汇编调用c语言printf函数的代码部分" class="headerlink" title="二 x86汇编调用c语言printf函数的代码部分"></a>二 x86汇编调用c语言<code>printf</code>函数的代码部分</h2>
-        
-          <p class="article-more-link">
-            <a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x86%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80printf%E5%87%BD%E6%95%B0/#more">Read More</a>
-          </p>
-        
+        <ul>
+<li><a href="#%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E4%B8%AD%E8%AF%BB%E5%8F%96%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%95%B0%E6%8D%AE">使用c语言在windows中读取程序的数据</a><ul>
+<li><a href="#1-c%E8%AF%AD%E8%A8%80%E9%80%9A%E8%BF%87%E6%8C%87%E9%92%88%E6%9D%A5%E8%8E%B7%E5%8F%96%E5%9C%B0%E5%9D%80%E7%9A%84%E6%95%B0%E6%8D%AE">1. C语言通过指针来获取地址的数据</a></li>
+<li><a href="#2-windows%E7%A8%8B%E5%BA%8F%E4%B8%AD%E9%80%9A%E8%BF%87readprocessmemory%E8%AF%BB%E5%8F%96%E5%9C%B0%E5%9D%80%E7%9A%84%E6%95%B0%E6%8D%AE">2. Windows程序中通过ReadProcessMemory读取地址的数据</a></li>
+<li><a href="#3-c%E8%AF%AD%E8%A8%80%E8%AF%BB%E5%8F%96%E5%AD%97%E8%8A%82%E9%9B%86%E7%9A%84%E6%95%B0%E6%8D%AE">3. C语言读取字节集的数据</a><ul>
+<li><a href="#1c%E8%AF%AD%E8%A8%80%E8%AF%BB%E5%8F%961%E5%AD%97%E8%8A%82%E7%9A%84%E6%95%B0%E6%8D%AE">1.C语言读取1字节的数据</a></li>
+<li><a href="#2c%E8%AF%AD%E8%A8%80%E8%AF%BB%E5%8F%96%E5%A4%9A%E4%B8%AA%E5%AD%97%E8%8A%82%E7%9A%84%E6%95%B0%E6%8D%AE">2.C语言读取多个字节的数据</a></li>
+<li><a href="#3%E8%A7%A3%E5%86%B3%E4%BD%BF%E7%94%A8readprocessmemeory%E8%AF%BB%E5%8F%96%E5%88%B0%E5%AD%97%E7%AC%A6%E9%9B%86%E7%B1%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E9%A1%BA%E5%BA%8F%E6%98%AF%E5%8F%8D%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%E4%B8%BA%E5%9C%A8x86%E7%A8%8B%E5%BA%8F%E4%B8%AD%E4%B8%80%E6%AC%A1%E8%AF%BB%E5%8F%964%E4%B8%AA%E5%AD%97%E8%8A%82%E7%9A%84%E6%95%B0%E6%8D%AE">3.解决使用ReadProcessMemeory读取到字符集类型数据顺序是反的，解决办法为在x86程序中一次读取4个字节的数据</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8size_t%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8F%98%E9%87%8F%E5%85%BC%E5%AE%B9x86%E4%B8%8Ex86_64%E7%A8%8B%E5%BA%8F">使用<code>size_t</code>类型的变量兼容x86与x86_64程序</a></li>
+</ul>
+<h1 id="使用c语言在windows中读取程序的数据"><a href="#使用c语言在windows中读取程序的数据" class="headerlink" title="使用c语言在windows中读取程序的数据"></a>使用c语言在windows中读取程序的数据</h1><h2 id="1-C语言通过指针来获取地址的数据"><a href="#1-C语言通过指针来获取地址的数据" class="headerlink" title="1. C语言通过指针来获取地址的数据"></a>1. C语言通过指针来获取地址的数据</h2><ol>
+<li>完整代码：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Message.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i = <span class="number">666</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var i vulue is     %d\n&quot;</span>, i);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var i address is   0x%p\n&quot;</span>, &amp;i);</span><br><span class="line">    <span class="type">int</span> *p = &amp;i;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var i vulue is     %d\n&quot;</span>, *p);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var i address is   0x%p\n&quot;</span>, p);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;point p address is 0x%p\n&quot;</span>, &amp;p);</span><br><span class="line">    getchar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>为了方便测试，在项目中关闭随机地址</p>
+<p><img src="/../../../../../image/C+Windows+Hacking/2_RandmBaseAddress.jpg" alt="2RandmBaseAddress"></p>
+</li>
+<li><p>运行结果：</p>
+</li>
+</ol>
+<p><img src="/../../../../../image/C+Windows+Hacking/2_C+WindowsReault1.jpg" alt="2_C+WindowsReault1"></p>
+<h2 id="2-Windows程序中通过ReadProcessMemory读取地址的数据"><a href="#2-Windows程序中通过ReadProcessMemory读取地址的数据" class="headerlink" title="2. Windows程序中通过ReadProcessMemory读取地址的数据"></a>2. Windows程序中通过ReadProcessMemory读取地址的数据</h2><ol>
+<li><p>保持Message程序运行</p>
+</li>
+<li><p>写一个C语言程序来读取Message程序中变量 <code>i</code>的值，完整代码如下：</p>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;	</span><br><span class="line">	DWORD dwProcessId=<span class="number">19732</span>;</span><br><span class="line">	HANDLE hProcess=OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	DWORD* buffer= <span class="built_in">malloc</span>(<span class="number">4</span>);<span class="comment">//recive readed data</span></span><br><span class="line">	SIZE_T nSize= <span class="number">4</span>;<span class="comment">//read 4 bytes data</span></span><br><span class="line">	SIZE_T* readLength = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully readed data size</span></span><br><span class="line">	ReadProcessMemory(hProcess, lpBaseAddr, buffer, nSize, readLength);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Read address 0x%p data is %d\n&quot;</span>, lpBaseAddr,*buffer);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Read data length is %d\n&quot;</span>, *readLength);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.运行结果如下：</p>
+<p><img src="/../../../../../image%5CC+Windows+Hacking%5C2_C+WindowsReault2.jpg" alt="2_C+WindowsReault2"></p>
+<h2 id="3-C语言读取字节集的数据"><a href="#3-C语言读取字节集的数据" class="headerlink" title="3. C语言读取字节集的数据"></a>3. C语言读取字节集的数据</h2><h3 id="1-C语言读取1字节的数据"><a href="#1-C语言读取1字节的数据" class="headerlink" title="1.C语言读取1字节的数据"></a>1.C语言读取1字节的数据</h3><ol>
+<li>完整代码：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">19732</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span>* buffer= <span class="built_in">malloc</span>(<span class="number">1</span>);<span class="comment">//recive readed data</span></span><br><span class="line">	SIZE_T nSize = <span class="number">1</span>;<span class="comment">//read 1 bytes data</span></span><br><span class="line">	SIZE_T* readLength = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully readed data size</span></span><br><span class="line">	ReadProcessMemory(hProcess, lpBaseAddr, buffer, nSize, readLength);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Read address 0x%p data is\t0x&quot;</span>, lpBaseAddr);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%02hhX&quot;</span>,*buffer);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\nRead data length is %d\n&quot;</span>, *readLength);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>运行结果：</li>
+</ol>
+<p><img src="/../../../../../image%5CC+Windows+Hacking%5C2_C+WindowsReault3.jpg" alt="2_C+WindowsReault3"></p>
+<h3 id="2-C语言读取多个字节的数据"><a href="#2-C语言读取多个字节的数据" class="headerlink" title="2.C语言读取多个字节的数据"></a>2.C语言读取多个字节的数据</h3><ol>
+<li>完整代码：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">19732</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span>* buffer= <span class="built_in">malloc</span>(<span class="number">4</span>);<span class="comment">//recive readed data</span></span><br><span class="line">	SIZE_T nSize = <span class="number">4</span>;<span class="comment">//read 4 bytes data</span></span><br><span class="line">	SIZE_T* readLength = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully readed data size</span></span><br><span class="line">	ReadProcessMemory(hProcess, lpBaseAddr, buffer, nSize, readLength);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Read address 0x%p data is\t0x&quot;</span>, lpBaseAddr);</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; *readLength; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%02hhX&quot;</span>,*buffer++);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\nRead data length is %d\n&quot;</span>, *readLength);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>运行结果：</p>
+<p><img src="/../../../../../image%5CC+Windows+Hacking%5C2_C+WindowsReault4.jpg" alt="2_C+WindowsReault4"></p>
+</li>
+</ol>
+<h3 id="3-解决使用ReadProcessMemeory读取到字符集类型数据顺序是反的，解决办法为在x86程序中一次读取4个字节的数据"><a href="#3-解决使用ReadProcessMemeory读取到字符集类型数据顺序是反的，解决办法为在x86程序中一次读取4个字节的数据" class="headerlink" title="3.解决使用ReadProcessMemeory读取到字符集类型数据顺序是反的，解决办法为在x86程序中一次读取4个字节的数据"></a>3.解决使用ReadProcessMemeory读取到字符集类型数据顺序是反的，解决办法为在x86程序中一次读取4个字节的数据</h3><ol>
+<li>使用ReadProcessMemeory读取到0x0019FEDC的数据应该为666,16进制的值应该为29A,但在之前的程序中显示为9A2，会发现明显顺序不对，需要修改代码为一次性读取4个字节的数据，以下为完整代码：</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">19732</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	SIZE_T nSize = <span class="number">4</span>;<span class="comment">//read 4 bytes data</span></span><br><span class="line">	BYTE** buffer = (BYTE**)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(BYTE*));<span class="comment">//recive readed data</span></span><br><span class="line">	*buffer = (BYTE*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(BYTE*));</span><br><span class="line">	SIZE_T* readLength = (SIZE_T*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully readed data size</span></span><br><span class="line">	ReadProcessMemory(hProcess, lpBaseAddr, buffer, nSize, readLength);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Read address 0x%p data is\t0x&quot;</span>, lpBaseAddr);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%08X&quot;</span>, *buffer);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\nRead data length is %d\n&quot;</span>, *readLength);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<p><img src="/../../../../../image%5CC+Windows+Hacking%5C2_C+WindowsReault5.jpg" alt="2_C+WindowsReault5"></p>
+<ol start="2">
+<li><p>读取多个字符集的完整代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;malloc.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">85064</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	DWORD lpBaseAddr = <span class="number">0x0019FEDC</span>;<span class="comment">//0x0019FEDC is address</span></span><br><span class="line">	ULONG addrNumber = <span class="number">10</span>;</span><br><span class="line">	SIZE_T nSize = <span class="keyword">sizeof</span>(BYTE*) * addrNumber;<span class="comment">//read size 32/64 bit</span></span><br><span class="line">	BYTE** buffer = (BYTE**)<span class="built_in">malloc</span>(addrNumber);<span class="comment">//recive readed data</span></span><br><span class="line">	<span class="keyword">for</span> (ULONG i = <span class="number">0</span>; i &lt; addrNumber; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		*(buffer+i) = (BYTE*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(BYTE*));</span><br><span class="line">	&#125;</span><br><span class="line">	SIZE_T* readLength = (SIZE_T*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully readed data size</span></span><br><span class="line">	ReadProcessMemory(hProcess, lpBaseAddr, buffer, nSize, readLength);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="keyword">if</span> (<span class="number">0</span> == *readLength)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> readSize = *readLength / <span class="keyword">sizeof</span>(BYTE*);</span><br><span class="line">	<span class="keyword">if</span> (*readLength % <span class="keyword">sizeof</span>(BYTE*) != <span class="number">0</span>)readSize++;</span><br><span class="line">	<span class="keyword">for</span> (ULONG i = <span class="number">0</span>; i &lt; readSize; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d\t&quot;</span>, i + <span class="number">1</span>);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Read address 0x%p data is\t&quot;</span>, lpBaseAddr + i * <span class="keyword">sizeof</span>(BYTE*));</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;0x%p\n&quot;</span>, *(buffer+i));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Read data length is %d\n&quot;</span>, *readLength);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>运行结果：</p>
+<p><img src="/../../../../../image/C+Windows+Hacking%5C2_C+WindowsReault6.jpg" alt="2_C+WindowsReault6"></p>
+<h1 id="使用size-t类型的变量兼容x86与x86-64程序"><a href="#使用size-t类型的变量兼容x86与x86-64程序" class="headerlink" title="使用size_t类型的变量兼容x86与x86_64程序"></a>使用<code>size_t</code>类型的变量兼容x86与x86_64程序</h1><ol>
+<li><p>Message.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Message.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>** argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">size_t</span> var = <span class="number">0x8070605040302010</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var  vulue is     0x%llX\n&quot;</span>, var);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var  address is   0x%p\n&quot;</span>, &amp;var);</span><br><span class="line">    <span class="type">size_t</span>* p = &amp;var;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var  vulue is     0x%llX\n&quot;</span>, *p);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;var  address is   0x%p\n&quot;</span>, p);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;point p address is 0x%p\n&quot;</span>, &amp;p);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ProcessID is %d\n&quot;</span>, GetCurrentProcessId());</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Module Message.exe address is 0x%p\n&quot;</span>,GetModuleHandleA(<span class="string">&quot;Message.exe&quot;</span>));</span><br><span class="line">    getchar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>main.c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">59568</span>;</span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);</span><br><span class="line">	<span class="type">size_t</span> lpBaseAddr = <span class="number">0x000000000014FCF8</span>;<span class="comment">//0x0019FEDC/0x000000000014FCF8 is address</span></span><br><span class="line">	<span class="type">size_t</span>* buffer = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">size_t</span>));<span class="comment">//recive readed data</span></span><br><span class="line">	SIZE_T nSize = <span class="keyword">sizeof</span>(<span class="type">size_t</span>);<span class="comment">//read 4/8 bytes data</span></span><br><span class="line">	SIZE_T* readLength = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(SIZE_T));<span class="comment">//output value is actully readed data size</span></span><br><span class="line">	ReadProcessMemory(hProcess, lpBaseAddr, buffer, nSize, readLength);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Read address 0x%p data is 0x%llx\n&quot;</span>, lpBaseAddr, *buffer);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Read data length is %d\n&quot;</span>, *readLength);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x86%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80printf%E5%87%BD%E6%95%B0/" data-id="cln7b1yi9000cwgd1gvie9bas" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2024/08/03/C+Windows+HackingNote/2.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E4%B8%AD%E8%AF%BB%E5%8F%96%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%95%B0%E6%8D%AE/" data-id="clzqr9dax000n34d155ke1r5g" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li></ul>
 
     </footer>
   </div>
@@ -152,11 +256,11 @@
 
 
   
-    <article id="post-assembly_x86/如何使用visualstudio写一个32位汇编程序" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-C+Windows+HackingNote/1.使用c语言开发第一个windows程序" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
-<a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio%E5%86%99%E4%B8%80%E4%B8%AA32%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" class="article-date">
-  <time datetime="2023-04-05T18:02:01.000Z" itemprop="datePublished">2023-04-05</time>
+<a href="/2024/08/02/C+Windows+HackingNote/1.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%A8%8B%E5%BA%8F/" class="article-date">
+  <time datetime="2024-08-02T12:42:01.000Z" itemprop="datePublished">2024-08-02</time>
 </a>
     
   </div>
@@ -167,7 +271,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio%E5%86%99%E4%B8%80%E4%B8%AA32%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/">如何用visual studio写一个32位汇编程序</a>
+      <a class="article-title" href="/2024/08/02/C+Windows+HackingNote/1.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%A8%8B%E5%BA%8F/">1.使用c语言开发第一个windows程序</a>
     </h1>
   
 
@@ -175,19 +279,27 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-32位汇编程序开发环境搭建"><a href="#一-32位汇编程序开发环境搭建" class="headerlink" title="一 32位汇编程序开发环境搭建"></a>一 32位汇编程序开发环境搭建</h2><h2 id="二-第一个32位汇编程序代码"><a href="#二-第一个32位汇编程序代码" class="headerlink" title="二 第一个32位汇编程序代码"></a>二 第一个32位汇编程序代码</h2><h2 id="三-编译运行"><a href="#三-编译运行" class="headerlink" title="三 编译运行"></a>三 编译运行</h2>
-        
-          <p class="article-more-link">
-            <a href="/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio%E5%86%99%E4%B8%80%E4%B8%AA32%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/#more">Read More</a>
-          </p>
-        
+        <ul>
+<li><a href="#%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%A8%8B%E5%BA%8F">使用c语言开发第一个windows程序</a><ul>
+<li><a href="#1-c%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8%E6%A0%87%E5%87%86%E5%BA%93%E5%87%BD%E6%95%B0">1. C语言使用标准库函数</a></li>
+<li><a href="#2c%E8%AF%AD%E8%A8%80%E4%BD%BF%E7%94%A8windows%E5%87%BD%E6%95%B0">2.C语言使用Windows函数</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="使用c语言开发第一个windows程序"><a href="#使用c语言开发第一个windows程序" class="headerlink" title="使用c语言开发第一个windows程序"></a>使用c语言开发第一个windows程序</h1><h2 id="1-C语言使用标准库函数"><a href="#1-C语言使用标准库函数" class="headerlink" title="1. C语言使用标准库函数"></a>1. C语言使用标准库函数</h2><p>c语言中使用标准库只需在源文件中包含对应的头文件,以下是一个代码示例</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"> <span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>** argv)</span></span><br><span class="line"> &#123;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;print function from &lt;stdio.h&gt;\n&quot;</span>);</span><br><span class="line">     <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-C语言使用Windows函数"><a href="#2-C语言使用Windows函数" class="headerlink" title="2.C语言使用Windows函数"></a>2.C语言使用Windows函数</h2><p>调用Windows平台的相关函数需要包含相关头文件,<code>windows.h</code>里有一些基本的函数，以下为完整代码，功能为弹出一个消息框</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"> <span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>** argv)</span></span><br><span class="line"> &#123;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">&quot;print function from &lt;stdio.h&gt;\n&quot;</span>);</span><br><span class="line">     MessageBoxA(<span class="number">0</span>,<span class="string">&quot;MessageBoxA function from &lt;windows.h&gt;\n&quot;</span>);</span><br><span class="line">     <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/04/05/assembly_x86/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio%E5%86%99%E4%B8%80%E4%B8%AA32%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" data-id="cln7b1yic000kwgd180uj9z27" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2024/08/02/C+Windows+HackingNote/1.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%A8%8B%E5%BA%8F/" data-id="clzqr9dao000334d1a33k7yqg" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li></ul>
 
     </footer>
   </div>
@@ -196,11 +308,11 @@
 
 
   
-    <article id="post-assembly_x64/如何利用vs与ida反汇编写汇编程序" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Hacking/使用PaExec进行远程注入" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
-<a href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8vs%E4%B8%8Eida%E5%8F%8D%E6%B1%87%E7%BC%96%E5%86%99%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" class="article-date">
-  <time datetime="2023-03-22T02:36:05.000Z" itemprop="datePublished">2023-03-21</time>
+<a href="/2024/03/23/Hacking/%E4%BD%BF%E7%94%A8PaExec%E8%BF%9B%E8%A1%8C%E8%BF%9C%E7%A8%8B%E6%B3%A8%E5%85%A5/" class="article-date">
+  <time datetime="2024-03-23T11:46:01.000Z" itemprop="datePublished">2024-03-23</time>
 </a>
     
   </div>
@@ -211,7 +323,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8vs%E4%B8%8Eida%E5%8F%8D%E6%B1%87%E7%BC%96%E5%86%99%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/">如何利用vs与ida反汇编写汇编程序</a>
+      <a class="article-title" href="/2024/03/23/Hacking/%E4%BD%BF%E7%94%A8PaExec%E8%BF%9B%E8%A1%8C%E8%BF%9C%E7%A8%8B%E6%B3%A8%E5%85%A5/">使用PaExec进行远程注入</a>
     </h1>
   
 
@@ -219,19 +331,46 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-新建两个空项目并分别添加cpp与asm文件"><a href="#一-新建两个空项目并分别添加cpp与asm文件" class="headerlink" title="一  新建两个空项目并分别添加cpp与asm文件"></a>一  新建两个空项目并分别添加cpp与asm文件</h2><h2 id="二-使用IDA反汇编"><a href="#二-使用IDA反汇编" class="headerlink" title="二.使用IDA反汇编"></a>二.使用IDA反汇编</h2>
+        <ul>
+<li><a href="#paexec%E4%BD%BF%E7%94%A8">PaExec使用</a><ul>
+<li><a href="#%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%93%E5%8D%B0%E7%BD%91%E5%8D%A1%E4%BF%A1%E6%81%AF">远程命令打印网卡信息</a></li>
+<li><a href="#%E8%BF%9C%E7%A8%8Bcmd">远程cmd</a></li>
+<li><a href="#%E8%BF%9C%E7%A8%8B%E8%BF%90%E8%A1%8Cnotepad%E5%B9%B6%E6%98%BE%E7%A4%BA%E5%9C%A8%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2">远程运行notepad并显示在用户界面</a></li>
+<li><a href="#%E8%BF%9C%E7%A8%8B%E8%BF%90%E8%A1%8Cquery-user%E5%91%BD%E4%BB%A4%E6%9F%A5%E8%AF%A2session-id">远程运行query user命令查询session ID</a></li>
+<li><a href="#%E5%9C%A8%E8%BF%9C%E7%A8%8B%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84%E4%B8%AD%E8%BF%90%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%99%A8%E5%B9%B6%E5%81%9C%E6%AD%A2%E7%AD%89%E5%BE%85%E8%BF%9B%E7%A8%8B-d">在远程绝对路径中运行计算器并停止等待进程（-d）</a></li>
+<li><a href="#%E8%BF%9C%E7%A8%8Bexplorer">远程explorer</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8psexec%E5%B0%86%E5%91%BD%E4%BB%A4%E4%BB%8E%E6%9C%AC%E5%9C%B0%E7%B3%BB%E7%BB%9F%E5%A4%8D%E5%88%B6%E5%88%B0%E8%BF%9C%E7%A8%8B%E7%B3%BB%E7%BB%9F%E4%BD%BF%E7%94%A8-c%E9%80%89%E9%A1%B9%E8%BF%9B%E8%A1%8C%E5%A4%8D%E5%88%B6-%E5%91%BD%E4%BB%A4%E5%AE%8C%E6%88%90%E5%90%8E%E8%BF%9C%E7%A8%8B%E5%AE%9E%E4%BE%8B%E5%B0%86%E8%A2%AB%E5%88%A0%E9%99%A4%E6%AD%A4%E7%A4%BA%E4%BE%8B%E4%B8%AD%E6%88%91%E4%BB%AC%E5%B0%86%E5%A4%8D%E5%88%B6cmdexe%E5%A4%8D%E5%88%B6%E6%93%8D%E4%BD%9C%E5%AE%8C%E6%88%90%E5%90%8E%E5%B0%86%E5%9C%A8%E8%BF%9C%E7%A8%8B%E7%B3%BB%E7%BB%9F%E4%B8%8A%E5%90%AF%E5%8A%A8cmdexe">使用Psexec将命令从本地系统复制到远程系统。使用-c选项进行复制。 命令完成后，远程实例将被删除。此示例中，我们将复制cmd.exe。复制操作完成后，将在远程系统上启动cmd.exe。</a></li>
+<li><a href="#%E4%BB%A5%E7%B3%BB%E7%BB%9F%E7%94%A8%E6%88%B7%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4">以系统用户运行命令</a></li>
+<li><a href="#%E9%98%B2%E6%AD%A2%E5%9B%BE%E5%BD%A2%E8%AE%B8%E5%8F%AF%E6%8F%90%E7%A4%BAaccepteula">防止图形许可提示&#x2F;accepteula</a></li>
+<li><a href="#%E7%94%A8%E5%B8%90%E6%88%B7%E7%9A%84%E6%8F%90%E5%8D%87%E4%BB%A4%E7%89%8C%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%AF%B7%E4%BD%BF%E7%94%A8-h-%E9%80%89%E9%A1%B9%E6%AD%A4%E9%80%89%E9%A1%B9%E5%AF%BC%E8%87%B4-psexec-%E4%BC%9A%E8%AF%9D%E4%B8%AD%E7%9A%84%E6%89%80%E6%9C%89%E5%91%BD%E4%BB%A4%E4%BB%A5%E4%BB%A5%E7%AE%A1%E7%90%86%E5%91%98%E8%BA%AB%E4%BB%BD%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F%E8%BF%90%E8%A1%8C">用帐户的提升令牌运行命令，请使用 –h 选项。此选项导致 PsExec 会话中的所有命令以“以管理员身份运行”模式运行。</a></li>
+</ul>
+</li>
+<li><a href="#paexec%E6%80%BB%E7%BB%93%E7%94%A8%E6%B3%95">PaExec总结用法</a><ul>
+<li><a href="#%E6%97%A0%E7%97%95%E6%B3%A8%E5%85%A5%E5%91%BD%E4%BB%A4%E6%88%96%E8%80%85%E8%BF%90%E8%A1%8Ccmd%E7%B3%BB%E7%BB%9F%E6%9D%83%E9%99%90%E9%98%B2%E6%AD%A2%E5%9B%BE%E5%BD%A2%E8%AE%B8%E5%8F%AF%E6%8F%90%E7%A4%BA">无痕注入命令或者运行cmd(系统权限+防止图形许可提示)</a></li>
+<li><a href="#%E6%97%A0%E7%97%95%E5%A4%8D%E5%88%B6%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F%E6%88%96%E8%84%9A%E6%9C%AC%E5%B9%B6%E6%89%A7%E8%A1%8C">无痕复制命令行程序或脚本并执行</a></li>
+<li><a href="#%E8%BF%9C%E7%A8%8B%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F%E6%98%BE%E7%A4%BA%E5%9C%A8%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2%E5%B9%B6%E6%97%A0%E9%9C%80%E7%AD%89%E5%BE%85%E8%BF%9B%E7%A8%8B%E9%80%80%E5%87%BA">远程运行程序显示在用户登录界面并无需等待进程退出</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5">参考链接</a></li>
+<li><a href="#%E4%B8%80%E4%BA%9B%E5%8F%AF%E8%83%BD%E4%BC%9A%E7%94%A8%E5%88%B0%E7%9A%84cmd%E5%91%BD%E4%BB%A4">一些可能会用到的cmd命令</a><ul>
+<li><a href="#%E6%89%93%E5%8D%B0%E6%89%80%E6%9C%89%E8%BF%9B%E7%A8%8B">打印所有进程</a></li>
+<li><a href="#%E6%A0%B9%E6%8D%AE%E8%BF%9B%E7%A8%8B%E5%90%8D%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B%E5%91%BD%E4%BB%A4">根据进程名结束进程命令</a></li>
+<li><a href="#%E6%A0%B9%E6%8D%AEpid%E7%BB%93%E6%9D%9F%E8%BF%9B%E7%A8%8B%E5%91%BD%E4%BB%A4">根据pid结束进程命令</a></li>
+</ul>
+</li>
+</ul>
         
           <p class="article-more-link">
-            <a href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8vs%E4%B8%8Eida%E5%8F%8D%E6%B1%87%E7%BC%96%E5%86%99%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/#more">Read More</a>
+            <a href="/2024/03/23/Hacking/%E4%BD%BF%E7%94%A8PaExec%E8%BF%9B%E8%A1%8C%E8%BF%9C%E7%A8%8B%E6%B3%A8%E5%85%A5/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8vs%E4%B8%8Eida%E5%8F%8D%E6%B1%87%E7%BC%96%E5%86%99%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" data-id="cln7b1yif000vwgd1fio46gjv" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2024/03/23/Hacking/%E4%BD%BF%E7%94%A8PaExec%E8%BF%9B%E8%A1%8C%E8%BF%9C%E7%A8%8B%E6%B3%A8%E5%85%A5/" data-id="clzqr9db3001c34d185wt0wq8" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li></ul>
 
     </footer>
   </div>
@@ -240,11 +379,11 @@
 
 
   
-    <article id="post-assembly_x64/如何在c语言中内连x64汇编" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-first pragram/使用C++在windows平台下开发第一个静态库与动态库" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
-<a href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E5%9C%A8c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%86%85%E8%BF%9Ex64%E6%B1%87%E7%BC%96/" class="article-date">
-  <time datetime="2023-03-22T02:36:04.000Z" itemprop="datePublished">2023-03-21</time>
+<a href="/2024/02/01/first%20pragram/%E4%BD%BF%E7%94%A8C++%E5%9C%A8windows%E5%B9%B3%E5%8F%B0%E4%B8%8B%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%8A%A8%E6%80%81%E5%BA%93/" class="article-date">
+  <time datetime="2024-01-31T19:00:05.000Z" itemprop="datePublished">2024-02-01</time>
 </a>
     
   </div>
@@ -255,7 +394,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E5%9C%A8c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%86%85%E8%BF%9Ex64%E6%B1%87%E7%BC%96/">如何在c语言中内连x64汇编</a>
+      <a class="article-title" href="/2024/02/01/first%20pragram/%E4%BD%BF%E7%94%A8C++%E5%9C%A8windows%E5%B9%B3%E5%8F%B0%E4%B8%8B%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%8A%A8%E6%80%81%E5%BA%93/">使用C++在windows平台下开发第一个静态库与动态库</a>
     </h1>
   
 
@@ -263,19 +402,111 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-用visual-studio新建一个C语言程序空项目"><a href="#一-用visual-studio新建一个C语言程序空项目" class="headerlink" title="一 用visual studio新建一个C语言程序空项目"></a>一 用visual studio新建一个C语言程序空项目</h2><h2 id="二-c语言内连汇编的代码部分"><a href="#二-c语言内连汇编的代码部分" class="headerlink" title="二 c语言内连汇编的代码部分"></a>二 c语言内连汇编的代码部分</h2><h2 id="三-c语言调用带参数的汇编函数代码部分"><a href="#三-c语言调用带参数的汇编函数代码部分" class="headerlink" title="三 c语言调用带参数的汇编函数代码部分"></a>三 c语言调用带参数的汇编函数代码部分</h2><h2 id="四-c语言调用带参数并且带返回值的汇编函数的代码部分"><a href="#四-c语言调用带参数并且带返回值的汇编函数的代码部分" class="headerlink" title="四 c语言调用带参数并且带返回值的汇编函数的代码部分"></a>四 c语言调用带参数并且带返回值的汇编函数的代码部分</h2>
-        
-          <p class="article-more-link">
-            <a href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E5%9C%A8c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%86%85%E8%BF%9Ex64%E6%B1%87%E7%BC%96/#more">Read More</a>
-          </p>
-        
+        <p>[TOC]</p>
+<h1 id="第一个静态库程序与调用"><a href="#第一个静态库程序与调用" class="headerlink" title="第一个静态库程序与调用"></a>第一个静态库程序与调用</h1><h2 id="一-第一个静态库程序"><a href="#一-第一个静态库程序" class="headerlink" title="一 第一个静态库程序"></a>一 第一个静态库程序</h2><ol>
+<li>在vs2022中创建一个静态库项目，在新建项目中选择<code>Static Library</code>,起名为<code>StaticLib1</code></li>
+<li>选择Solution Explorer-&gt;Property-&gt;c&#x2F;c++-&gt;Procompiled Headers-&gt;选择Not Using Precompiled Headers</li>
+<li>删除项目里的所有文件，添加头文件<code>StaticFunction.h</code>与源文件<code>StaticFunction.cpp</code></li>
+</ol>
+<p>StaticFunction.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> STATICFUNCTION_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STATICFUNCTION_H</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span>;<span class="comment">//声明函数</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">//STATICFUNCTION_H</span></span></span><br></pre></td></tr></table></figure>
+
+<p>MyStaticLib.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;StaticFunction.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> x + y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>编译生成得到StaticLib1.lib</li>
+</ol>
+<h2 id="二-使用c语言控制台程序调用静态库里的函数"><a href="#二-使用c语言控制台程序调用静态库里的函数" class="headerlink" title="二 使用c语言控制台程序调用静态库里的函数"></a>二 使用c语言控制台程序调用静态库里的函数</h2><p>1.在vs2022中创建一个控制台程序起名为Library</p>
+<p>2.把头文件<code>StaticFunction.h</code>与静态库<code>StaticLib1.lib</code>添加到项目中</p>
+<p>3.在项目里添加文件main.cpp</p>
+<p>main.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;StaticFunction.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;StaticLib1.lib&quot;</span>)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;10+20=%d&quot;</span>, sum(<span class="number">10</span>, <span class="number">20</span>));</span><br><span class="line">    getchar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>编译运行</li>
+</ol>
+<h1 id="第一个动态库程序与调用"><a href="#第一个动态库程序与调用" class="headerlink" title="第一个动态库程序与调用"></a>第一个动态库程序与调用</h1><h2 id="一-第一个动态库程序"><a href="#一-第一个动态库程序" class="headerlink" title="一 第一个动态库程序"></a>一 第一个动态库程序</h2><ol>
+<li><p>在vs2022中创建一个动态库项目，在新建项目中选择<code>Dynamic_Link Library(DLL)</code>,起名为<code>Dll1</code></p>
+</li>
+<li><p>选择Solution Explorer-&gt;Property-&gt;c&#x2F;c++-&gt;Procompiled Headers-&gt;选择Not Using Precompiled Headers</p>
+</li>
+<li><p>删除项目里的所有文件，添加头文件<code>DllFunction.h</code>与源文件<code>DllFunction.cpp</code>和<code>dllmain.cpp</code></p>
+</li>
+</ol>
+<p>DllFunction.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> DLLFUNCTION_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DLLFUNCTION_H</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllexport) <span class="type">int</span> <span class="title function_">Add</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> __declspec(dllexport) <span class="type">int</span> <span class="title function_">Mul</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">//DLLFUNCTION_H</span></span></span><br></pre></td></tr></table></figure>
+
+<p>DllFunction.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;DllFunction.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">Add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span>&#123;<span class="keyword">return</span> a + b;&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">Mul</span><span class="params">(<span class="type">int</span> c, <span class="type">int</span> d)</span>&#123;<span class="keyword">return</span> c * d;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>dllmain.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">BOOL APIENTRY <span class="title function_">DllMain</span><span class="params">( HMODULE hModule,</span></span><br><span class="line"><span class="params">                       DWORD  ul_reason_for_call,</span></span><br><span class="line"><span class="params">                       LPVOID lpReserved</span></span><br><span class="line"><span class="params">                     )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>编译生成</li>
+</ol>
+<h2 id="二-使用c语言控制台程序调用动态库里的函数"><a href="#二-使用c语言控制台程序调用动态库里的函数" class="headerlink" title="二 使用c语言控制台程序调用动态库里的函数"></a>二 使用c语言控制台程序调用动态库里的函数</h2><h3 id="调用动态库的方法一：静态加载（显式调用）"><a href="#调用动态库的方法一：静态加载（显式调用）" class="headerlink" title="调用动态库的方法一：静态加载（显式调用）"></a>调用动态库的方法一：静态加载（显式调用）</h3><p>1.在vs2022中创建一个控制台程序起名为Library</p>
+<p>2.把头文件<code>DllFunction.h</code>与动态库<code>Dll1.dll</code>与<code>Dll1.lib</code>添加到项目中</p>
+<p>3.在项目里添加文件main.cpp</p>
+<p>main.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;DllFunction.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;Dll1.lib&quot;</span>)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;10+20=%d\n&quot;</span>, Add(<span class="number">10</span>, <span class="number">20</span>));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;10x20=%d\n&quot;</span>, Mul(<span class="number">10</span>, <span class="number">20</span>));</span><br><span class="line">    getchar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="调用动态库的方法二：动态加载-隐式调用"><a href="#调用动态库的方法二：动态加载-隐式调用" class="headerlink" title="调用动态库的方法二：动态加载(隐式调用)"></a>调用动态库的方法二：动态加载(隐式调用)</h3><p>1.在vs2022中创建一个控制台程序起名为Library</p>
+<p>2.把头文件<code>DllFunction.h</code>与动态库<code>Dll1.dll</code>与<code>Dll1.lib</code>添加到项目中</p>
+<p>3.在项目里添加文件main.cpp</p>
+<p>main.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span>  </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello World!\n&quot;</span>);</span><br><span class="line">    HMODULE hmod = LoadLibrary(<span class="string">L&quot;Dll1.dll&quot;</span>);</span><br><span class="line">    <span class="keyword">typedef</span> <span class="title function_">int</span><span class="params">(*LoadProc)</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span>;</span><br><span class="line">    LoadProc Load_proc = (LoadProc)GetProcAddress(hmod, <span class="string">&quot;Add&quot;</span>);</span><br><span class="line">    <span class="type">int</span> iRet = Load_proc(<span class="number">10</span>, <span class="number">20</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;the Add the value is:%d\n&quot;</span>, iRet);</span><br><span class="line">    getchar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="用-declspec-dllimport-完善动态库的调用"><a href="#用-declspec-dllimport-完善动态库的调用" class="headerlink" title="用__declspec(dllimport)完善动态库的调用"></a>用<code>__declspec(dllimport)</code>完善动态库的调用</h1><h2 id="一-创建动态库程序"><a href="#一-创建动态库程序" class="headerlink" title="一 创建动态库程序"></a>一 创建动态库程序</h2><p>DllFunction.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> DLLFUNCTION_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DLLFUNCTION_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> DLLFUNCTION_EXPORTS</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DLL_API _declspec(dllexport)</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DLL_API _declspec(dllimport)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> DLL_API <span class="type">int</span> <span class="title function_">Add</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> DLL_API <span class="type">int</span> <span class="title function_">Mul</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> <span class="type">int</span> DLL_API varlabel;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">//DLLFUNCTION_H</span></span></span><br></pre></td></tr></table></figure>
+
+<p>DllFunction.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;DllFunction.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">Add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">Mul</span><span class="params">(<span class="type">int</span> c, <span class="type">int</span> d)</span> &#123; <span class="keyword">return</span> c * d; &#125;</span><br><span class="line"><span class="type">int</span> varlabel = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>dllmain.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">BOOL APIENTRY <span class="title function_">DllMain</span><span class="params">( HMODULE hModule,</span></span><br><span class="line"><span class="params">                       DWORD  ul_reason_for_call,</span></span><br><span class="line"><span class="params">                       LPVOID lpReserved</span></span><br><span class="line"><span class="params">                     )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="二-使用c语言控制台程序调用动态库里的函数-1"><a href="#二-使用c语言控制台程序调用动态库里的函数-1" class="headerlink" title="二 使用c语言控制台程序调用动态库里的函数"></a>二 使用c语言控制台程序调用动态库里的函数</h2><h3 id="调用动态库：静态加载（显式调用）"><a href="#调用动态库：静态加载（显式调用）" class="headerlink" title="调用动态库：静态加载（显式调用）"></a>调用动态库：静态加载（显式调用）</h3><p>1.在vs2022中创建一个控制台程序起名为Library</p>
+<p>2.把头文件<code>DllFunction.h</code>与动态库<code>Dll1.dll</code>与<code>Dll1.lib</code>添加到项目中</p>
+<p>3.在项目里添加文件main.cpp</p>
+<p>main.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;DllFunction.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;Dll1.lib&quot;</span>)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;10+20=%d\n&quot;</span>, Add(<span class="number">10</span>, <span class="number">20</span>));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;10x20=%d\n&quot;</span>, Mul(<span class="number">10</span>, <span class="number">20</span>));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;varlabel=%d\n&quot;</span>, );</span><br><span class="line">    getchar();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用def导出动态库调用"><a href="#使用def导出动态库调用" class="headerlink" title="使用def导出动态库调用"></a>使用def导出动态库调用</h1><h2 id="一-创建动态库程序-1"><a href="#一-创建动态库程序-1" class="headerlink" title="一 创建动态库程序"></a>一 创建动态库程序</h2><ul>
+<li>选择Solution Explorer-&gt;Property-&gt;Linker-&gt;Input-&gt;Module Definition File-&gt;输入def文件名Dll1.def</li>
+<li>所有项目文件<code>DllFunction.h</code>,<code>DllFunction.cpp</code>,<code>dllmain.cpp</code>,<code>Dll1.def</code></li>
+</ul>
+<p>DllFunction.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> DLLFUNCTION_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DLLFUNCTION_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> DLLFUNCTION_EXPORTS</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DLL_API _declspec(dllexport)</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DLL_API _declspec(dllimport)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> DLL_API <span class="type">int</span> <span class="title function_">Add</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> DLL_API <span class="type">int</span> <span class="title function_">Mul</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> <span class="type">int</span> DLL_API varlabel;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">//DLLFUNCTION_H</span></span></span><br></pre></td></tr></table></figure>
+
+<p>DllFunction.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;DllFunction.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">Add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">Mul</span><span class="params">(<span class="type">int</span> c, <span class="type">int</span> d)</span> &#123; <span class="keyword">return</span> c * d; &#125;</span><br><span class="line"><span class="type">int</span> varlabel = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>dllmain.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">BOOL APIENTRY <span class="title function_">DllMain</span><span class="params">( HMODULE hModule,</span></span><br><span class="line"><span class="params">                       DWORD  ul_reason_for_call,</span></span><br><span class="line"><span class="params">                       LPVOID lpReserved</span></span><br><span class="line"><span class="params">                     )</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Dll1.def</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LIBRARY   DLL1</span><br><span class="line">EXPORTS</span><br><span class="line">   Add   @1</span><br><span class="line">   Mul   @2</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二-使用c语言控制台程序调用动态库里的函数-2"><a href="#二-使用c语言控制台程序调用动态库里的函数-2" class="headerlink" title="二 使用c语言控制台程序调用动态库里的函数"></a>二 使用c语言控制台程序调用动态库里的函数</h2><h3 id="调用动态库的方法：动态加载-隐式调用"><a href="#调用动态库的方法：动态加载-隐式调用" class="headerlink" title="调用动态库的方法：动态加载(隐式调用)"></a>调用动态库的方法：动态加载(隐式调用)</h3><p>1.在vs2022中创建一个控制台程序起名为Library</p>
+<p>2.把动态库<code>Dll1.dll</code>添加到项目中</p>
+<p>3.在项目里添加文件main.cpp</p>
+<p>main.cpp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span>  </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello World!\n&quot;</span>);</span><br><span class="line">    HMODULE hmod = LoadLibrary(<span class="string">L&quot;Dll1.dll&quot;</span>);</span><br><span class="line">    <span class="keyword">typedef</span> <span class="title function_">int</span><span class="params">(*LoadProc)</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span>;</span><br><span class="line">    LoadProc Load_proc = (LoadProc)GetProcAddress(hmod, <span class="string">&quot;Add&quot;</span>);</span><br><span class="line">    <span class="type">int</span> iRet = Load_proc(<span class="number">10</span>, <span class="number">20</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;the Add the value is:%d\n&quot;</span>, iRet);</span><br><span class="line">    getchar();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E5%9C%A8c%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%86%85%E8%BF%9Ex64%E6%B1%87%E7%BC%96/" data-id="cln7b1yif000ywgd12kyp3wxs" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2024/02/01/first%20pragram/%E4%BD%BF%E7%94%A8C++%E5%9C%A8windows%E5%B9%B3%E5%8F%B0%E4%B8%8B%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%8A%A8%E6%80%81%E5%BA%93/" data-id="clzqr9dbd002934d11xyg97dz" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li></ul>
 
     </footer>
   </div>
@@ -284,11 +515,11 @@
 
 
   
-    <article id="post-assembly_x64/如何使用x64汇编调用win32api" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-first pragram/用nasm在linux下编写第一个64位汇编程序" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
-<a href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x64%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8win32api/" class="article-date">
-  <time datetime="2023-03-22T02:36:03.000Z" itemprop="datePublished">2023-03-21</time>
+<a href="/2024/02/01/first%20pragram/%E7%94%A8nasm%E5%9C%A8linux%E4%B8%8B%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AA64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" class="article-date">
+  <time datetime="2024-01-31T19:00:01.000Z" itemprop="datePublished">2024-02-01</time>
 </a>
     
   </div>
@@ -299,7 +530,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x64%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8win32api/">如何使用x64汇编调用win32api</a>
+      <a class="article-title" href="/2024/02/01/first%20pragram/%E7%94%A8nasm%E5%9C%A8linux%E4%B8%8B%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AA64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/">用nasm在linux下编写第一个64位汇编程序</a>
     </h1>
   
 
@@ -307,19 +538,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-用visual-studio新建一个汇编语言程序项目"><a href="#一-用visual-studio新建一个汇编语言程序项目" class="headerlink" title="一 用visual studio新建一个汇编语言程序项目"></a>一 用visual studio新建一个汇编语言程序项目</h2><h2 id="二-x64汇编语言调用windows弹窗函数-MessageBoxA的代码部分"><a href="#二-x64汇编语言调用windows弹窗函数-MessageBoxA的代码部分" class="headerlink" title="二 x64汇编语言调用windows弹窗函数 MessageBoxA的代码部分"></a>二 x64汇编语言调用windows弹窗函数 <code>MessageBoxA</code>的代码部分</h2>
+        <h1 id="用nasm在linux下编写第一个64位汇编程序"><a href="#用nasm在linux下编写第一个64位汇编程序" class="headerlink" title="用nasm在linux下编写第一个64位汇编程序"></a>用nasm在linux下编写第一个64位汇编程序</h1>
         
           <p class="article-more-link">
-            <a href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x64%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8win32api/#more">Read More</a>
+            <a href="/2024/02/01/first%20pragram/%E7%94%A8nasm%E5%9C%A8linux%E4%B8%8B%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AA64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x64%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8win32api/" data-id="cln7b1yif000uwgd17h08gn70" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2024/02/01/first%20pragram/%E7%94%A8nasm%E5%9C%A8linux%E4%B8%8B%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AA64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" data-id="clzqr9dbh002j34d16vinbasi" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/" rel="tag">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li></ul>
 
     </footer>
   </div>
@@ -328,11 +559,11 @@
 
 
   
-    <article id="post-assembly_x64/如何使用x64汇编调用c语言函数" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-first pragram/第一个windows窗口程序demo" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
-<a href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x64%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0/" class="article-date">
-  <time datetime="2023-03-22T02:36:02.000Z" itemprop="datePublished">2023-03-21</time>
+<a href="/2023/10/02/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8Fdemo/" class="article-date">
+  <time datetime="2023-10-02T03:00:01.000Z" itemprop="datePublished">2023-10-02</time>
 </a>
     
   </div>
@@ -343,7 +574,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x64%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0/">如何使用x64汇编调用c语言函数</a>
+      <a class="article-title" href="/2023/10/02/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8Fdemo/">使用C++开发第一个windows窗口程序demo</a>
     </h1>
   
 
@@ -351,19 +582,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><h2 id="一-用visual-studio新建一个汇编语言程序项目"><a href="#一-用visual-studio新建一个汇编语言程序项目" class="headerlink" title="一 用visual studio新建一个汇编语言程序项目"></a>一 用visual studio新建一个汇编语言程序项目</h2><h2 id="二-使用x64汇编调用c语言printf函数代码内容"><a href="#二-使用x64汇编调用c语言printf函数代码内容" class="headerlink" title="二 使用x64汇编调用c语言printf函数代码内容"></a>二 使用x64汇编调用c语言<code>printf</code>函数代码内容</h2><h2 id="三-使用x64汇编调用c语言printf函数循环打印代码内容"><a href="#三-使用x64汇编调用c语言printf函数循环打印代码内容" class="headerlink" title="三 使用x64汇编调用c语言printf函数循环打印代码内容"></a>三 使用x64汇编调用c语言<code>printf</code>函数循环打印代码内容</h2>
+        <ul>
+<li><a href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F">第一个窗口程序</a><ul>
+<li><a href="#%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AAwindows-desktop%E7%A9%BA%E9%A1%B9%E7%9B%AE%E6%AD%A5%E9%AA%A4">新建一个Windows Desktop空项目步骤</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81">第一个窗口程序完整代码</a></li>
+</ul>
+</li>
+</ul>
         
           <p class="article-more-link">
-            <a href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x64%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0/#more">Read More</a>
+            <a href="/2023/10/02/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8Fdemo/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8x64%E6%B1%87%E7%BC%96%E8%B0%83%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0/" data-id="cln7b1yie000qwgd158y93h5o" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/10/02/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8Fdemo/" data-id="clzqr9dbh002h34d1hwy65g27" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li></ul>
 
     </footer>
   </div>
@@ -372,11 +609,11 @@
 
 
   
-    <article id="post-assembly_x64/如何使用visualstudio写一个64位汇编程序" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-mingw_gcc等编译器的使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
-<a href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio%E5%86%99%E4%B8%80%E4%B8%AA64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" class="article-date">
-  <time datetime="2023-03-22T02:36:01.000Z" itemprop="datePublished">2023-03-21</time>
+<a href="/2023/08/17/mingw_gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
+  <time datetime="2023-08-16T21:24:01.000Z" itemprop="datePublished">2023-08-17</time>
 </a>
     
   </div>
@@ -387,7 +624,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio%E5%86%99%E4%B8%80%E4%B8%AA64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/">如何使用visualstudio写一个64位汇编程序</a>
+      <a class="article-title" href="/2023/08/17/mingw_gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/">mingw&amp;gcc等编译器的使用</a>
     </h1>
   
 
@@ -395,19 +632,48 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="目录："><a href="#目录：" class="headerlink" title="目录："></a>目录：</h1><h2 id="一-首先使用visual-studio新建一个空项目"><a href="#一-首先使用visual-studio新建一个空项目" class="headerlink" title="一 首先使用visual studio新建一个空项目."></a>一 首先使用visual studio新建一个空项目.</h2><h2 id="二-勾选msam"><a href="#二-勾选msam" class="headerlink" title="二 勾选msam"></a>二 勾选msam</h2><h2 id="三-给源文件新建一个后缀名位-asm文件-例如-first-assembly-x64-asm"><a href="#三-给源文件新建一个后缀名位-asm文件-例如-first-assembly-x64-asm" class="headerlink" title="三 给源文件新建一个后缀名位.asm文件,例如:first_assembly_x64.asm"></a>三 给源文件新建一个后缀名位.asm文件,例如:first_assembly_x64.asm</h2><h2 id="四-单独一个汇编程序需要设置函数入口点，将函数入口点设为main"><a href="#四-单独一个汇编程序需要设置函数入口点，将函数入口点设为main" class="headerlink" title="四 单独一个汇编程序需要设置函数入口点，将函数入口点设为main"></a>四 单独一个汇编程序需要设置函数入口点，将函数入口点设为main</h2><h2 id="五-汇编程序的代码部分"><a href="#五-汇编程序的代码部分" class="headerlink" title="五 汇编程序的代码部分"></a>五 汇编程序的代码部分</h2>
+        <ul>
+<li><a href="#gcc%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8">GCC编译器的基本使用</a><ul>
+<li><a href="#gcc%E7%9A%84%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B">gcc的编译过程</a></li>
+<li><a href="#gcc%E7%BC%96%E8%AF%91%E5%99%A8%E7%BC%96%E8%AF%91c">GCC编译器编译c++</a></li>
+<li><a href="#gcc%E7%BC%96%E8%AF%91%E8%A3%B8%E6%9C%BA%E7%A8%8B%E5%BA%8F">gcc编译裸机程序</a></li>
+<li><a href="#gcc%E7%BC%96%E8%AF%91%E5%8A%A8%E6%80%81%E5%BA%93">GCC编译动态库</a></li>
+<li><a href="#gcc%E7%BC%96%E8%AF%91%E9%9D%99%E6%80%81%E5%BA%93">GCC编译静态库</a></li>
+<li><a href="#mingw%E4%B8%AD%E7%9A%84%E6%B1%87%E7%BC%96%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95">mingw中的汇编命令用法</a></li>
+<li><a href="#gcc%E7%94%9F%E6%88%90intel%E8%AF%AD%E6%B3%95%E7%9A%84%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81">gcc生成intel语法的汇编代码</a></li>
+</ul>
+</li>
+<li><a href="#nasm%E6%B1%87%E7%BC%96%E5%99%A8">NASM汇编器</a><ul>
+<li><a href="#%E4%BD%BF%E7%94%A8%E4%BB%A5%E4%B8%8B%E5%91%BD%E4%BB%A4%E5%B0%86%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E7%BC%96%E8%AF%91%E6%88%90%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6">使用以下命令将汇编代码编译成可执行文件：</a></li>
+<li><a href="#nasm%E5%B0%86%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6">NASM将汇编代码生成为二进制文件</a></li>
+<li><a href="#nasm%E9%87%8C%E7%9A%84ndisasm%E5%B7%A5%E5%85%B7%E5%B0%86%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E5%8F%8D%E6%B1%87%E7%BC%96">NASM里的ndisasm工具将二进制代码反汇编</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2%E4%B8%8E%E5%8F%8D%E6%B1%87%E7%BC%96%E5%B7%A5%E5%85%B7">格式转换与反汇编工具</a><ul>
+<li><a href="#objcopy">objcopy</a></li>
+<li><a href="#objdump">objdump</a></li>
+<li><a href="#gdb">gdb</a></li>
+<li><a href="#%E4%B8%80%E4%BA%9B%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7">一些其他工具</a><ul>
+<li><a href="#od">od#</a></li>
+<li><a href="#xxd">xxd#</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#vs2019%E7%BC%96%E8%AF%91%E5%99%A8">vs2019编译器</a></li>
+</ul>
         
           <p class="article-more-link">
-            <a href="/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio%E5%86%99%E4%B8%80%E4%B8%AA64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/#more">Read More</a>
+            <a href="/2023/08/17/mingw_gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/03/21/assembly_x64/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8visualstudio%E5%86%99%E4%B8%80%E4%B8%AA64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" data-id="cln7b1yie000swgd19qvp5be1" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/08/17/mingw_gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/" data-id="clzqr9dal000134d1caro2dpp" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li></ul>
 
     </footer>
   </div>
@@ -416,11 +682,11 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-c++/qt/Qt6.2.4静态编译" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     
-<a href="/2023/03/21/hello-world/" class="article-date">
-  <time datetime="2023-03-21T14:01:47.511Z" itemprop="datePublished">2023-03-21</time>
+<a href="/2023/07/08/c++/qt/Qt6.2.4%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91/" class="article-date">
+  <time datetime="2023-07-08T06:41:31.526Z" itemprop="datePublished">2023-07-08</time>
 </a>
     
   </div>
@@ -431,7 +697,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/03/21/hello-world/">Hello World</a>
+      <a class="article-title" href="/2023/07/08/c++/qt/Qt6.2.4%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91/">Qt6.2.4静态编译</a>
     </h1>
   
 
@@ -439,18 +705,102 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+        <ul>
+<li><a href="#%E4%BD%BF%E7%94%A8mingw%E8%BF%9B%E8%A1%8C%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91qt">使用MinGW进行静态编译Qt</a><ul>
+<li><a href="#build-tools">Build Tools</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85-build-tools">安装 Build Tools</a><ul>
+<li><a href="#%E5%AE%89%E8%A3%85-chocolatey">安装 Chocolatey</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85-perl--python">安装 Perl &amp; Python</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%89%E8%A3%85-cmake--mingw--ninja">安装 CMake &amp; MinGW &amp; Ninja</a></li>
+<li><a href="#%E6%A3%80%E6%9F%A5%E7%8E%AF%E5%A2%83">检查环境</a></li>
+<li><a href="#%E5%9C%A8%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%E9%95%9C%E5%83%8F%E6%BA%90%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81">在清华大学镜像源下载源码</a></li>
+<li><a href="#%E5%9C%A8%E6%9C%AC%E5%9C%B0%E8%B7%AF%E5%BE%84%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9dsoftwareqt624mingw_624_static%E9%A2%84%E7%95%99120g-%E7%A9%BA%E9%97%B4">在本地路径新建文件夹<code>D:\software\Qt\6.2.4\mingw_624_static</code>,预留120G 空间。</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E6%8C%87%E4%BB%A4%E4%B8%BA">编译指令为：</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8msvc%E8%BF%9B%E8%A1%8C%E7%BC%96%E8%AF%91qt">使用MSVC进行编译Qt</a><ul>
+<li><a href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%82%E8%80%83%E4%B8%8A%E6%96%B9%E5%86%85%E5%AE%B9%E6%B7%BB%E5%8A%A0llvm">配置环境参考上方内容,添加LLVM</a></li>
+<li><a href="#%E5%9C%A8%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%E9%95%9C%E5%83%8F%E6%BA%90%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81-1">在清华大学镜像源下载源码</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9%E6%BA%90%E7%A0%81%E9%87%8C%E7%9A%84qtbasemkspecscommonmsvc-desktopconf%E6%96%87%E4%BB%B6%E9%9D%9E%E5%BF%85%E9%A1%BB%E5%BB%BA%E8%AE%AE%E4%B8%8D%E6%94%B9">修改源码里的qtbase\mkspecs\common\msvc-desktop.conf文件（非必须，建议不改）</a></li>
+<li><a href="#%E5%9C%A8x64-native-tools-command-prompt-for-vs-2022-%E9%87%8C%E8%BF%9B%E5%85%A5qt%E6%BA%90%E4%BB%A3%E7%A0%81%E7%9B%AE%E5%BD%95">在x64 Native Tools Command Prompt for VS 2022 里进入Qt源代码目录</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E5%91%BD%E4%BB%A4">编译命令</a></li>
+<li><a href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
+</ul>
+</li>
+</ul>
         
           <p class="article-more-link">
-            <a href="/2023/03/21/hello-world/#more">Read More</a>
+            <a href="/2023/07/08/c++/qt/Qt6.2.4%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/03/21/hello-world/" data-id="cln7b1yhx0000wgd13wfvd3p8" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/07/08/c++/qt/Qt6.2.4%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91/" data-id="clzqr9dbt004334d129jo3g73" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-first pragram/使用Python进行第一个爬虫脚本" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+<a href="/2023/07/07/first%20pragram/%E4%BD%BF%E7%94%A8Python%E8%BF%9B%E8%A1%8C%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E8%84%9A%E6%9C%AC/" class="article-date">
+  <time datetime="2023-07-07T11:00:01.000Z" itemprop="datePublished">2023-07-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/07/07/first%20pragram/%E4%BD%BF%E7%94%A8Python%E8%BF%9B%E8%A1%8C%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E8%84%9A%E6%9C%AC/">使用Python进行第一个爬虫脚本</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#first-web-crawler">First web crawler</a><ul>
+<li><a href="#development">Development</a><ul>
+<li><a href="#install-python">Install python</a></li>
+</ul>
+</li>
+<li><a href="#first--crawler-program">First  crawler program</a><ul>
+<li><a href="#install-dependent-environment">Install dependent environment</a></li>
+<li><a href="#first-crawler-code">First crawler code</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E8%B1%86%E7%93%A3%E7%BD%91%E9%A1%B5%E4%BF%A1%E6%81%AF">获取豆瓣网页信息</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+        
+          <p class="article-more-link">
+            <a href="/2023/07/07/first%20pragram/%E4%BD%BF%E7%94%A8Python%E8%BF%9B%E8%A1%8C%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E8%84%9A%E6%9C%AC/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/07/07/first%20pragram/%E4%BD%BF%E7%94%A8Python%E8%BF%9B%E8%A1%8C%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E8%84%9A%E6%9C%AC/" data-id="clzqr9dbg002f34d1a64lgoz9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Socket/" rel="tag">Socket</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
     </footer>
   </div>
   
@@ -462,7 +812,7 @@
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/">Next &amp;raquo;</a>
   </nav>
 
 </section>
@@ -476,7 +826,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" rel="tag">c语言程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qt5-8/" rel="tag">qt5.8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win32api/" rel="tag">win32api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MFC/" rel="tag">MFC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/" rel="tag">Socket</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/" rel="tag">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-driver/" rel="tag">c++windows+driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" rel="tag">c语言的万种用法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsp/" rel="tag">jsp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
     </div>
   </div>
 
@@ -486,7 +836,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 17.5px;">64位汇编程序</a> <a href="/tags/Hacking/" style="font-size: 15px;">Hacking</a> <a href="/tags/OpenGL/" style="font-size: 10px;">OpenGL</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/compiled/" style="font-size: 10px;">compiled</a> <a href="/tags/c%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F/" style="font-size: 10px;">c语言程序</a> <a href="/tags/first-pragram/" style="font-size: 15px;">first pragram</a> <a href="/tags/mysql/" style="font-size: 12.5px;">mysql</a> <a href="/tags/qt5-8/" style="font-size: 10px;">qt5.8</a> <a href="/tags/termux/" style="font-size: 12.5px;">termux</a> <a href="/tags/win32api/" style="font-size: 10px;">win32api</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 20px;">x86汇编程序</a>
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 15.71px;">64位汇编程序</a> <a href="/tags/Hacking/" style="font-size: 12.86px;">Hacking</a> <a href="/tags/MFC/" style="font-size: 10px;">MFC</a> <a href="/tags/OpenGL/" style="font-size: 10px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 12.86px;">Qt</a> <a href="/tags/Socket/" style="font-size: 11.43px;">Socket</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/assembly/" style="font-size: 10px;">assembly</a> <a href="/tags/c/" style="font-size: 15.71px;">c++</a> <a href="/tags/c-windows-driver/" style="font-size: 10px;">c++windows+driver</a> <a href="/tags/c-windows-hacking/" style="font-size: 20px;">c+windows+hacking</a> <a href="/tags/compiled/" style="font-size: 10px;">compiled</a> <a href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" style="font-size: 14.29px;">c语言的万种用法</a> <a href="/tags/first-pragram/" style="font-size: 17.14px;">first pragram</a> <a href="/tags/jsp/" style="font-size: 10px;">jsp</a> <a href="/tags/mysql/" style="font-size: 11.43px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/termux/" style="font-size: 11.43px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 18.57px;">x86汇编程序</a>
     </div>
   </div>
 
@@ -495,7 +845,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/08/">August 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li></ul>
     </div>
   </div>
 
@@ -508,23 +858,23 @@
       <ul>
         
           <li>
-            <a href="/2023/08/17/mingw&gcc%E7%AD%89%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/">mingw&amp;gcc等编译器的使用</a>
+            <a href="/2024/08/11/C+Windows+HackingNote/23.C%E8%AF%AD%E8%A8%80InlineHook/">23.C语言实现InlineHook</a>
           </li>
         
           <li>
-            <a href="/2023/07/07/first%20pragram/%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%88%AC%E8%99%AB%E7%A8%8B%E5%BA%8F/">第一个爬虫程序</a>
+            <a href="/2024/08/11/C+Windows+HackingNote/22.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">22.使用C语言获取系统架构</a>
           </li>
         
           <li>
-            <a href="/2023/05/06/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/">使用qt5.8开发数据库程序</a>
+            <a href="/2024/08/11/C+Windows+HackingNote/21.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8syscall%E9%87%8D%E5%86%99%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/">21.使用C语言与汇编语言调用syscall重写进程相关函数</a>
           </li>
         
           <li>
-            <a href="/2023/05/01/c&c++/%E4%BD%BF%E7%94%A8opengl%E5%9B%BE%E5%BD%A2%E5%BA%93%E7%94%BB%E7%AA%97%E5%8F%A3%E5%9B%BE%E5%BD%A2/">使用opengl图形库画窗口图形</a>
+            <a href="/2024/08/10/C+Windows+HackingNote/20.%E5%B0%86Dll%E6%96%87%E4%BB%B6%E8%BD%AC%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%8E%8B%E5%87%BA%E6%9D%A5/">20.将Dll文件转为二进制代码运行时解压出来</a>
           </li>
         
           <li>
-            <a href="/2023/05/01/win32api/%E4%B8%80%E4%BA%9Bwin32api%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/">一些win32api使用方法</a>
+            <a href="/2024/08/10/C+Windows+HackingNote/19.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9D%97%E5%8F%A5%E6%9F%84/">19.使用C语言获取进程模块句柄</a>
           </li>
         
       </ul>
@@ -549,7 +899,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2023 Theqiqi<br>
+      &copy; 2024 Theqiqi<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

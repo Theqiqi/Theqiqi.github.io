@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>MFC与qt中的类是什么 | Theqiqi_blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="使用QT框架创建窗口程序 在main函数中创建窗口程序 指针的方式调用类 使用继承的方式调用Qt类   使用MFC框架创建窗口程序 在main函数中调用MFC类 使用继承的方式调用MFC中的类创建窗口程序 使用新建全局对象的方式创建窗口   模仿MFC框架 模仿MFC隐藏入口函数WinMain实现隐藏main函数 模仿MFC封装Win32程序   模仿Qt框架 模仿QT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MFC与qt中的类是什么">
+<meta property="og:url" content="http://example.com/2023/05/01/c++/MFC%E4%B8%8Eqt%E4%B8%AD%E7%9A%84%E7%B1%BB%E6%98%AF%E4%BB%80%E4%B9%88/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="使用QT框架创建窗口程序 在main函数中创建窗口程序 指针的方式调用类 使用继承的方式调用Qt类   使用MFC框架创建窗口程序 在main函数中调用MFC类 使用继承的方式调用MFC中的类创建窗口程序 使用新建全局对象的方式创建窗口   模仿MFC框架 模仿MFC隐藏入口函数WinMain实现隐藏main函数 模仿MFC封装Win32程序   模仿Qt框架 模仿QT">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-05-01T07:05:01.000Z">
+<meta property="article:modified_time" content="2024-08-12T07:19:34.427Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="c++">
+<meta property="article:tag" content="MFC">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Theqiqi_blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Theqiqi_blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-c++/MFC与qt中的类是什么" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    
+
+	<span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+		  <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+<a href="/2023/05/01/c++/MFC%E4%B8%8Eqt%E4%B8%AD%E7%9A%84%E7%B1%BB%E6%98%AF%E4%BB%80%E4%B9%88/" class="article-date">
+  <time datetime="2023-05-01T07:05:01.000Z" itemprop="datePublished">2023-05-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MFC与qt中的类是什么
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li><a href="#%E4%BD%BF%E7%94%A8qt%E6%A1%86%E6%9E%B6%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F">使用QT框架创建窗口程序</a><ul>
+<li><a href="#%E5%9C%A8main%E5%87%BD%E6%95%B0%E4%B8%AD%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F">在main函数中创建窗口程序</a></li>
+<li><a href="#%E6%8C%87%E9%92%88%E7%9A%84%E6%96%B9%E5%BC%8F%E8%B0%83%E7%94%A8%E7%B1%BB">指针的方式调用类</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E7%BB%A7%E6%89%BF%E7%9A%84%E6%96%B9%E5%BC%8F%E8%B0%83%E7%94%A8qt%E7%B1%BB">使用继承的方式调用Qt类</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8mfc%E6%A1%86%E6%9E%B6%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F">使用MFC框架创建窗口程序</a><ul>
+<li><a href="#%E5%9C%A8main%E5%87%BD%E6%95%B0%E4%B8%AD%E8%B0%83%E7%94%A8mfc%E7%B1%BB">在main函数中调用MFC类</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E7%BB%A7%E6%89%BF%E7%9A%84%E6%96%B9%E5%BC%8F%E8%B0%83%E7%94%A8mfc%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F">使用继承的方式调用MFC中的类创建窗口程序</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E6%96%B0%E5%BB%BA%E5%85%A8%E5%B1%80%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%96%B9%E5%BC%8F%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3">使用新建全局对象的方式创建窗口</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A8%A1%E4%BB%BFmfc%E6%A1%86%E6%9E%B6">模仿MFC框架</a><ul>
+<li><a href="#%E6%A8%A1%E4%BB%BFmfc%E9%9A%90%E8%97%8F%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0winmain%E5%AE%9E%E7%8E%B0%E9%9A%90%E8%97%8Fmain%E5%87%BD%E6%95%B0">模仿MFC隐藏入口函数WinMain实现隐藏<code>main</code>函数</a></li>
+<li><a href="#%E6%A8%A1%E4%BB%BFmfc%E5%B0%81%E8%A3%85win32%E7%A8%8B%E5%BA%8F">模仿MFC封装Win32程序</a></li>
+</ul>
+</li>
+<li><a href="#%E6%A8%A1%E4%BB%BFqt%E6%A1%86%E6%9E%B6">模仿Qt框架</a><ul>
+<li><a href="#%E6%A8%A1%E4%BB%BFqt">模仿QT</a></li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="使用QT框架创建窗口程序"><a href="#使用QT框架创建窗口程序" class="headerlink" title="使用QT框架创建窗口程序"></a>使用QT框架创建窗口程序</h1><h2 id="在main函数中创建窗口程序"><a href="#在main函数中创建窗口程序" class="headerlink" title="在main函数中创建窗口程序"></a>在main函数中创建窗口程序</h2><p>在qt中的其他类别里新建qmake项目,项目中包含一个文件FirstQt.pro</p>
+<p>添加文件命名为main.cpp</p>
+<p>代码示例</p>
+<p>main.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QApplication&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QWidget&gt;</span> <span class="comment">//窗口控件基类</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">QApplication <span class="title">app</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line"></span><br><span class="line">    QWidget w;</span><br><span class="line">    w.<span class="built_in">setWindowTitle</span>(<span class="string">&quot;Title&quot;</span>);</span><br><span class="line">    w.<span class="built_in">show</span>();</span><br><span class="line"></span><br><span class="line">    app.<span class="built_in">exec</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>FirstQt.pro</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#FirstQt.pro</span><br><span class="line">QT += widgets</span><br><span class="line"></span><br><span class="line">SOURCES += \</span><br><span class="line">    main.cpp</span><br></pre></td></tr></table></figure>
+
+<h2 id="指针的方式调用类"><a href="#指针的方式调用类" class="headerlink" title="指针的方式调用类"></a>指针的方式调用类</h2><p>main.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QApplication&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QWidget&gt;</span> <span class="comment">//窗口控件基类</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">QApplication <span class="title">app</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line"></span><br><span class="line">    QWidget *w=<span class="keyword">new</span> QWidget;</span><br><span class="line">    w-&gt;<span class="built_in">setWindowTitle</span>(<span class="string">&quot;Title&quot;</span>);</span><br><span class="line">    w-&gt;<span class="built_in">show</span>();</span><br><span class="line"></span><br><span class="line">    app.<span class="built_in">exec</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>FirstQt.pro</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#FirstQt.pro</span><br><span class="line">QT += widgets</span><br><span class="line"></span><br><span class="line">SOURCES += \</span><br><span class="line">    main.cpp</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用继承的方式调用Qt类"><a href="#使用继承的方式调用Qt类" class="headerlink" title="使用继承的方式调用Qt类"></a>使用继承的方式调用Qt类</h2><h1 id="使用MFC框架创建窗口程序"><a href="#使用MFC框架创建窗口程序" class="headerlink" title="使用MFC框架创建窗口程序"></a>使用MFC框架创建窗口程序</h1><p><strong>MFC库文件配置方法</strong></p>
+<p>1).”配置属性”—&gt;”常规”—&gt;”项目默认值”, 改为”在静态库中使用 MFC”;     </p>
+<h2 id="在main函数中调用MFC类"><a href="#在main函数中调用MFC类" class="headerlink" title="在main函数中调用MFC类"></a>在main函数中调用MFC类</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;afxwin.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CWinApp theApp; <span class="comment">//①建立应用程序。</span></span><br><span class="line"></span><br><span class="line">	CFrameWnd* Frame = <span class="keyword">new</span> <span class="built_in">CFrameWnd</span>();      <span class="comment">// 构造框架</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;sfas\n&quot;</span>);</span><br><span class="line">	theApp.m_pMainWnd = Frame; <span class="comment">// 将m_pMainWnd设定为Frame;</span></span><br><span class="line">	Frame-&gt;<span class="built_in">Create</span>(<span class="literal">NULL</span>, _T(<span class="string">&quot;最简单的窗口&quot;</span>));     <span class="comment">// 建立框架</span></span><br><span class="line">	Frame-&gt;<span class="built_in">ShowWindow</span>(SW_SHOW);              <span class="comment">// 显示框架</span></span><br><span class="line">	theApp.<span class="built_in">Run</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用继承的方式调用MFC中的类创建窗口程序"><a href="#使用继承的方式调用MFC中的类创建窗口程序" class="headerlink" title="使用继承的方式调用MFC中的类创建窗口程序"></a>使用继承的方式调用MFC中的类创建窗口程序</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;afxwin.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyApp</span> : <span class="keyword">public</span> CWinApp&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">	<span class="function">BOOL <span class="title">InitInstance</span><span class="params">()</span>                          <span class="comment">// ②程序入点</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line"></span><br><span class="line">		CFrameWnd* Frame = <span class="keyword">new</span> <span class="built_in">CFrameWnd</span>();      <span class="comment">// 构造框架</span></span><br><span class="line"></span><br><span class="line">		m_pMainWnd = Frame; <span class="comment">// 将m_pMainWnd设定为Frame;</span></span><br><span class="line"></span><br><span class="line">		Frame-&gt;<span class="built_in">Create</span>(<span class="literal">NULL</span>, _T(<span class="string">&quot;最简单的窗口&quot;</span>));     <span class="comment">// 建立框架</span></span><br><span class="line"></span><br><span class="line">		Frame-&gt;<span class="built_in">ShowWindow</span>(SW_SHOW);              <span class="comment">// 显示框架</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;                             <span class="comment">// 返回</span></span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	MyApp theApp;</span><br><span class="line">	theApp.<span class="built_in">InitInstance</span>();</span><br><span class="line">	CFrameWnd* Frame = <span class="keyword">new</span> <span class="built_in">CFrameWnd</span>();      <span class="comment">// 构造框架</span></span><br><span class="line">	theApp.<span class="built_in">Run</span>();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="使用新建全局对象的方式创建窗口"><a href="#使用新建全局对象的方式创建窗口" class="headerlink" title="使用新建全局对象的方式创建窗口"></a>使用新建全局对象的方式创建窗口</h2><p>(2).”配置属性”—&gt;”链接器”—&gt;”系统”—&gt;”子系统”, 改为”窗口 (&#x2F;SUBSYSTEM:WINDOWS)”;</p>
+<p>入口点为WinMain</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;afxwin.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyApp</span> : <span class="keyword">public</span> CWinApp&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">	<span class="function">BOOL <span class="title">InitInstance</span><span class="params">()</span>                          <span class="comment">// ②程序入点</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line"></span><br><span class="line">		CFrameWnd* Frame = <span class="keyword">new</span> <span class="built_in">CFrameWnd</span>();      <span class="comment">// 构造框架</span></span><br><span class="line"></span><br><span class="line">		m_pMainWnd = Frame; <span class="comment">// 将m_pMainWnd设定为Frame;</span></span><br><span class="line"></span><br><span class="line">		Frame-&gt;<span class="built_in">Create</span>(<span class="literal">NULL</span>, _T(<span class="string">&quot;最简单的窗口&quot;</span>));     <span class="comment">// 建立框架</span></span><br><span class="line"></span><br><span class="line">		Frame-&gt;<span class="built_in">ShowWindow</span>(SW_SHOW);              <span class="comment">// 显示框架</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;                             <span class="comment">// 返回</span></span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line">MyApp theApp;</span><br></pre></td></tr></table></figure>
+
+<h1 id="模仿MFC框架"><a href="#模仿MFC框架" class="headerlink" title="模仿MFC框架"></a>模仿MFC框架</h1><h2 id="模仿MFC隐藏入口函数WinMain实现隐藏main函数"><a href="#模仿MFC隐藏入口函数WinMain实现隐藏main函数" class="headerlink" title="模仿MFC隐藏入口函数WinMain实现隐藏main函数"></a>模仿MFC隐藏入口函数WinMain实现隐藏<code>main</code>函数</h2><p>Inherit.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Inherit.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Base.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Inherit</span> :Base &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">int</span> a = <span class="number">1</span>;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">BaseFun</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;inhert\n&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Inherit in;</span><br><span class="line"><span class="comment">//Base ss;</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Base.h</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Base.h</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Base</span>();</span><br><span class="line">	~<span class="built_in">Base</span>();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">BaseFun</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//void* m_pMainWnd;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> Base* g_pBase;</span><br></pre></td></tr></table></figure>
+
+<p>Base.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Base.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Base.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Base* g_pBase = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">Base::<span class="built_in">Base</span>() &#123;</span><br><span class="line">	<span class="comment">//m_pMainWnd = NULL;</span></span><br><span class="line">	g_pBase = <span class="keyword">this</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Base\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Base::~<span class="built_in">Base</span>() &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Base::BaseFun</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;BaseFun\n&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Main.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Main.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Base.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> <span class="function"><span class="type">int</span> __stdcall <span class="title">AfxMain</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> <span class="function"><span class="type">int</span> __stdcall <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span>  <span class="title">AfxMain</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Base* pBase = g_pBase; </span><br><span class="line">	pBase-&gt;<span class="built_in">BaseFun</span>();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;AfxMain\n&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">AfxMain</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="模仿MFC封装Win32程序"><a href="#模仿MFC封装Win32程序" class="headerlink" title="模仿MFC封装Win32程序"></a>模仿MFC封装Win32程序</h2><h1 id="模仿Qt框架"><a href="#模仿Qt框架" class="headerlink" title="模仿Qt框架"></a>模仿Qt框架</h1><h2 id="模仿QT"><a href="#模仿QT" class="headerlink" title="模仿QT"></a>模仿QT</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/05/01/c++/MFC%E4%B8%8Eqt%E4%B8%AD%E7%9A%84%E7%B1%BB%E6%98%AF%E4%BB%80%E4%B9%88/" data-id="clzqr9db7001r34d1esax4j38" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MFC/" rel="tag">MFC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/05/06/c++/qt/%E7%94%A8qt5.8%E5%BC%80%E5%8F%91%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A8%8B%E5%BA%8F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用qt5.8开发数据库程序
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/05/01/C%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/C%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E5%B9%B3%E5%8F%B0%E4%BD%BF%E7%94%A8opengl%E5%9B%BE%E5%BD%A2%E5%BA%93%E7%94%BB%E7%AA%97%E5%8F%A3%E5%9B%BE%E5%BD%A2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">C语言在windows平台使用opengl图形库画窗口图形</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">64位汇编程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hacking/" rel="tag">Hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MFC/" rel="tag">MFC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenGL/" rel="tag">OpenGL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/" rel="tag">Socket</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/" rel="tag">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/" rel="tag">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-driver/" rel="tag">c++windows+driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-windows-hacking/" rel="tag">c+windows+hacking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiled/" rel="tag">compiled</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" rel="tag">c语言的万种用法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/first-pragram/" rel="tag">first pragram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsp/" rel="tag">jsp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/termux/" rel="tag">termux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" rel="tag">x86汇编程序</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 15.71px;">64位汇编程序</a> <a href="/tags/Hacking/" style="font-size: 12.86px;">Hacking</a> <a href="/tags/MFC/" style="font-size: 10px;">MFC</a> <a href="/tags/OpenGL/" style="font-size: 10px;">OpenGL</a> <a href="/tags/Qt/" style="font-size: 12.86px;">Qt</a> <a href="/tags/Socket/" style="font-size: 11.43px;">Socket</a> <a href="/tags/android/" style="font-size: 10px;">android</a> <a href="/tags/assembly/" style="font-size: 10px;">assembly</a> <a href="/tags/c/" style="font-size: 15.71px;">c++</a> <a href="/tags/c-windows-driver/" style="font-size: 10px;">c++windows+driver</a> <a href="/tags/c-windows-hacking/" style="font-size: 20px;">c+windows+hacking</a> <a href="/tags/compiled/" style="font-size: 10px;">compiled</a> <a href="/tags/c%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/" style="font-size: 14.29px;">c语言的万种用法</a> <a href="/tags/first-pragram/" style="font-size: 17.14px;">first pragram</a> <a href="/tags/jsp/" style="font-size: 10px;">jsp</a> <a href="/tags/mysql/" style="font-size: 11.43px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/termux/" style="font-size: 11.43px;">termux</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 18.57px;">x86汇编程序</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/08/">August 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">August 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/07/">July 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/03/">March 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/23.C%E8%AF%AD%E8%A8%80InlineHook/">23.C语言实现InlineHook</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/22.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">22.使用C语言获取系统架构</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/11/C+Windows+HackingNote/21.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E4%B8%8E%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8syscall%E9%87%8D%E5%86%99%E8%BF%9B%E7%A8%8B%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/">21.使用C语言与汇编语言调用syscall重写进程相关函数</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/20.%E5%B0%86Dll%E6%96%87%E4%BB%B6%E8%BD%AC%E4%B8%BA%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A7%A3%E5%8E%8B%E5%87%BA%E6%9D%A5/">20.将Dll文件转为二进制代码运行时解压出来</a>
+          </li>
+        
+          <li>
+            <a href="/2024/08/10/C+Windows+HackingNote/19.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%8E%B7%E5%8F%96%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9D%97%E5%8F%A5%E6%9F%84/">19.使用C语言获取进程模块句柄</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      
+  <span id="busuanzi_container_site_pv">
+          本站总访问量<span id="busuanzi_value_site_pv"></span>次
+  </span>
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv" style='display:none'>
+          本站访客数<span id="busuanzi_value_site_uv"></span>人
+  </span>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2024 Theqiqi<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
