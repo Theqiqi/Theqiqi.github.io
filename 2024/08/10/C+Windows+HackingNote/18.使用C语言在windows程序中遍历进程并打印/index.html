@@ -15,7 +15,7 @@
 <meta property="og:description" content="C语言遍历 1.使用while循环 2.使用do{}while()循环 3.使用while循环给数组赋值 4.使用while循环打印数组的值 5.使用while循环打印指针指向地址的值(数组的方式) 6.使用while循环打印指针指向地址的值(指针的方式)   Windows程序遍历进程 1. Windows程序中通过遍历PE结构体打印进程  2.c语言程序使用二维数组 3.c语言程序使用指针分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-08-09T16:24:09.000Z">
-<meta property="article:modified_time" content="2024-08-12T08:54:40.386Z">
+<meta property="article:modified_time" content="2024-08-12T09:11:24.379Z">
 <meta property="article:author" content="Theqiqi">
 <meta property="article:tag" content="c+windows+hacking">
 <meta name="twitter:card" content="summary">
@@ -126,6 +126,8 @@
 </ul>
 </li>
 </ul>
+<span id="more"></span>
+
 <h1 id="C语言遍历"><a href="#C语言遍历" class="headerlink" title="C语言遍历"></a>C语言遍历</h1><h2 id="1-使用while循环"><a href="#1-使用while循环" class="headerlink" title="1.使用while循环"></a>1.使用while循环</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argv, <span class="type">char</span>* argc[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">while</span> (a &lt; <span class="number">20</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;a 的值： %d\n&quot;</span>, a);</span><br><span class="line">        a++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="2-使用do-while-循环"><a href="#2-使用do-while-循环" class="headerlink" title="2.使用do{}while()循环"></a>2.使用do{}while()循环</h2><p>do{}while()为先执行后判断</p>

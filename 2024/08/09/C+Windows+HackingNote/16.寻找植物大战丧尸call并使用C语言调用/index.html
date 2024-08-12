@@ -7,15 +7,15 @@
   
   <title>16.寻找植物大战丧尸call并使用C语言调用 | Theqiqi_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="使用CE寻找种植Call并编写自动汇编脚本 1. 通过CE找到汇编Call（掠过） 2. 编写自动汇编脚本   通过Dll将代码注入 1. 编写动态链接库 2. 编写C语言程序将dll加载到程序中   使用C语言根据种植Call编写自动种植脚本 1. 在x64dbg中编写汇编代码后转为机器码(略过) 2. 使用C语言编写自动种植功能    使用CE寻找种植Call并编写自动汇编脚本1. 通过CE">
+  <meta name="description" content="使用CE寻找种植Call并编写自动汇编脚本 1. 通过CE找到汇编Call（掠过） 2. 编写自动汇编脚本   通过Dll将代码注入 1. 编写动态链接库 2. 编写C语言程序将dll加载到程序中   使用C语言根据种植Call编写自动种植脚本 1. 在x64dbg中编写汇编代码后转为机器码(略过) 2. 使用C语言编写自动种植功能">
 <meta property="og:type" content="article">
 <meta property="og:title" content="16.寻找植物大战丧尸call并使用C语言调用">
 <meta property="og:url" content="http://example.com/2024/08/09/C+Windows+HackingNote/16.%E5%AF%BB%E6%89%BE%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E4%B8%A7%E5%B0%B8call%E5%B9%B6%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E8%B0%83%E7%94%A8/index.html">
 <meta property="og:site_name" content="Theqiqi_blog">
-<meta property="og:description" content="使用CE寻找种植Call并编写自动汇编脚本 1. 通过CE找到汇编Call（掠过） 2. 编写自动汇编脚本   通过Dll将代码注入 1. 编写动态链接库 2. 编写C语言程序将dll加载到程序中   使用C语言根据种植Call编写自动种植脚本 1. 在x64dbg中编写汇编代码后转为机器码(略过) 2. 使用C语言编写自动种植功能    使用CE寻找种植Call并编写自动汇编脚本1. 通过CE">
+<meta property="og:description" content="使用CE寻找种植Call并编写自动汇编脚本 1. 通过CE找到汇编Call（掠过） 2. 编写自动汇编脚本   通过Dll将代码注入 1. 编写动态链接库 2. 编写C语言程序将dll加载到程序中   使用C语言根据种植Call编写自动种植脚本 1. 在x64dbg中编写汇编代码后转为机器码(略过) 2. 使用C语言编写自动种植功能">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-08-09T12:43:01.000Z">
-<meta property="article:modified_time" content="2024-08-12T08:51:17.308Z">
+<meta property="article:modified_time" content="2024-08-12T09:11:12.730Z">
 <meta property="article:author" content="Theqiqi">
 <meta property="article:tag" content="c+windows+hacking">
 <meta name="twitter:card" content="summary">
@@ -112,6 +112,8 @@
 </ul>
 </li>
 </ul>
+<span id="more"></span>
+
 <h1 id="使用CE寻找种植Call并编写自动汇编脚本"><a href="#使用CE寻找种植Call并编写自动汇编脚本" class="headerlink" title="使用CE寻找种植Call并编写自动汇编脚本"></a>使用CE寻找种植Call并编写自动汇编脚本</h1><h2 id="1-通过CE找到汇编Call（掠过）"><a href="#1-通过CE找到汇编Call（掠过）" class="headerlink" title="1. 通过CE找到汇编Call（掠过）"></a>1. 通过CE找到汇编Call（掠过）</h2><h2 id="2-编写自动汇编脚本"><a href="#2-编写自动汇编脚本" class="headerlink" title="2. 编写自动汇编脚本"></a>2. 编写自动汇编脚本</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">[ENABLE]</span><br><span class="line">//code from here to &#x27;[DISABLE]&#x27; will be used to enable the cheat</span><br><span class="line"></span><br><span class="line">alloc(newmem,1024)</span><br><span class="line">createthread(newmem)</span><br><span class="line">newmem:</span><br><span class="line"></span><br><span class="line">//根据基地址和偏移量计算第一个参数的变量地址</span><br><span class="line">mov ebx,00729670</span><br><span class="line">mov ebx,[ebx]</span><br><span class="line">mov ebx,[ebx+868]</span><br><span class="line"></span><br><span class="line">//call function</span><br><span class="line">push FFFFFFFF       //常量-1</span><br><span class="line">push 2             //种植ID 此刻为樱桃炸弹</span><br><span class="line">mov eax,4         //Y轴座标</span><br><span class="line">push 0             //x轴坐标</span><br><span class="line"></span><br><span class="line">push ebx//地址[PlantsVsZombies.exe+329670]+868</span><br><span class="line">call 0040FA10//函数地址</span><br><span class="line">ret</span><br><span class="line"></span><br><span class="line">[DISABLE]</span><br><span class="line">//code from here till the end of the code will be used to disable the cheat</span><br><span class="line">dealloc(newmem)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h1 id="通过Dll将代码注入"><a href="#通过Dll将代码注入" class="headerlink" title="通过Dll将代码注入"></a>通过Dll将代码注入</h1><h2 id="1-编写动态链接库"><a href="#1-编写动态链接库" class="headerlink" title="1. 编写动态链接库"></a>1. 编写动态链接库</h2><p>dllmain.c</p>

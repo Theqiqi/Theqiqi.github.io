@@ -7,15 +7,15 @@
   
   <title>10.使用C语言在windows中获得句柄 | Theqiqi_blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="使用C语言在windows中获得进程句柄 C语言在windows中获得自己的进程句柄 C语言在windows中获得其他进程的句柄   windows程序中一个程序获得的句柄能否让其他进程同样拥有？ 1. 子进程能否继承父进程句柄？ 2. 父进程怎么获得子进程句柄？ 3.同一个父进程下的子进程句柄能否相互继承？（不能）    使用C语言在windows中获得进程句柄C语言在windows中获得自己">
+  <meta name="description" content="使用C语言在windows中获得进程句柄 C语言在windows中获得自己的进程句柄 C语言在windows中获得其他进程的句柄   windows程序中一个程序获得的句柄能否让其他进程同样拥有？ 1. 子进程能否继承父进程句柄？ 2. 父进程怎么获得子进程句柄？ 3.同一个父进程下的子进程句柄能否相互继承？（不能）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="10.使用C语言在windows中获得句柄">
 <meta property="og:url" content="http://example.com/2024/08/05/C+Windows+HackingNote/10.%E4%BD%BF%E7%94%A8C%E8%AF%AD%E8%A8%80%E5%9C%A8windows%E4%B8%AD%E8%8E%B7%E5%BE%97%E5%8F%A5%E6%9F%84/index.html">
 <meta property="og:site_name" content="Theqiqi_blog">
-<meta property="og:description" content="使用C语言在windows中获得进程句柄 C语言在windows中获得自己的进程句柄 C语言在windows中获得其他进程的句柄   windows程序中一个程序获得的句柄能否让其他进程同样拥有？ 1. 子进程能否继承父进程句柄？ 2. 父进程怎么获得子进程句柄？ 3.同一个父进程下的子进程句柄能否相互继承？（不能）    使用C语言在windows中获得进程句柄C语言在windows中获得自己">
+<meta property="og:description" content="使用C语言在windows中获得进程句柄 C语言在windows中获得自己的进程句柄 C语言在windows中获得其他进程的句柄   windows程序中一个程序获得的句柄能否让其他进程同样拥有？ 1. 子进程能否继承父进程句柄？ 2. 父进程怎么获得子进程句柄？ 3.同一个父进程下的子进程句柄能否相互继承？（不能）">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-08-05T04:13:01.000Z">
-<meta property="article:modified_time" content="2024-08-12T07:48:46.975Z">
+<meta property="article:modified_time" content="2024-08-12T09:10:37.220Z">
 <meta property="article:author" content="Theqiqi">
 <meta property="article:tag" content="c+windows+hacking">
 <meta name="twitter:card" content="summary">
@@ -108,6 +108,8 @@
 </ul>
 </li>
 </ul>
+<span id="more"></span>
+
 <h1 id="使用C语言在windows中获得进程句柄"><a href="#使用C语言在windows中获得进程句柄" class="headerlink" title="使用C语言在windows中获得进程句柄"></a>使用C语言在windows中获得进程句柄</h1><h2 id="C语言在windows中获得自己的进程句柄"><a href="#C语言在windows中获得自己的进程句柄" class="headerlink" title="C语言在windows中获得自己的进程句柄"></a>C语言在windows中获得自己的进程句柄</h2><p>使用GetCurrentProcess()或者<code>-1</code>可以得到自身进程的句柄</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwProcessId = <span class="number">116348</span>;</span><br><span class="line">	HANDLE hProcess1 = GetCurrentProcess();</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;hProcess is %p\n&quot;</span>, hProcess1);</span><br><span class="line">	CloseHandle(hProcess1);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;hProcess is %p\n&quot;</span>, <span class="number">-1</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
