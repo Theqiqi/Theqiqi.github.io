@@ -1,0 +1,357 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>9.压测 | Theqiqi_blog</title><meta name="author" content="Theqiqi"><meta name="copyright" content="Theqiqi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="现在的 epoll HTTP 服务器完全可以用专业工具做压力测试，得到真实的：  最大并发连接数 最大 QPS 最大吞吐量 延迟分布（P50 &#x2F; P90 &#x2F; P99） CPU &#x2F; 内存占用  以下是一个从简单到专业的完整测试方案，照着做就能得到真实数据。 🟩 方案 1：用 curl 做最简单的功能测试（不是压力测试）1curl -v http:&#x2F;&#x2F;127.0.0.1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="9.压测">
+<meta property="og:url" content="http://example.com/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/9.%E5%8E%8B%E6%B5%8B/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="现在的 epoll HTTP 服务器完全可以用专业工具做压力测试，得到真实的：  最大并发连接数 最大 QPS 最大吞吐量 延迟分布（P50 &#x2F; P90 &#x2F; P99） CPU &#x2F; 内存占用  以下是一个从简单到专业的完整测试方案，照着做就能得到真实数据。 🟩 方案 1：用 curl 做最简单的功能测试（不是压力测试）1curl -v http:&#x2F;&#x2F;127.0.0.1">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2025-03-27T03:53:09.000Z">
+<meta property="article:modified_time" content="2026-01-13T06:37:25.385Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="http">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/9.%E5%8E%8B%E6%B5%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '9.压测',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-01-13 14:37:25'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">255</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">100</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">23</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Theqiqi_blog"><span class="site-name">Theqiqi_blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">9.压测</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-03-27T03:53:09.000Z" title="Created 2025-03-27 11:53:09">2025-03-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-01-13T06:37:25.385Z" title="Updated 2026-01-13 14:37:25">2026-01-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/web-server/">web server</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="9.压测"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>现在的 epoll HTTP 服务器完全可以用专业工具做压力测试，得到真实的：</p>
+<ul>
+<li>最大并发连接数</li>
+<li>最大 QPS</li>
+<li>最大吞吐量</li>
+<li>延迟分布（P50 &#x2F; P90 &#x2F; P99）</li>
+<li>CPU &#x2F; 内存占用</li>
+</ul>
+<p>以下是一个<strong>从简单到专业</strong>的完整测试方案，照着做就能得到真实数据。</p>
+<h1 id="🟩-方案-1：用-curl-做最简单的功能测试（不是压力测试）"><a href="#🟩-方案-1：用-curl-做最简单的功能测试（不是压力测试）" class="headerlink" title="🟩 方案 1：用 curl 做最简单的功能测试（不是压力测试）"></a>🟩 <strong>方案 1：用</strong> <code>curl</code> <strong>做最简单的功能测试（不是压力测试）</strong></h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v http://127.0.0.1:8080/</span><br></pre></td></tr></table></figure>
+
+<p>确认服务器能正常返回。</p>
+<h1 id="🟦-方案-2：用-ab（ApacheBench）做轻量压测"><a href="#🟦-方案-2：用-ab（ApacheBench）做轻量压测" class="headerlink" title="🟦 方案 2：用 ab（ApacheBench）做轻量压测"></a>🟦 <strong>方案 2：用</strong> <code>ab</code><strong>（ApacheBench）做轻量压测</strong></h1><p>这是最常用的入门压测工具。</p>
+<p>安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install apache2-utils</span><br></pre></td></tr></table></figure>
+
+<p>测试 1000 次请求，50 并发：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ab -n 1000 -c 50 http://127.0.0.1:8080/</span><br></pre></td></tr></table></figure>
+
+<p>你能看到：</p>
+<ul>
+<li>QPS</li>
+<li>平均延迟</li>
+<li>失败率</li>
+<li>并发处理能力</li>
+</ul>
+<h1 id="🟧-方案-3：用-wrk（最专业的-HTTP-压测工具）"><a href="#🟧-方案-3：用-wrk（最专业的-HTTP-压测工具）" class="headerlink" title="🟧 方案 3：用 wrk（最专业的 HTTP 压测工具）"></a>🟧 <strong>方案 3：用</strong> <code>wrk</code><strong>（最专业的 HTTP 压测工具）</strong></h1><p>这是工业界最常用的压测工具，Nginx 官方推荐 wrk。</p>
+<p>安装（Ubuntu）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install wrk</span><br></pre></td></tr></table></figure>
+
+<p>压测 30 秒，100 并发：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wrk -t4 -c100 -d30s http://127.0.0.1:8080/</span><br></pre></td></tr></table></figure>
+
+<p>参数解释：</p>
+<ul>
+<li><code>-t4</code>：4 个线程</li>
+<li><code>-c100</code>：100 个并发连接</li>
+<li><code>-d30s</code>：持续 30 秒</li>
+</ul>
+<p>wrk 会有：</p>
+<ul>
+<li>Requests&#x2F;sec（QPS）</li>
+<li>Latency（延迟）</li>
+<li>Transfer&#x2F;sec（吞吐量）</li>
+</ul>
+<p>这是最真实的性能指标。</p>
+<h1 id="🟥-方案-4：测试“1-万连接同时在线”"><a href="#🟥-方案-4：测试“1-万连接同时在线”" class="headerlink" title="🟥 方案 4：测试“1 万连接同时在线”"></a>🟥 <strong>方案 4：测试“1 万连接同时在线”</strong></h1><p>问“能不能承受 10000 台客户端同时连接”，要用 <strong>tcpcopy &#x2F; hping3 &#x2F; wrk2 &#x2F; custom client</strong> 来模拟。</p>
+<p>最简单的方法：</p>
+<h2 id="用-hping3-模拟大量-TCP-连接："><a href="#用-hping3-模拟大量-TCP-连接：" class="headerlink" title="用 hping3 模拟大量 TCP 连接："></a>用 <code>hping3</code> 模拟大量 TCP 连接：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hping3 -S -p 8080 --flood 127.0.0.1</span><br></pre></td></tr></table></figure>
+
+<p>但它不建立完整 HTTP 连接。</p>
+<h2 id="更专业的方法：用-wrk-ulimit-sysctl-调优"><a href="#更专业的方法：用-wrk-ulimit-sysctl-调优" class="headerlink" title="更专业的方法：用 wrk + ulimit + sysctl 调优"></a>更专业的方法：用 <code>wrk</code> + <code>ulimit</code> + <code>sysctl</code> 调优</h2><h3 id="1-提高文件描述符限制"><a href="#1-提高文件描述符限制" class="headerlink" title="1. 提高文件描述符限制"></a>1. 提高文件描述符限制</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ulimit</span> -n 200000</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-调整内核参数"><a href="#2-调整内核参数" class="headerlink" title="2. 调整内核参数"></a>2. 调整内核参数</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo sysctl -w net.core.somaxconn=65535</span><br><span class="line">sudo sysctl -w net.ipv4.ip_local_port_range=<span class="string">&quot;1024 65535&quot;</span></span><br><span class="line">sudo sysctl -w net.ipv4.tcp_tw_reuse=1</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-用-wrk-模拟-1-万连接"><a href="#3-用-wrk-模拟-1-万连接" class="headerlink" title="3. 用 wrk 模拟 1 万连接"></a>3. 用 wrk 模拟 1 万连接</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wrk -t8 -c10000 -d30s http://127.0.0.1:8080/</span><br></pre></td></tr></table></figure>
+
+<p>如果你的服务器能撑住：</p>
+<ul>
+<li>不崩</li>
+<li>不拒绝连接</li>
+<li>不出现大量超时</li>
+</ul>
+<p>那就说明此 epoll 服务器确实能承受 1 万连接。</p>
+<h1 id="🟪-方案-5：用-Python-写一个-1-万连接的客户端（最真实）"><a href="#🟪-方案-5：用-Python-写一个-1-万连接的客户端（最真实）" class="headerlink" title="🟪 方案 5：用 Python 写一个 1 万连接的客户端（最真实）"></a>🟪 <strong>方案 5：用 Python 写一个 1 万连接的客户端（最真实）</strong></h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    s = socket.socket()</span><br><span class="line">    s.connect((<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">8080</span>))</span><br><span class="line">    s.send(<span class="string">b&quot;GET / HTTP/1.1\r\nHost: localhost\r\n\r\n&quot;</span>)</span><br><span class="line">    s.recv(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10000</span>):</span><br><span class="line">    threading.Thread(target=connect).start()</span><br></pre></td></tr></table></figure>
+
+<p>这是真实的 TCP 连接 + HTTP 请求。</p>
+<h1 id="🎯-最终结论（非常清晰）"><a href="#🎯-最终结论（非常清晰）" class="headerlink" title="🎯 最终结论（非常清晰）"></a>🎯 <strong>最终结论（非常清晰）</strong></h1><p>完全可以用这些工具测试此 epoll 服务器：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>curl</td>
+<td>功能测试</td>
+</tr>
+<tr>
+<td>ab</td>
+<td>入门压测</td>
+</tr>
+<tr>
+<td>wrk</td>
+<td>专业压测（推荐）</td>
+</tr>
+<tr>
+<td>wrk2</td>
+<td>更稳定的 QPS 控制</td>
+</tr>
+<tr>
+<td>Python 客户端</td>
+<td>模拟真实 1 万连接</td>
+</tr>
+<tr>
+<td>sysctl + ulimit</td>
+<td>调优内核参数</td>
+</tr>
+</tbody></table>
+<h1 id="🌟-结论先说："><a href="#🌟-结论先说：" class="headerlink" title="🌟 结论先说："></a>🌟 结论先说：</h1><h2 id="单台客户端完全可以发出-1-万、5-万、甚至-10-万-TCP-连接。"><a href="#单台客户端完全可以发出-1-万、5-万、甚至-10-万-TCP-连接。" class="headerlink" title="单台客户端完全可以发出 1 万、5 万、甚至 10 万 TCP 连接。"></a><strong>单台客户端完全可以发出 1 万、5 万、甚至 10 万 TCP 连接。</strong></h2><p>但必须满足三个条件：</p>
+<ol>
+<li><strong>系统允许足够多的文件描述符（ulimit -n）</strong></li>
+<li><strong>内核参数允许大量 TIME_WAIT、端口复用等</strong></li>
+<li><strong>压测工具本身支持高并发（wrk、ab、Python、Go 客户端都可以）</strong></li>
+</ol>
+<p>这些都满足后，一台机器发 1 万连接是轻轻松松的。</p>
+<h1 id="🧩-为什么单台客户端能发这么多连接？"><a href="#🧩-为什么单台客户端能发这么多连接？" class="headerlink" title="🧩 为什么单台客户端能发这么多连接？"></a>🧩 为什么单台客户端能发这么多连接？</h1><p>因为：</p>
+<ul>
+<li>一个 TCP 连接 &#x3D; 一个文件描述符</li>
+<li>Linux 默认限制是 1024</li>
+<li>但你可以把它调到 100000 或更多</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ulimit</span> -n 200000</span><br></pre></td></tr></table></figure>
+
+<p>这意味着：</p>
+<blockquote>
+<p><strong>你的客户端可以同时打开 20 万个 socket。</strong></p>
+</blockquote>
+<p>这不是理论，是实战。</p>
+<h1 id="🧩-关键点-1：端口数量够不够？"><a href="#🧩-关键点-1：端口数量够不够？" class="headerlink" title="🧩 关键点 1：端口数量够不够？"></a>🧩 关键点 1：端口数量够不够？</h1><p>客户端发起连接时使用：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">源IP:源端口 → 目标IP:目标端口</span><br></pre></td></tr></table></figure>
+
+<p>源端口范围默认是：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1024 ~ 65535</span><br></pre></td></tr></table></figure>
+
+<p>也就是 <strong>6 万多个端口</strong>。</p>
+<p>如果你想发 10 万连接怎么办？</p>
+<p>你可以：</p>
+<h3 id="✔-使用多个源-IP（虚拟网卡）"><a href="#✔-使用多个源-IP（虚拟网卡）" class="headerlink" title="✔ 使用多个源 IP（虚拟网卡）"></a>✔ 使用多个源 IP（虚拟网卡）</h3><h3 id="✔-使用端口复用（SO-REUSEPORT）"><a href="#✔-使用端口复用（SO-REUSEPORT）" class="headerlink" title="✔ 使用端口复用（SO_REUSEPORT）"></a>✔ 使用端口复用（SO_REUSEPORT）</h3><h3 id="✔-使用多个客户端进程"><a href="#✔-使用多个客户端进程" class="headerlink" title="✔ 使用多个客户端进程"></a>✔ 使用多个客户端进程</h3><h3 id="✔-使用多个线程-多个-socket-组"><a href="#✔-使用多个线程-多个-socket-组" class="headerlink" title="✔ 使用多个线程 + 多个 socket 组"></a>✔ 使用多个线程 + 多个 socket 组</h3><p>所以端口不是瓶颈。</p>
+<h1 id="🧩-关键点-2：TIME-WAIT-会不会爆？"><a href="#🧩-关键点-2：TIME-WAIT-会不会爆？" class="headerlink" title="🧩 关键点 2：TIME_WAIT 会不会爆？"></a>🧩 关键点 2：TIME_WAIT 会不会爆？</h1><p>大量短连接会产生 TIME_WAIT。</p>
+<p>解决方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo sysctl -w net.ipv4.tcp_tw_reuse=1</span><br><span class="line">sudo sysctl -w net.ipv4.tcp_tw_recycle=1</span><br><span class="line">sudo sysctl -w net.ipv4.tcp_fin_timeout=10</span><br></pre></td></tr></table></figure>
+
+<p>这样 TIME_WAIT 就不会成为瓶颈。</p>
+<h1 id="🧩-关键点-3：压测工具本身能不能发这么多？"><a href="#🧩-关键点-3：压测工具本身能不能发这么多？" class="headerlink" title="🧩 关键点 3：压测工具本身能不能发这么多？"></a>🧩 关键点 3：压测工具本身能不能发这么多？</h1><h2 id="✔-wrk"><a href="#✔-wrk" class="headerlink" title="✔ wrk"></a>✔ wrk</h2><p>可以发 1 万、2 万连接 （但 wrk 的连接数受线程数影响）</p>
+<h2 id="✔-wrk2"><a href="#✔-wrk2" class="headerlink" title="✔ wrk2"></a>✔ wrk2</h2><p>更稳定，支持更高连接数</p>
+<h2 id="✔-Python-自己写脚本"><a href="#✔-Python-自己写脚本" class="headerlink" title="✔ Python 自己写脚本"></a>✔ Python 自己写脚本</h2><p>线程 + 协程（asyncio）可以轻松发 1 万连接</p>
+<h2 id="✔-Go-写客户端"><a href="#✔-Go-写客户端" class="headerlink" title="✔ Go 写客户端"></a>✔ Go 写客户端</h2><p>Go 的 goroutine 可以轻松发 5 万连接</p>
+<h2 id="✔-hping3"><a href="#✔-hping3" class="headerlink" title="✔ hping3"></a>✔ hping3</h2><p>可以发大量 TCP SYN（但不是完整连接）</p>
+<h1 id="🧪-实战例子："><a href="#🧪-实战例子：" class="headerlink" title="🧪 实战例子："></a>🧪 实战例子：</h1><p>一个真实的 Python 例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">connect</span>():</span><br><span class="line">    s = socket.socket()</span><br><span class="line">    s.connect((<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">8080</span>))</span><br><span class="line">    s.send(<span class="string">b&quot;GET / HTTP/1.1\r\nHost: localhost\r\n\r\n&quot;</span>)</span><br><span class="line">    s.recv(<span class="number">1024</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10000</span>):</span><br><span class="line">    threading.Thread(target=connect).start()</span><br></pre></td></tr></table></figure>
+
+<p>只要：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ulimit</span> -n 20000</span><br></pre></td></tr></table></figure>
+
+<p>这段代码就能发出 <strong>1 万个真实 TCP 连接</strong>。</p>
+<h1 id="🧠-那么，单台客户端的极限是多少？"><a href="#🧠-那么，单台客户端的极限是多少？" class="headerlink" title="🧠 那么，单台客户端的极限是多少？"></a>🧠 那么，单台客户端的极限是多少？</h1><p>取决于：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>典型值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件描述符限制</td>
+<td>100k～500k</td>
+</tr>
+<tr>
+<td>可用端口</td>
+<td>6 万（单 IP）</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>1 核也能发 1 万连接</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>每个连接占 10～20KB</td>
+</tr>
+</tbody></table>
+<p>所以：</p>
+<h1 id="⭐-单台客户端发-1-万连接-→-轻松"><a href="#⭐-单台客户端发-1-万连接-→-轻松" class="headerlink" title="⭐ 单台客户端发 1 万连接 → 轻松"></a>⭐ 单台客户端发 1 万连接 → 轻松</h1><h1 id="⭐-单台客户端发-5-万连接-→-需要调内核"><a href="#⭐-单台客户端发-5-万连接-→-需要调内核" class="headerlink" title="⭐ 单台客户端发 5 万连接 → 需要调内核"></a>⭐ 单台客户端发 5 万连接 → 需要调内核</h1><h1 id="⭐-单台客户端发-10-万连接-→-需要多-IP-或端口复用"><a href="#⭐-单台客户端发-10-万连接-→-需要多-IP-或端口复用" class="headerlink" title="⭐ 单台客户端发 10 万连接 → 需要多 IP 或端口复用"></a>⭐ 单台客户端发 10 万连接 → 需要多 IP 或端口复用</h1><h1 id="🎯-最终结论（非常清晰）-1"><a href="#🎯-最终结论（非常清晰）-1" class="headerlink" title="🎯 最终结论（非常清晰）"></a>🎯 最终结论（非常清晰）</h1><table>
+<thead>
+<tr>
+<th>你问的问题</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单台客户端能发 1 万连接吗？</td>
+<td>✔ 绝对可以</td>
+</tr>
+<tr>
+<td>工具能做到吗？</td>
+<td>✔ wrk、Python、Go 都可以</td>
+</tr>
+<tr>
+<td>需要调系统吗？</td>
+<td>✔ 需要调 ulimit 和 sysctl</td>
+</tr>
+<tr>
+<td>真实压测你的 epoll 服务器可行吗？</td>
+<td>✔ 完全可行</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Theqiqi</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/9.%E5%8E%8B%E6%B5%8B/">http://example.com/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/9.%E5%8E%8B%E6%B5%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/http/">http</a><a class="post-meta__tags" href="/tags/linux/">linux</a><a class="post-meta__tags" href="/tags/web/">web</a><a class="post-meta__tags" href="/tags/python/">python</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/01/03/web%E6%9C%8D%E5%8A%A1%E5%99%A8/101.%E4%BD%BF%E7%94%A8Grop%E7%BD%91%E7%AB%99%E6%8F%90%E4%BE%9B%E7%9A%84%E6%8E%A5%E5%8F%A3/" title="101.使用Grop网站提供的api"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">101.使用Grop网站提供的api</div></div></a></div><div class="next-post pull-right"><a href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/8.Linux%20Socket%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8Bhttp%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="8.Linux Socket并发模型http服务器"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">8.Linux Socket并发模型http服务器</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/2.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Elinux%E7%B3%BB%E7%BB%9F%E5%86%99%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81http%E7%BD%91%E9%A1%B5%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%9C%8D%E5%8A%A1%E5%99%A8,%E5%8F%91%E9%80%81%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6/" title="2.使用c语言与linux系统写一个静态http网页文件下载服务器,发送一个文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-27</div><div class="title">2.使用c语言与linux系统写一个静态http网页文件下载服务器,发送一个文件</div></div></a></div><div><a href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/5.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Elinux%E7%B3%BB%E7%BB%9F%E5%86%99%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8,%E8%A7%A3%E6%9E%90%E5%B9%B6%E5%93%8D%E5%BA%94get%E8%AF%B7%E6%B1%82/" title="5.使用c语言与linux系统写一个静态服务器,解析并响应get请求"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-27</div><div class="title">5.使用c语言与linux系统写一个静态服务器,解析并响应get请求</div></div></a></div><div><a href="/2026/01/03/web%E6%9C%8D%E5%8A%A1%E5%99%A8/101.%E4%BD%BF%E7%94%A8Grop%E7%BD%91%E7%AB%99%E6%8F%90%E4%BE%9B%E7%9A%84%E6%8E%A5%E5%8F%A3/" title="101.使用Grop网站提供的api"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-03</div><div class="title">101.使用Grop网站提供的api</div></div></a></div><div><a href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/4.%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Elinux%E7%B3%BB%E7%BB%9F%E5%86%99%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E7%BD%91%E9%A1%B5%E6%9C%8D%E5%8A%A1%E5%99%A8,%E5%8F%91%E9%80%81html%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9/" title="4.使用c语言与linux系统写一个静态网页服务器,发送html文件内容"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-27</div><div class="title">4.使用c语言与linux系统写一个静态网页服务器,发送html文件内容</div></div></a></div><div><a href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/7.web%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E6%94%B6%E5%8F%91REST%E6%8E%A5%E5%8F%A3/" title="7.web服务器中收发REST接口"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-27</div><div class="title">7.web服务器中收发REST接口</div></div></a></div><div><a href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/6%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Elinux%E7%B3%BB%E7%BB%9F%E5%86%99%E4%B8%80%E4%B8%AAweb%E6%9C%8D%E5%8A%A1%E5%99%A8,%E8%A7%A3%E6%9E%90%E5%B9%B6%E5%93%8D%E5%BA%94get%E4%B8%8Epost%E8%AF%B7%E6%B1%82/" title="6使用c语言与linux系统写一个web服务器,解析并响应get与post请求"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-27</div><div class="title">6使用c语言与linux系统写一个web服务器,解析并响应get与post请求</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Theqiqi</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">255</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">100</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">23</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Theqiqi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%9F%A9-%E6%96%B9%E6%A1%88-1%EF%BC%9A%E7%94%A8-curl-%E5%81%9A%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%8A%9F%E8%83%BD%E6%B5%8B%E8%AF%95%EF%BC%88%E4%B8%8D%E6%98%AF%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95%EF%BC%89"><span class="toc-text">🟩 方案 1：用 curl 做最简单的功能测试（不是压力测试）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%9F%A6-%E6%96%B9%E6%A1%88-2%EF%BC%9A%E7%94%A8-ab%EF%BC%88ApacheBench%EF%BC%89%E5%81%9A%E8%BD%BB%E9%87%8F%E5%8E%8B%E6%B5%8B"><span class="toc-text">🟦 方案 2：用 ab（ApacheBench）做轻量压测</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%9F%A7-%E6%96%B9%E6%A1%88-3%EF%BC%9A%E7%94%A8-wrk%EF%BC%88%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84-HTTP-%E5%8E%8B%E6%B5%8B%E5%B7%A5%E5%85%B7%EF%BC%89"><span class="toc-text">🟧 方案 3：用 wrk（最专业的 HTTP 压测工具）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%9F%A5-%E6%96%B9%E6%A1%88-4%EF%BC%9A%E6%B5%8B%E8%AF%95%E2%80%9C1-%E4%B8%87%E8%BF%9E%E6%8E%A5%E5%90%8C%E6%97%B6%E5%9C%A8%E7%BA%BF%E2%80%9D"><span class="toc-text">🟥 方案 4：测试“1 万连接同时在线”</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-hping3-%E6%A8%A1%E6%8B%9F%E5%A4%A7%E9%87%8F-TCP-%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="toc-text">用 hping3 模拟大量 TCP 连接：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E4%B8%93%E4%B8%9A%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%9A%E7%94%A8-wrk-ulimit-sysctl-%E8%B0%83%E4%BC%98"><span class="toc-text">更专业的方法：用 wrk + ulimit + sysctl 调优</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%8F%90%E9%AB%98%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6%E9%99%90%E5%88%B6"><span class="toc-text">1. 提高文件描述符限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%B0%83%E6%95%B4%E5%86%85%E6%A0%B8%E5%8F%82%E6%95%B0"><span class="toc-text">2. 调整内核参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%94%A8-wrk-%E6%A8%A1%E6%8B%9F-1-%E4%B8%87%E8%BF%9E%E6%8E%A5"><span class="toc-text">3. 用 wrk 模拟 1 万连接</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%9F%AA-%E6%96%B9%E6%A1%88-5%EF%BC%9A%E7%94%A8-Python-%E5%86%99%E4%B8%80%E4%B8%AA-1-%E4%B8%87%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF%EF%BC%88%E6%9C%80%E7%9C%9F%E5%AE%9E%EF%BC%89"><span class="toc-text">🟪 方案 5：用 Python 写一个 1 万连接的客户端（最真实）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E6%9C%80%E7%BB%88%E7%BB%93%E8%AE%BA%EF%BC%88%E9%9D%9E%E5%B8%B8%E6%B8%85%E6%99%B0%EF%BC%89"><span class="toc-text">🎯 最终结论（非常清晰）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8C%9F-%E7%BB%93%E8%AE%BA%E5%85%88%E8%AF%B4%EF%BC%9A"><span class="toc-text">🌟 结论先说：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E5%8F%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%AE%8C%E5%85%A8%E5%8F%AF%E4%BB%A5%E5%8F%91%E5%87%BA-1-%E4%B8%87%E3%80%815-%E4%B8%87%E3%80%81%E7%94%9A%E8%87%B3-10-%E4%B8%87-TCP-%E8%BF%9E%E6%8E%A5%E3%80%82"><span class="toc-text">单台客户端完全可以发出 1 万、5 万、甚至 10 万 TCP 连接。</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%A7%A9-%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8D%95%E5%8F%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%83%BD%E5%8F%91%E8%BF%99%E4%B9%88%E5%A4%9A%E8%BF%9E%E6%8E%A5%EF%BC%9F"><span class="toc-text">🧩 为什么单台客户端能发这么多连接？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%A7%A9-%E5%85%B3%E9%94%AE%E7%82%B9-1%EF%BC%9A%E7%AB%AF%E5%8F%A3%E6%95%B0%E9%87%8F%E5%A4%9F%E4%B8%8D%E5%A4%9F%EF%BC%9F"><span class="toc-text">🧩 关键点 1：端口数量够不够？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%94-%E4%BD%BF%E7%94%A8%E5%A4%9A%E4%B8%AA%E6%BA%90-IP%EF%BC%88%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1%EF%BC%89"><span class="toc-text">✔ 使用多个源 IP（虚拟网卡）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%94-%E4%BD%BF%E7%94%A8%E7%AB%AF%E5%8F%A3%E5%A4%8D%E7%94%A8%EF%BC%88SO-REUSEPORT%EF%BC%89"><span class="toc-text">✔ 使用端口复用（SO_REUSEPORT）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%94-%E4%BD%BF%E7%94%A8%E5%A4%9A%E4%B8%AA%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9B%E7%A8%8B"><span class="toc-text">✔ 使用多个客户端进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%94-%E4%BD%BF%E7%94%A8%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B-%E5%A4%9A%E4%B8%AA-socket-%E7%BB%84"><span class="toc-text">✔ 使用多个线程 + 多个 socket 组</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%A7%A9-%E5%85%B3%E9%94%AE%E7%82%B9-2%EF%BC%9ATIME-WAIT-%E4%BC%9A%E4%B8%8D%E4%BC%9A%E7%88%86%EF%BC%9F"><span class="toc-text">🧩 关键点 2：TIME_WAIT 会不会爆？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%A7%A9-%E5%85%B3%E9%94%AE%E7%82%B9-3%EF%BC%9A%E5%8E%8B%E6%B5%8B%E5%B7%A5%E5%85%B7%E6%9C%AC%E8%BA%AB%E8%83%BD%E4%B8%8D%E8%83%BD%E5%8F%91%E8%BF%99%E4%B9%88%E5%A4%9A%EF%BC%9F"><span class="toc-text">🧩 关键点 3：压测工具本身能不能发这么多？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9C%94-wrk"><span class="toc-text">✔ wrk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9C%94-wrk2"><span class="toc-text">✔ wrk2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9C%94-Python-%E8%87%AA%E5%B7%B1%E5%86%99%E8%84%9A%E6%9C%AC"><span class="toc-text">✔ Python 自己写脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9C%94-Go-%E5%86%99%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text">✔ Go 写客户端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9C%94-hping3"><span class="toc-text">✔ hping3</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%A7%AA-%E5%AE%9E%E6%88%98%E4%BE%8B%E5%AD%90%EF%BC%9A"><span class="toc-text">🧪 实战例子：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%A7%A0-%E9%82%A3%E4%B9%88%EF%BC%8C%E5%8D%95%E5%8F%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E6%9E%81%E9%99%90%E6%98%AF%E5%A4%9A%E5%B0%91%EF%BC%9F"><span class="toc-text">🧠 那么，单台客户端的极限是多少？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%AD%90-%E5%8D%95%E5%8F%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91-1-%E4%B8%87%E8%BF%9E%E6%8E%A5-%E2%86%92-%E8%BD%BB%E6%9D%BE"><span class="toc-text">⭐ 单台客户端发 1 万连接 → 轻松</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%AD%90-%E5%8D%95%E5%8F%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91-5-%E4%B8%87%E8%BF%9E%E6%8E%A5-%E2%86%92-%E9%9C%80%E8%A6%81%E8%B0%83%E5%86%85%E6%A0%B8"><span class="toc-text">⭐ 单台客户端发 5 万连接 → 需要调内核</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E2%AD%90-%E5%8D%95%E5%8F%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91-10-%E4%B8%87%E8%BF%9E%E6%8E%A5-%E2%86%92-%E9%9C%80%E8%A6%81%E5%A4%9A-IP-%E6%88%96%E7%AB%AF%E5%8F%A3%E5%A4%8D%E7%94%A8"><span class="toc-text">⭐ 单台客户端发 10 万连接 → 需要多 IP 或端口复用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%F0%9F%8E%AF-%E6%9C%80%E7%BB%88%E7%BB%93%E8%AE%BA%EF%BC%88%E9%9D%9E%E5%B8%B8%E6%B8%85%E6%99%B0%EF%BC%89-1"><span class="toc-text">🎯 最终结论（非常清晰）</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/03/web%E6%9C%8D%E5%8A%A1%E5%99%A8/101.%E4%BD%BF%E7%94%A8Grop%E7%BD%91%E7%AB%99%E6%8F%90%E4%BE%9B%E7%9A%84%E6%8E%A5%E5%8F%A3/" title="101.使用Grop网站提供的api">101.使用Grop网站提供的api</a><time datetime="2026-01-03T00:10:01.000Z" title="Created 2026-01-03 08:10:01">2026-01-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/9.%E5%8E%8B%E6%B5%8B/" title="9.压测">9.压测</a><time datetime="2025-03-27T03:53:09.000Z" title="Created 2025-03-27 11:53:09">2025-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/8.Linux%20Socket%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8Bhttp%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="8.Linux Socket并发模型http服务器">8.Linux Socket并发模型http服务器</a><time datetime="2025-03-27T03:53:08.000Z" title="Created 2025-03-27 11:53:08">2025-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/7.web%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E6%94%B6%E5%8F%91REST%E6%8E%A5%E5%8F%A3/" title="7.web服务器中收发REST接口">7.web服务器中收发REST接口</a><time datetime="2025-03-27T03:53:07.000Z" title="Created 2025-03-27 11:53:07">2025-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/6%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Elinux%E7%B3%BB%E7%BB%9F%E5%86%99%E4%B8%80%E4%B8%AAweb%E6%9C%8D%E5%8A%A1%E5%99%A8,%E8%A7%A3%E6%9E%90%E5%B9%B6%E5%93%8D%E5%BA%94get%E4%B8%8Epost%E8%AF%B7%E6%B1%82/" title="6使用c语言与linux系统写一个web服务器,解析并响应get与post请求">6使用c语言与linux系统写一个web服务器,解析并响应get与post请求</a><time datetime="2025-03-27T03:53:06.000Z" title="Created 2025-03-27 11:53:06">2025-03-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By Theqiqi</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

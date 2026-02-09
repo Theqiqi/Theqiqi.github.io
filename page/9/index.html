@@ -1,0 +1,280 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Theqiqi_blog</title><meta name="author" content="Theqiqi"><meta name="copyright" content="Theqiqi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Theqiqi_blog">
+<meta property="og:url" content="http://example.com/page/9/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:author" content="Theqiqi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/page/9/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Theqiqi_blog',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-02-09 19:11:05'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">255</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">100</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">23</div></a></div><hr class="custom-hr"/></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Theqiqi_blog"><span class="site-name">Theqiqi_blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">Theqiqi_blog</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/13/driver/windows%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%9117.%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E4%BF%AE%E6%94%B9%E8%BF%9B%E7%A8%8B%E6%9D%83%E9%99%90%E4%B8%8E%E9%AB%98%E5%BA%A6%E6%8B%A6%E6%88%AA%E6%81%A2%E5%A4%8D%E8%AF%BB%E5%86%99%E6%9D%83%E9%99%90/" title="windows驱动开发17.回调函数修改进程权限与高度拦截恢复读写权限">windows驱动开发17.回调函数修改进程权限与高度拦截恢复读写权限</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-13T12:11:17.000Z" title="Created 2025-03-13 20:11:17">2025-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Drvier/">Drvier</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C/">C</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Drvier/">Drvier</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/WindowsDriver/">WindowsDriver</a></span></div><div class="content">恢复句柄权限的方法1.使用高度拦截在回调函数中恢复句柄权限回调函数在系统中依次由高到低执行，查看回调函数的高度，此时注册一个回调函数只要高度比降低权限的回调低，就会形成先降低权限再提高权限。
+1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283#include&lt;ntifs.h&gt;PVOID RegistrationHandle = NULL;BOOLEAN is_callback = FALSE;HANDLE g_pid;VOID uninstall_callback()&#123;	if (RegistrationHandle != NULL &amp;&amp; is_callback)        ObUnRegisterCallbacks(RegistrationHandle);&#125;//回调提升进程权 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/13/driver/windows%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%9116%E4%BD%BF%E7%94%A8%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E4%BF%9D%E6%8A%A4%E8%BF%9B%E7%A8%8B%E4%B8%8D%E8%A2%AB%E8%AF%BB%E5%86%99/" title="windows驱动开发16使用回调函数保护进程不被读写">windows驱动开发16使用回调函数保护进程不被读写</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-13T12:11:16.000Z" title="Created 2025-03-13 20:11:16">2025-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Drvier/">Drvier</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C/">C</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Drvier/">Drvier</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/WindowsDriver/">WindowsDriver</a></span></div><div class="content">编写C语言代码使用回调函数保护进程不被读写1. 驱动中注册一个回调函数，当驱动被注册时打印消息12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849#include &lt;ntifs.h&gt;#define Log(X) DbgPrint(&quot;qi:&quot;X##)VOID processcreate_callback(_In_ HANDLE ParentId, _In_ HANDLE ProcessId, _In_ BOOLEAN Create);VOID TestCallback();NTSTATUS DriverUnload(PDRIVER_OBJECT pdriver)&#123;	PsSetCreateProcessNotifyRoutine(processcreate_callback, TRUE);	DbgPrint(&quot;unload...\n&quot;);	return STATUS_SUCCESS;&#125;NTSTA ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/13/driver/windows%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%9115.%E9%A9%B1%E5%8A%A8%E4%B8%AD%E8%AF%BB%E5%8F%96%E4%B8%8E%E5%86%99%E5%85%A5%E5%86%85%E5%AD%98/" title="windows驱动开发15.驱动中读取与写入内存">windows驱动开发15.驱动中读取与写入内存</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-13T12:11:15.000Z" title="Created 2025-03-13 20:11:15">2025-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Drvier/">Drvier</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C/">C</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Drvier/">Drvier</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/WindowsDriver/">WindowsDriver</a></span></div><div class="content">驱动程序中读取与写入内存数据的几种方式1.读取与写入系统虚拟内存地址数据
+使用指针直接读取与写入。
+使用C语言内存复制函数读取与写入,例如memcpy()函数。
+使用windows驱动函数，例如，RtllCopyMemory。
+使用MDL映射的方式写入系统虚拟地址
+
+2.读取与写入物理地址的方式操作系统与驱动程序都运行在系统虚拟地址高位空间中，要想读取与写入物理地址需要将物理地址映射到系统虚拟地址中。才能在驱动程序中读取与写入数据。
+映射物理地址到系统虚拟地址的方法
+
+方法一：使用函数
+方法二：使用MDL的方式使用函数
+
+3.读取与写入应用程序虚拟内存地址的方式高位系统虚拟地址运行的是内核与驱动的指令，低位系统虚拟地址运行的是应用程序的指令。每个应用程序进程的地址空间都会通过四级页表映射到系统虚拟地址空间中。
+读取与写入应用程序内存数据的方法
+
+方法一：使用windows驱动函数MmCopyVirtualMemory.
+方法二:  根据应用pid获得eprocess后挂靠就可以通过指针或者内存复制函数来读取或写入。
+方法三：找到应用程序进程中虚拟地址对应的物理地址后-&gt;将物理地址 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/13/driver/windows%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%9114.%E9%A9%B1%E5%8A%A8%E4%B8%8E%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%BC%82%E6%AD%A5%E9%80%9A%E4%BF%A1/" title="windows驱动开发14.驱动与应用程序异步通信">windows驱动开发14.驱动与应用程序异步通信</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-13T12:11:14.000Z" title="Created 2025-03-13 20:11:14">2025-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Drvier/">Drvier</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C/">C</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Drvier/">Drvier</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/WindowsDriver/">WindowsDriver</a></span></div><div class="content">驱动与应用程序异步通信1.驱动与应用异步通信是什么?驱动与应用程序的异步通信是指应用程序向驱动程序发送请求后，驱动程序并不立即返回响应，而是继续执行其他操作，直到请求处理完成，驱动程序才通知应用程序或提供结果。异步通信通常用于需要处理长时间操作或等待外部事件的场景，这样可以避免应用程序在等待时被阻塞。
+异步通信的工作原理：
+
+请求发送：应用程序通过调用 DeviceIoControl、ReadFile 或 WriteFile 等函数向驱动程序发送请求。
+请求排队：驱动程序收到请求后，不会立即返回，而是将请求添加到请求队列中，继续处理其他任务或者立即返回，表示操作正在进行。
+事件通知：当驱动程序完成请求的处理后，它会通过某种机制（如信号量、事件、I&#x2F;O 完成端口等）通知应用程序，通常是通过回调机制或事件对象。
+获取结果：应用程序可以使用等待（如WaitForSingleObject）或轮询的方式等待通知，或者在通知到来时继续执行后续操作。
+
+常见的异步机制：
+
+**I&#x2F;O 完成端口 (IOCP)**：用于处理大量的并发 I&#x2F;O 请求，特别适用于高性能的网络或 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/13/driver/windows%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%9113.%E9%A9%B1%E5%8A%A8%E4%B8%8E%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E9%80%9A%E4%BF%A1/" title="windows驱动开发13.驱动与应用程序通信">windows驱动开发13.驱动与应用程序通信</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-13T12:11:13.000Z" title="Created 2025-03-13 20:11:13">2025-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Drvier/">Drvier</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C/">C</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Drvier/">Drvier</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/WindowsDrive/">WindowsDrive</a></span></div><div class="content">1. windows应用程序进程间怎么互相通信?方法一：共享内存
+方法二：共享内存
+方法三：网络通信
+方法一：管道通信的完整代码管道通信需要一个服务端与一个客户端。在服务端创建管道，在客户端读取管道。
+1.server.c
+1234567891011121314151617181920212223// server.c : This file contains the &#x27;main&#x27; function. Program execution begins and ends there.#include &lt;stdio.h&gt;#include &lt;windows.h&gt;int main()&#123;    HANDLE hPipe = CreateNamedPipe(TEXT(&quot;\\\\.\\pipe\\MyPipe&quot;),        PIPE_ACCESS_DUPLEX, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,        1, 1024, 1024, 0,  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/13/driver/windows%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%9112.EProcess%E7%BB%93%E6%9E%84%E4%BD%93%E4%B8%8E%E4%BF%AE%E6%94%B9%E8%BF%9B%E7%A8%8B%E4%BF%A1%E6%81%AF/" title="windows驱动开发12.EProcess结构体与修改进程信息">windows驱动开发12.EProcess结构体与修改进程信息</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-13T12:11:12.000Z" title="Created 2025-03-13 20:11:12">2025-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Drvier/">Drvier</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C/">C</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Drvier/">Drvier</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/WindowsDriver/">WindowsDriver</a></span></div><div class="content">查看eprocess结构体Windows操作系统中的EPROCESS是一个关键的内核数据结构，它是Windows内核用来表示进程的执行体(Executive Process)。
+EPROCESS是一个复杂的结构体，包含了与进程相关的所有信息，例如：
+
+进程ID (PID)
+父进程ID
+进程创建时间
+进程安全上下文
+进程地址空间信息
+进程拥有的对象句柄
+线程列表
+进程优先级
+内存使用统计
+各种标志和状态信息
+
+1.windgb中查看eprocess在 WinDbg 中，你可以使用多种命令来查看和分析 EPROCESS 结构体。以下是几种常用方法：
+
+使用 dt命令查看 EPROCESS 结构定义：
+1dt nt!_EPROCESS
+
+这会显示整个 EPROCESS 结构的布局和成员。
+
+查看特定进程的 EPROCESS：
+1!process [进程地址] 1
+
+或者通过 PID 查看：
+1!process [PID] 1
+
+要获取当前进程的 EPROCESS 地址并查看：
+12r $procdt nt!_EPROCESS @$proc
+
+查看特定字段：
+1dt nt!_EPROCESS  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/13/driver/windows%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%9111.%E9%A9%B1%E5%8A%A8%E4%B8%AD%E8%AF%BB%E5%8F%96%E5%86%85%E5%AD%98%E6%95%B0%E6%8D%AE/" title="windows驱动开发11.驱动中读取内存数据">windows驱动开发11.驱动中读取内存数据</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-13T12:11:11.000Z" title="Created 2025-03-13 20:11:11">2025-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Drvier/">Drvier</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C/">C</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Drvier/">Drvier</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/WindowsDriver/">WindowsDriver</a></span></div><div class="content">Windows中的内存地址分为几种?Windows11中内存数据分为物理内存与虚拟内存
+在Windows 11（以及所有现代Windows版本）中，内存按照以下描述的方式组织：
+
+物理内存 - 这是实际的硬件RAM，由内存条提供的实际存储空间。
+
+虚拟内存
+ - 这是一个抽象层，被划分为两个主要区域：
+
+低地址空间（用户空间）：分配给应用程序使用的虚拟地址。在64位Windows系统中，用户空间通常是从0x0000000000000000到0x00007FFFFFFFFFFF，即低48位地址空间。每个进程都有自己独立的用户空间虚拟地址映射。
+高地址空间（内核空间）：保留给操作系统内核和驱动程序使用的虚拟地址。在64位Windows系统中，内核空间通常从0xFFFF800000000000开始，即高位地址空间。所有进程共享相同的内核空间映射。
+
+
+
+读取物理内存地址数据1. 使用Windbg读取物理内存地址
+windbg断点
+
+输入!db命令查询地址
+1!db 0x100000
+
+带感叹号的命令读取物理内存地址，不带感叹号读取虚拟内存地址
+
+在WinDbg中读取物理内存的常用命令：
+
+! ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/13/driver/windows%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%9110.%E9%85%8D%E7%BD%AEvs2022%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E9%A9%B1%E5%8A%A8%E7%8E%AF%E5%A2%83/" title="windows驱动开发10.配置vs2022远程调试驱动环境">windows驱动开发10.配置vs2022远程调试驱动环境</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-13T12:11:10.000Z" title="Created 2025-03-13 20:11:10">2025-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Drvier/">Drvier</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C/">C</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Drvier/">Drvier</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/WindowsDriver/">WindowsDriver</a></span></div><div class="content">1.在被调试机器中安装远程工具并运行https://www.cnblogs.com/TechNomad/p/17444008.html
+
+被调试机上也安装上 WDK 环境.
+
+在 WDK 的安装目录下运行该工具 WDK Test Target Setup
+默认路径：C:\Program Files (x86)\Windows Kits\10\Remote\x64\WDK Test Target Setup x64-x64_en-us.msi
+
+
+2.在主机中添加远程机器的信息驱动项目中打开Driver install-&gt;Deployment。填入信息。
+3. 编译后运行驱动项目选择远程内核调试器。
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/13/driver/windows%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%919.%E5%85%B3%E4%BA%8E%E6%89%93%E5%8D%B0%E5%87%BD%E6%95%B0%E7%9A%84%E5%87%A0%E7%A7%8D%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/" title="windows驱动开发9.关于打印函数的几种使用方式">windows驱动开发9.关于打印函数的几种使用方式</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-13T12:11:09.000Z" title="Created 2025-03-13 20:11:09">2025-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Drvier/">Drvier</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C/">C</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Drvier/">Drvier</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/WindowsDriver/">WindowsDriver</a></span></div><div class="content">1.驱动输出函数1. KdPrint函数1234567891011121314151617#include&lt;ntifs.h&gt;void DriverUnload(PDRIVER_OBJECT DriverObject)&#123;    KdPrint(&quot;qi:进入卸载例程DriverObject=%p&quot;);&#125;NTSTATUS    DriverEntry(    _In_ PDRIVER_OBJECT DriverObject,    _In_ PUNICODE_STRING RegistryPath)&#123;    DriverObject;    RegistryPath;    KdPrint(&quot;qi;进入 DriverEntry入口点DriverObject=%p\n&quot;);    return 0;&#125;
+
+2. DbgPrintEx函数123456789101112131415161718#include &lt;ntifs.h&gt;#pragma warning (disable : 4100)NTS ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/13/driver/windows%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%918.HelloWorld%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E6%98%AF%E5%A6%82%E4%BD%95%E4%B8%80%E6%AD%A5%E6%AD%A5%E5%AE%8C%E6%95%B4%E7%9A%84/" title="windows驱动开发8.HelloWorld驱动程序是如何一步步完整的">windows驱动开发8.HelloWorld驱动程序是如何一步步完整的</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-13T12:11:08.000Z" title="Created 2025-03-13 20:11:08">2025-03-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Drvier/">Drvier</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C/">C</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Drvier/">Drvier</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/WindowsDriver/">WindowsDriver</a></span></div><div class="content">1.使用vs2022创建KMDF空项目
+选择Kernel Mode Driver, Empty(KMDF)
+源文件夹添加entry.c
+entry.c添加驱动入口函数
+
+1234int DriverEntry()&#123;    return 0;&#125;
+
+
+编译成功，但是没什么用。
+如果出现Inf2Cat错误，关闭Inf2Cat或者在Inf2Cat选项中使用本地时间。
+如果出现spectre缓解错误，下载缓解库版本SKD或者在项目中关闭spectre缓解。
+如果之后的驱动程序加载失败试着在项目属性-&gt;Driver Settings中设置Target Platform为Desktop。
+
+2.使用标准入口函数
+修改代码
+
+12345678910#include &lt;ntifs.h&gt;NTSTATUSDriverEntry(    _In_ PDRIVER_OBJECT DriverObject,    _In_ PUNICODE_STRING RegistryPath)&#123;    return 0;&#125;
+
+
+解决报错
+问题:
+123Error	C2 ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/8/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/#content-inner">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/#content-inner">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/#content-inner">26</a><a class="extend next" rel="next" href="/page/10/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Theqiqi</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">255</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">100</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">23</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Theqiqi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/03/web%E6%9C%8D%E5%8A%A1%E5%99%A8/101.%E4%BD%BF%E7%94%A8Grop%E7%BD%91%E7%AB%99%E6%8F%90%E4%BE%9B%E7%9A%84%E6%8E%A5%E5%8F%A3/" title="101.使用Grop网站提供的api">101.使用Grop网站提供的api</a><time datetime="2026-01-03T00:10:01.000Z" title="Created 2026-01-03 08:10:01">2026-01-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/9.%E5%8E%8B%E6%B5%8B/" title="9.压测">9.压测</a><time datetime="2025-03-27T03:53:09.000Z" title="Created 2025-03-27 11:53:09">2025-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/8.Linux%20Socket%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8Bhttp%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="8.Linux Socket并发模型http服务器">8.Linux Socket并发模型http服务器</a><time datetime="2025-03-27T03:53:08.000Z" title="Created 2025-03-27 11:53:08">2025-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/7.web%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E6%94%B6%E5%8F%91REST%E6%8E%A5%E5%8F%A3/" title="7.web服务器中收发REST接口">7.web服务器中收发REST接口</a><time datetime="2025-03-27T03:53:07.000Z" title="Created 2025-03-27 11:53:07">2025-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/6%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Elinux%E7%B3%BB%E7%BB%9F%E5%86%99%E4%B8%80%E4%B8%AAweb%E6%9C%8D%E5%8A%A1%E5%99%A8,%E8%A7%A3%E6%9E%90%E5%B9%B6%E5%93%8D%E5%BA%94get%E4%B8%8Epost%E8%AF%B7%E6%B1%82/" title="6使用c语言与linux系统写一个web服务器,解析并响应get与post请求">6使用c语言与linux系统写一个web服务器,解析并响应get与post请求</a><time datetime="2025-03-27T03:53:06.000Z" title="Created 2025-03-27 11:53:06">2025-03-27</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            <a class="card-more-btn" href="/categories/" title="View More">
+    <i class="fas fa-angle-right"></i></a>
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C-with-Socks/"><span class="card-category-list-name">C with Socks</span><span class="card-category-list-count">16</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C-Sound/"><span class="card-category-list-name">C_Sound</span><span class="card-category-list-count">10</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C-Windows-Graphi/"><span class="card-category-list-name">C_Windows_Graphi</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Cpp/"><span class="card-category-list-name">Cpp</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Cpp-Socket/"><span class="card-category-list-name">Cpp_Socket</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C%E8%AF%AD%E8%A8%80%E5%9C%A8Windows%E4%B8%AD%E5%AE%9E%E7%8E%B0%E6%8A%93%E5%8C%85/"><span class="card-category-list-name">C语言在Windows中实现抓包</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C%E8%AF%AD%E8%A8%80%E7%9A%84%E4%B8%87%E7%A7%8D%E7%94%A8%E6%B3%95/"><span class="card-category-list-name">C语言的万种用法</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Debian/"><span class="card-category-list-name">Debian</span><span class="card-category-list-count">1</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/Cmake/" style="font-size: 1.43em; color: #99a6b8">Cmake</a> <a href="/tags/UltraISO/" style="font-size: 1.1em; color: #999">UltraISO</a> <a href="/tags/AI/" style="font-size: 1.1em; color: #999">AI</a> <a href="/tags/rufus/" style="font-size: 1.1em; color: #999">rufus</a> <a href="/tags/C/" style="font-size: 1.5em; color: #99a9bf">C</a> <a href="/tags/GDI/" style="font-size: 1.21em; color: #999da3">GDI</a> <a href="/tags/Windows/" style="font-size: 1.46em; color: #99a8bc">Windows</a> <a href="/tags/web/" style="font-size: 1.35em; color: #99a3b1">web</a> <a href="/tags/UDP/" style="font-size: 1.14em; color: #999a9c">UDP</a> <a href="/tags/termux/" style="font-size: 1.14em; color: #999a9c">termux</a> <a href="/tags/poll/" style="font-size: 1.1em; color: #999">poll</a> <a href="/tags/mysql/" style="font-size: 1.28em; color: #99a0aa">mysql</a> <a href="/tags/BSD-Sockets/" style="font-size: 1.1em; color: #999">BSD Sockets</a> <a href="/tags/x86%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 1.32em; color: #99a2ae">x86汇编程序</a> <a href="/tags/ISO/" style="font-size: 1.1em; color: #999">ISO</a> <a href="/tags/html/" style="font-size: 1.1em; color: #999">html</a> <a href="/tags/Vmware/" style="font-size: 1.21em; color: #999da3">Vmware</a> <a href="/tags/Socks5/" style="font-size: 1.1em; color: #999">Socks5</a> <a href="/tags/Drvier/" style="font-size: 1.43em; color: #99a6b8">Drvier</a> <a href="/tags/Compile/" style="font-size: 1.1em; color: #999">Compile</a> <a href="/tags/qemu/" style="font-size: 1.1em; color: #999">qemu</a> <a href="/tags/DLL/" style="font-size: 1.1em; color: #999">DLL</a> <a href="/tags/ipv6/" style="font-size: 1.14em; color: #999a9c">ipv6</a> <a href="/tags/Hook/" style="font-size: 1.1em; color: #999">Hook</a> <a href="/tags/TCP/" style="font-size: 1.28em; color: #99a0aa">TCP</a> <a href="/tags/64%E4%BD%8D%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" style="font-size: 1.25em; color: #999fa7">64位汇编程序</a> <a href="/tags/Http/" style="font-size: 1.1em; color: #999">Http</a> <a href="/tags/PVE/" style="font-size: 1.1em; color: #999">PVE</a> <a href="/tags/Qt/" style="font-size: 1.1em; color: #999">Qt</a> <a href="/tags/linux/" style="font-size: 1.39em; color: #99a5b5">linux</a> <a href="/tags/first-pragram/" style="font-size: 1.35em; color: #99a3b1">first pragram</a> <a href="/tags/OpenGl/" style="font-size: 1.17em; color: #999ca0">OpenGl</a> <a href="/tags/make/" style="font-size: 1.1em; color: #999">make</a> <a href="/tags/android/" style="font-size: 1.1em; color: #999">android</a> <a href="/tags/Ipv6/" style="font-size: 1.1em; color: #999">Ipv6</a> <a href="/tags/python/" style="font-size: 1.1em; color: #999">python</a> <a href="/tags/Debian/" style="font-size: 1.1em; color: #999">Debian</a> <a href="/tags/Websocket/" style="font-size: 1.1em; color: #999">Websocket</a> <a href="/tags/Graphi/" style="font-size: 1.35em; color: #99a3b1">Graphi</a> <a href="/tags/Desktop/" style="font-size: 1.1em; color: #999">Desktop</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span><a class="card-more-btn" href="/archives/" title="View More">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/01/"><span class="card-archive-list-date">January 2026</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/03/"><span class="card-archive-list-date">March 2025</span><span class="card-archive-list-count">96</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/02/"><span class="card-archive-list-date">February 2025</span><span class="card-archive-list-count">23</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/09/"><span class="card-archive-list-date">September 2024</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">August 2024</span><span class="card-archive-list-count">71</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">June 2024</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/03/"><span class="card-archive-list-date">March 2024</span><span class="card-archive-list-count">11</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/02/"><span class="card-archive-list-date">February 2024</span><span class="card-archive-list-count">8</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">255</div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-02-09T11:11:01.011Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By Theqiqi</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>

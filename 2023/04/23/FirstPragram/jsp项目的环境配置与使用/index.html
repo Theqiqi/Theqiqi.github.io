@@ -1,0 +1,226 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>jsp项目的环境配置与使用 | Theqiqi_blog</title><meta name="author" content="Theqiqi"><meta name="copyright" content="Theqiqi"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="jsp开发的环境配置 下载安装javajdk 下载安装eclipse 下载安装Tomcat   使用eclipse开发第一个jsp项目 运行eclipse 新建jsp项目 新建jsp文件 运行jsp项目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jsp项目的环境配置与使用">
+<meta property="og:url" content="http://example.com/2023/04/23/FirstPragram/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Theqiqi_blog">
+<meta property="og:description" content="jsp开发的环境配置 下载安装javajdk 下载安装eclipse 下载安装Tomcat   使用eclipse开发第一个jsp项目 运行eclipse 新建jsp项目 新建jsp文件 运行jsp项目">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-04-23T12:16:01.000Z">
+<meta property="article:modified_time" content="2025-02-14T03:18:35.044Z">
+<meta property="article:author" content="Theqiqi">
+<meta property="article:tag" content="first pragram">
+<meta property="article:tag" content="jsp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/04/23/FirstPragram/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'jsp项目的环境配置与使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-02-14 11:18:35'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">255</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">100</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">23</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Theqiqi_blog"><span class="site-name">Theqiqi_blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">jsp项目的环境配置与使用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-04-23T12:16:01.000Z" title="Created 2023-04-23 20:16:01">2023-04-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-02-14T03:18:35.044Z" title="Updated 2025-02-14 11:18:35">2025-02-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/FirstPragram/">FirstPragram</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="jsp项目的环境配置与使用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><ul>
+<li><a href="#jsp%E5%BC%80%E5%8F%91%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE">jsp开发的环境配置</a><ul>
+<li><a href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85javajdk">下载安装javajdk</a></li>
+<li><a href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85eclipse">下载安装eclipse</a></li>
+<li><a href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85tomcat">下载安装Tomcat</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8eclipse%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAjsp%E9%A1%B9%E7%9B%AE">使用eclipse开发第一个jsp项目</a><ul>
+<li><a href="#%E8%BF%90%E8%A1%8Ceclipse">运行eclipse</a></li>
+<li><a href="#%E6%96%B0%E5%BB%BAjsp%E9%A1%B9%E7%9B%AE">新建jsp项目</a></li>
+<li><a href="#%E6%96%B0%E5%BB%BAjsp%E6%96%87%E4%BB%B6">新建jsp文件</a></li>
+<li><a href="#%E8%BF%90%E8%A1%8Cjsp%E9%A1%B9%E7%9B%AE">运行jsp项目</a><span id="more"></span></li>
+</ul>
+</li>
+</ul>
+<h2 id="jsp开发的环境配置"><a href="#jsp开发的环境配置" class="headerlink" title="jsp开发的环境配置"></a>jsp开发的环境配置</h2><ol>
+<li>下载安装javajdk</li>
+<li>下载安装eclipse</li>
+<li>下载安装Tomcat</li>
+</ol>
+<h3 id="下载安装javajdk"><a href="#下载安装javajdk" class="headerlink" title="下载安装javajdk"></a>下载安装javajdk</h3><p>官网下载javajdk,版本选择jkd17</p>
+<p>下载完成后安装</p>
+<p>安装完成后进行配置,在系统中配置环境变量</p>
+<p>1.添加变量名与变量值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#变量名</span><br><span class="line">CLASSPATH</span><br><span class="line">#变量值</span><br><span class="line">.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;</span><br></pre></td></tr></table></figure>
+
+<p>2.添加变量名与变量值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#变量名</span><br><span class="line">JAVA_HOME</span><br><span class="line">#变量值</span><br><span class="line">C:\Program Files\Java\jdk-17.0.4.1</span><br></pre></td></tr></table></figure>
+
+<p>3.在变量名为Path中添加两条值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#Path</span><br><span class="line">%JAVA_HOME%\bin</span><br><span class="line">%JAVA_HOME%\jre\bin</span><br></pre></td></tr></table></figure>
+
+<p>4.在命令行窗口中通过javac验证环境是否配置成功</p>
+<h3 id="下载安装eclipse"><a href="#下载安装eclipse" class="headerlink" title="下载安装eclipse"></a>下载安装eclipse</h3><p>在官方网站下载Eclipse,版本选择2022-12,Eclipse IDE for Enterprise Java and Web Developers。</p>
+<p>下载完成后安装。</p>
+<h3 id="下载安装Tomcat"><a href="#下载安装Tomcat" class="headerlink" title="下载安装Tomcat"></a>下载安装Tomcat</h3><p>官网下载Tomcat,版本选择Tomcat10.1.</p>
+<p>下载完成后安装。</p>
+<h2 id="使用eclipse开发第一个jsp项目"><a href="#使用eclipse开发第一个jsp项目" class="headerlink" title="使用eclipse开发第一个jsp项目"></a>使用eclipse开发第一个jsp项目</h2><ol>
+<li><p>运行eclipse并配置Tomcat</p>
+</li>
+<li><p>新建jsp项目</p>
+</li>
+<li><p>新建jsp文件</p>
+</li>
+<li><p>运行jsp项目</p>
+</li>
+</ol>
+<h3 id="运行eclipse"><a href="#运行eclipse" class="headerlink" title="运行eclipse"></a>运行eclipse</h3><ol>
+<li>通过双击eclipse运行eclipse-&gt;选择workspace路径-&gt;之后会进入eclipse主界面.</li>
+<li>在Windows-&gt;preferences中选择Server-&gt;Runtime Environments.</li>
+<li>点击Add-&gt;Apache-&gt;Apache Tomcat v10.1,点击next.</li>
+<li>在Tomcat installation directory中填入Tomcat的安装目录-&gt;点击Finish.</li>
+</ol>
+<h3 id="新建jsp项目"><a href="#新建jsp项目" class="headerlink" title="新建jsp项目"></a>新建jsp项目</h3><ol>
+<li>点击file-&gt;new-&gt;Dynamic Web Project</li>
+<li>在弹出的界面中输入项目名称hello</li>
+<li>点击next-&gt;next-&gt;Finish.</li>
+</ol>
+<h3 id="新建jsp文件"><a href="#新建jsp文件" class="headerlink" title="新建jsp文件"></a>新建jsp文件</h3><ol>
+<li>打开hello-&gt;src-&gt;main-&gt;webapp</li>
+<li>鼠标右键webapp-&gt;选择New-&gt;JSP File，</li>
+<li>更改文件名为hello.jsp-&gt;选择html5-&gt;点击Finish.</li>
+<li>在body标签里输入hello world.</li>
+</ol>
+<h3 id="运行jsp项目"><a href="#运行jsp项目" class="headerlink" title="运行jsp项目"></a>运行jsp项目</h3><ol>
+<li>在hello.jsp文件中点击鼠标右键选择Run As-&gt;Run on Server</li>
+<li>在弹出的界面中选择Tomcat服务器-&gt;点击Next-&gt;选择hello项目-&gt;点击Finish.</li>
+<li>运行后在浏览器中会显示hello world,运行结果如下图所示:</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">Theqiqi</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2023/04/23/FirstPragram/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/">http://example.com/2023/04/23/FirstPragram/jsp%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/first-pragram/">first pragram</a><a class="post-meta__tags" href="/tags/jsp/">jsp</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/01/FirstPragram/%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAwin32api%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F/" title="用c语言开发第一个win32api窗口程序"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">用c语言开发第一个win32api窗口程序</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/22/android/%E9%80%9A%E8%BF%87%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%89%93%E5%BC%80android%E6%A8%A1%E6%8B%9F%E5%99%A8%E5%B9%B6root/" title="通过命令行打开android模拟器并root"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">通过命令行打开android模拟器并root</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2024/09/02/FirstPragram/GNUmakefile/" title="GNUmakefile"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-02</div><div class="title">GNUmakefile</div></div></a></div><div><a href="/2024/02/01/FirstPragram/%E4%BD%BF%E7%94%A8C++%E5%9C%A8windows%E5%B9%B3%E5%8F%B0%E4%B8%8B%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%8A%A8%E6%80%81%E5%BA%93/" title="使用C++在windows平台下开发第一个静态库与动态库"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-02-01</div><div class="title">使用C++在windows平台下开发第一个静态库与动态库</div></div></a></div><div><a href="/2023/05/01/FirstPragram/%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAwin32api%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8F/" title="用c语言开发第一个win32api窗口程序"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-05-01</div><div class="title">用c语言开发第一个win32api窗口程序</div></div></a></div><div><a href="/2023/10/02/FirstPragram/%E7%AC%AC%E4%B8%80%E4%B8%AAwindows%E7%AA%97%E5%8F%A3%E7%A8%8B%E5%BA%8Fdemo/" title="使用C++开发第一个windows窗口程序demo"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-02</div><div class="title">使用C++开发第一个windows窗口程序demo</div></div></a></div><div><a href="/2023/10/02/FirstPragram/c%E4%B8%8Ecpp%E4%BD%BF%E7%94%A8raylib%E4%B8%8Eraygui%E5%BA%93/" title="c与cpp使用raylib与raygui库"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-02</div><div class="title">c与cpp使用raylib与raygui库</div></div></a></div><div><a href="/2024/09/01/FirstPragram/Linux%E9%93%BE%E6%8E%A5%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%8A%A8%E6%80%81%E5%BA%93%E5%B9%B6%E4%B8%94%E6%89%93%E5%8C%85%E7%A8%8B%E5%BA%8F/" title="Linux链接静态库与动态库并且打包程序"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-01</div><div class="title">Linux链接静态库与动态库并且打包程序</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Theqiqi</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">255</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">100</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">23</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Theqiqi"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#jsp%E5%BC%80%E5%8F%91%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-text">jsp开发的环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85javajdk"><span class="toc-text">下载安装javajdk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85eclipse"><span class="toc-text">下载安装eclipse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85Tomcat"><span class="toc-text">下载安装Tomcat</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8eclipse%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAjsp%E9%A1%B9%E7%9B%AE"><span class="toc-text">使用eclipse开发第一个jsp项目</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8Ceclipse"><span class="toc-text">运行eclipse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%BB%BAjsp%E9%A1%B9%E7%9B%AE"><span class="toc-text">新建jsp项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%BB%BAjsp%E6%96%87%E4%BB%B6"><span class="toc-text">新建jsp文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8Cjsp%E9%A1%B9%E7%9B%AE"><span class="toc-text">运行jsp项目</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/01/03/web%E6%9C%8D%E5%8A%A1%E5%99%A8/101.%E4%BD%BF%E7%94%A8Grop%E7%BD%91%E7%AB%99%E6%8F%90%E4%BE%9B%E7%9A%84%E6%8E%A5%E5%8F%A3/" title="101.使用Grop网站提供的api">101.使用Grop网站提供的api</a><time datetime="2026-01-03T00:10:01.000Z" title="Created 2026-01-03 08:10:01">2026-01-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/9.%E5%8E%8B%E6%B5%8B/" title="9.压测">9.压测</a><time datetime="2025-03-27T03:53:09.000Z" title="Created 2025-03-27 11:53:09">2025-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/8.Linux%20Socket%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8Bhttp%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="8.Linux Socket并发模型http服务器">8.Linux Socket并发模型http服务器</a><time datetime="2025-03-27T03:53:08.000Z" title="Created 2025-03-27 11:53:08">2025-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/7.web%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E6%94%B6%E5%8F%91REST%E6%8E%A5%E5%8F%A3/" title="7.web服务器中收发REST接口">7.web服务器中收发REST接口</a><time datetime="2025-03-27T03:53:07.000Z" title="Created 2025-03-27 11:53:07">2025-03-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/27/web%E6%9C%8D%E5%8A%A1%E5%99%A8/6%E4%BD%BF%E7%94%A8c%E8%AF%AD%E8%A8%80%E4%B8%8Elinux%E7%B3%BB%E7%BB%9F%E5%86%99%E4%B8%80%E4%B8%AAweb%E6%9C%8D%E5%8A%A1%E5%99%A8,%E8%A7%A3%E6%9E%90%E5%B9%B6%E5%93%8D%E5%BA%94get%E4%B8%8Epost%E8%AF%B7%E6%B1%82/" title="6使用c语言与linux系统写一个web服务器,解析并响应get与post请求">6使用c语言与linux系统写一个web服务器,解析并响应get与post请求</a><time datetime="2025-03-27T03:53:06.000Z" title="Created 2025-03-27 11:53:06">2025-03-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By Theqiqi</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>
